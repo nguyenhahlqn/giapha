@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Bảo tàng số di sản dòng họ Nguyễn — Đất Hà Nam cổ. 84 thành viên, 15 đời từ cuối thế kỷ XV đến nay, khởi từ Hoàng quí Công.">
+<meta property="og:title" content="Họ Nguyễn — Bảo Tàng Số Di Sản · Đất Hà Nam Cổ">
+<meta property="og:description" content="Hơn bốn thế kỷ ghi dấu cội nguồn. Nơi con cháu quay về chiêm nghiệm lịch sử, kết nối ngàn đời.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="vi_VN">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Họ Nguyễn — Bảo Tàng Số Di Sản Duy Tiên">
+<meta name="twitter:description" content="Hơn bốn thế kỷ ghi dấu cội nguồn — 84 thành viên, 15 thế hệ từ đất Hà Nam cổ.">
+<meta name="theme-color" content="#0a0804">
+<meta name="apple-mobile-web-app-title" content="Họ Nguyễn">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Họ Nguyễn — Bảo Tàng Số Di Sản · Đất Hà Nam Cổ · Từ Thế Kỷ XV</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* LUXURY HERITAGE TOKENS */
+:root {
+  --ink0:#050402; --ink1:#0a0804; --ink2:#120d08; --ink3:#1c1510; --ink4:#261d14; --ink5:#30261a;
+  --parch0:#F8F0DC; --parch1:#EFE4C4; --parch2:#E4D4A8; --parch3:#C9B884;
+  --g0:#3D2800; --g1:#6B4400; --g2:#8B6014; --g3:#B8901A; --g4:#D4AE3A; --g5:#E8C96A; --g6:#F5E098;
+  --gold-grad:linear-gradient(135deg,#8B6014 0%,#C4942A 30%,#E8C96A 55%,#D4AE3A 70%,#B8901A 100%);
+  --gold-text:linear-gradient(135deg,#A07820 0%,#D4AE3A 40%,#F5E098 60%,#C4942A 80%,#8B6014 100%);
+  --moss0:#060e09; --moss1:#0d1c11; --moss2:#152b1c; --moss3:#1e3d27; --moss4:#2d5a3b; --moss5:#4a7c5f; --moss6:#7aaa90;
+  --bd-gold:rgba(212,174,58,.18); --bd-gold2:rgba(212,174,58,.35);
+  --bd-light:rgba(248,240,220,.06); --bd-light2:rgba(248,240,220,.12);
+  --display:'Playfair Display',Georgia,serif; --sans:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--ink1);color:var(--parch1);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* GRAIN */
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence baseFrequency='.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.055'/%3E%3C/svg%3E")}
+body::after{content:'';position:fixed;inset:0;pointer-events:none;z-index:8999;
+  background:radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(5,4,2,.6) 100%)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:700;height:64px;
+  display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;
+  transition:background .4s,border-color .4s}
+nav.scrolled{background:rgba(10,8,4,.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--bd-gold)}
+.nav-logo{font-family:var(--display);font-size:24px;font-weight:600;letter-spacing:.32em;text-transform:uppercase;
+  text-decoration:none;background:linear-gradient(135deg,#D4AE3A 0%,#FFE880 35%,#FFF0A0 55%,#E8C860 75%,#B89028 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 8px rgba(212,174,58,.25))}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:rgba(240,228,192,.85);
+  text-decoration:none;font-weight:400;transition:color .2s;position:relative;padding-bottom:2px}
+.nav-links a::after{content:'';position:absolute;bottom:0;left:0;width:0;height:1px;
+  background:var(--gold-grad);transition:width .3s}
+.nav-links a:hover{color:var(--parch0)} .nav-links a:hover::after,.nav-links a.active::after{width:100%}
+.nav-links a.active{color:var(--g5)}
+.nav-r{display:flex;align-items:center;gap:.75rem}
+.nav-cta{display:flex;align-items:center;gap:8px;padding:10px 22px;
+  background:var(--gold-grad);border:none;border-radius:2px;font-family:var(--sans);
+  font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink0);cursor:pointer;text-decoration:none;transition:opacity .2s,transform .2s;
+  position:relative;overflow:hidden;box-shadow:0 2px 16px rgba(212,174,58,.3)}
+.nav-cta::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.28),transparent);transition:left .5s}
+.nav-cta:hover::before{left:100%} .nav-cta:hover{opacity:.9;transform:translateY(-1px)}
+.nav-cta svg{width:13px;height:13px}
+
+/* HERO */
+.hero{position:relative;min-height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;text-align:center;overflow:hidden;padding:8rem 2rem 6rem}
+.hero-bg{position:absolute;inset:0;z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%,rgba(45,90,59,.28) 0%,transparent 60%),
+    radial-gradient(ellipse 60% 40% at 50% 100%,rgba(30,25,10,.5) 0%,transparent 70%),
+    linear-gradient(180deg,#080603 0%,#120d08 35%,#0d1509 65%,#070604 100%)}
+.hero-field{position:absolute;bottom:0;left:0;right:0;height:44%;z-index:1;opacity:.32;overflow:hidden}
+.hero-field svg{width:100%;height:100%}
+.particles{position:absolute;inset:0;z-index:2;pointer-events:none}
+.p-dot{position:absolute;border-radius:50%;background:radial-gradient(circle,var(--g5) 0%,transparent 70%);animation:float-up linear infinite;opacity:0}
+@keyframes float-up{0%{transform:translateY(0) scale(1);opacity:0}15%{opacity:.55}85%{opacity:.18}100%{transform:translateY(-80vh) scale(.3);opacity:0}}
+.orn{display:flex;align-items:center;gap:1rem;margin:0 auto 1.75rem}
+.orn-line{height:1px;flex:1;max-width:80px;background:linear-gradient(90deg,transparent,var(--g3),transparent)}
+.orn-diamond{width:6px;height:6px;background:var(--gold-grad);transform:rotate(45deg);flex-shrink:0}
+.orn-dot{width:3px;height:3px;background:var(--g3);border-radius:50%}
+.hero-inner{position:relative;z-index:3;max-width:820px;margin:0 auto}
+.hero-dynasty{font-family:var(--sans);font-size:10px;font-weight:300;letter-spacing:.45em;text-transform:uppercase;
+  color:var(--g4);margin-bottom:1.75rem;opacity:0;animation:fadeDown .8s ease .2s forwards}
+.hero-h1{font-family:var(--display);font-size:clamp(44px,7vw,84px);font-weight:500;line-height:1.05;
+  letter-spacing:-.02em;margin-bottom:1.75rem;opacity:0;animation:fadeUp 1s ease .4s forwards}
+.hero-h1 em{font-style:italic;font-weight:500;display:block;background:linear-gradient(135deg,#C4A030 0%,#F0D060 40%,#FFE880 60%,#D4AE3A 80%,#A07020 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.hero-h1 span{display:block;color:var(--parch0)}
+.hero-sub{font-family:var(--display);font-size:clamp(15px,2.2vw,19px);font-weight:300;font-style:italic;
+  color:var(--parch3);letter-spacing:.04em;line-height:1.7;max-width:500px;margin:0 auto 2.5rem;
+  opacity:0;animation:fadeUp .9s ease .6s forwards}
+.hero-actions{display:flex;align-items:center;justify-content:center;gap:1.25rem;flex-wrap:wrap;
+  opacity:0;animation:fadeUp .8s ease .8s forwards}
+.btn-primary{display:inline-flex;align-items:center;gap:10px;padding:14px 34px;
+  background:var(--gold-grad);border:none;border-radius:2px;font-family:var(--sans);
+  font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink0);cursor:pointer;text-decoration:none;position:relative;overflow:hidden;
+  transition:transform .25s,box-shadow .25s;box-shadow:0 4px 24px rgba(184,144,26,.25),0 1px 4px rgba(0,0,0,.4)}
+.btn-primary::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .5s}
+.btn-primary:hover::before{left:100%}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(184,144,26,.35),0 2px 8px rgba(0,0,0,.5)}
+.btn-primary svg{width:14px;height:14px}
+.btn-ghost{display:inline-flex;align-items:center;gap:10px;padding:14px 34px;
+  background:var(--gold-grad);border:none;border-radius:2px;font-family:var(--sans);
+  font-size:11px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--ink0);cursor:pointer;text-decoration:none;position:relative;overflow:hidden;
+  transition:transform .25s,box-shadow .25s;box-shadow:0 4px 24px rgba(184,144,26,.25),0 1px 4px rgba(0,0,0,.4)}
+.btn-ghost::before{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transition:left .5s}
+.btn-ghost:hover::before{left:100%}
+.btn-ghost:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(184,144,26,.35),0 2px 8px rgba(0,0,0,.5)}
+.scroll-cue{position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;animation:fadeIn 1s ease 1.4s forwards;z-index:3}
+.sc-label{font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:var(--g3)}
+.sc-line{width:1px;height:48px;background:linear-gradient(to bottom,var(--g4),transparent);animation:sc-pulse 2s ease infinite}
+@keyframes sc-pulse{0%,100%{opacity:.3;transform:scaleY(.7)}50%{opacity:1;transform:scaleY(1)}}
+
+/* STATS */
+.stats-band{position:relative;background:linear-gradient(135deg,var(--ink3) 0%,var(--ink4) 50%,var(--ink3) 100%);
+  border-top:1px solid var(--bd-gold);border-bottom:1px solid var(--bd-gold);padding:3.5rem 2rem;overflow:hidden}
+.stats-band::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 100% at 50% 50%,rgba(45,90,59,.12) 0%,transparent 70%)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);max-width:900px;margin:0 auto;position:relative;z-index:1}
+.stat-item{display:flex;flex-direction:column;align-items:center;padding:1rem 2rem;border-right:1px solid var(--bd-gold)}
+.stat-item:last-child{border-right:none}
+.stat-n{font-family:var(--display);font-size:clamp(42px,5vw,66px);font-weight:300;line-height:1;
+  background:var(--gold-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-n sup{font-size:.45em;vertical-align:super}
+.stat-l{font-size:9px;font-weight:300;letter-spacing:.25em;text-transform:uppercase;color:var(--parch3);margin-top:.35rem}
+.stat-sub{font-family:var(--display);font-style:italic;font-size:12px;color:var(--g3);margin-top:.2rem}
+
+/* QUOTE */
+.quote-sec{padding:6rem 2rem;background:var(--moss0);position:relative;text-align:center;overflow:hidden}
+.quote-sec::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(45,90,59,.2) 0%,transparent 70%)}
+.quote-mark{font-family:var(--display);font-size:120px;line-height:.7;
+  background:var(--gold-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  opacity:.3;margin-bottom:-.5rem;display:block;position:relative;z-index:1}
+.quote-text{font-family:var(--display);font-size:clamp(22px,3.5vw,34px);font-weight:300;font-style:italic;
+  color:var(--parch1);line-height:1.55;letter-spacing:.02em;max-width:680px;margin:0 auto 1.5rem;position:relative;z-index:1}
+.quote-attr{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--g3);font-weight:300;position:relative;z-index:1}
+
+/* STORY */
+.story{padding:7rem 2rem;background:linear-gradient(180deg,var(--ink2) 0%,var(--ink1) 100%);position:relative;overflow:hidden}
+.story::before{content:'';position:absolute;left:50%;top:0;transform:translateX(-50%);
+  width:1px;height:100%;background:linear-gradient(to bottom,transparent,var(--bd-gold),transparent)}
+.story-inner{max-width:960px;margin:0 auto;display:grid;grid-template-columns:1fr 80px 1fr;gap:0;align-items:center}
+.story-left{padding-right:3.5rem;text-align:right} .story-right{padding-left:3.5rem}
+.story-center{display:flex;flex-direction:column;align-items:center;gap:12px}
+.story-node{width:14px;height:14px;background:var(--gold-grad);border-radius:50%;
+  box-shadow:0 0 20px rgba(212,174,58,.45),0 0 40px rgba(212,174,58,.2)}
+.story-vline{width:1px;height:60px;background:linear-gradient(to bottom,var(--bd-gold2),transparent)}
+.s-num{font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--g3);margin-bottom:.75rem;font-weight:300}
+.s-h{font-family:var(--display);font-size:clamp(20px,3vw,28px);font-weight:400;color:var(--parch0);line-height:1.3;margin-bottom:.85rem}
+.s-h em{font-style:italic;color:var(--g5)}
+.s-p{font-size:14px;color:var(--parch3);line-height:1.85;font-weight:300}
+.story-row{margin-bottom:4rem} .story-row:last-child{margin-bottom:0}
+
+/* TIMELINE */
+.timeline-sec{padding:7rem 2rem;background:linear-gradient(180deg,var(--ink1) 0%,var(--ink2) 100%)}
+.sec-header{text-align:center;margin-bottom:4rem}
+.sec-eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--g4);font-weight:300;margin-bottom:.75rem}
+.sec-title{font-family:var(--display);font-size:clamp(28px,4vw,44px);font-weight:300;color:var(--parch0);line-height:1.2}
+.sec-title em{font-style:italic;color:var(--g5)}
+.tl-container{max-width:780px;margin:0 auto;position:relative}
+.tl-spine{position:absolute;left:50%;top:0;bottom:0;width:1px;
+  background:linear-gradient(to bottom,transparent,var(--bd-gold2) 10%,var(--bd-gold2) 90%,transparent);transform:translateX(-50%)}
+.tl-entry{display:grid;grid-template-columns:1fr 40px 1fr;align-items:center;margin-bottom:3rem}
+.tl-entry:nth-child(even) .tl-left{text-align:right;padding-right:2rem}
+.tl-entry:nth-child(even) .tl-right{opacity:0}
+.tl-entry:nth-child(odd) .tl-left{opacity:0}
+.tl-entry:nth-child(odd) .tl-right{padding-left:2rem}
+.tl-mid{display:flex;align-items:center;justify-content:center}
+.tl-gem{width:12px;height:12px;background:var(--gold-grad);transform:rotate(45deg);box-shadow:0 0 12px rgba(212,174,58,.5);flex-shrink:0}
+.tl-gen{font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:var(--g3);margin-bottom:.4rem}
+.tl-name{font-family:var(--display);font-size:17px;font-weight:400;color:var(--parch1);margin-bottom:.25rem}
+.tl-role{font-family:var(--display);font-style:italic;font-size:13px;color:var(--g3)}
+
+/* HERITAGE PILLARS */
+.features-sec{padding:7rem 2rem;background:linear-gradient(135deg,var(--ink2) 0%,var(--ink3) 100%);position:relative}
+.feat-grid{max-width:1000px;margin:3.5rem auto 0;display:grid;grid-template-columns:repeat(3,1fr);
+  gap:0;border:1px solid var(--bd-gold)}
+.feat-card{background:var(--ink2);padding:3rem 2.25rem;transition:background .25s;position:relative;overflow:hidden;
+  border-right:1px solid var(--bd-gold)}
+.feat-card:last-child{border-right:none}
+.feat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--gold-grad);transform:scaleX(0);transition:transform .35s;transform-origin:left}
+.feat-card:hover{background:var(--ink3)} .feat-card:hover::before{transform:scaleX(1)}
+.feat-num{font-family:var(--display);font-size:48px;font-weight:300;line-height:1;
+  background:var(--gold-text);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  opacity:.35;margin-bottom:1.25rem;display:block}
+.feat-h{font-family:var(--display);font-size:20px;font-weight:400;color:var(--parch0);margin-bottom:.75rem;line-height:1.3}
+.feat-h em{font-style:italic;color:var(--g5)}
+.feat-p{font-size:13px;font-weight:300;color:var(--parch3);line-height:1.85}
+.feat-tag{display:inline-block;margin-top:1.5rem;font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--g3);border-top:1px solid var(--bd-gold);padding-top:.75rem;width:100%}
+
+/* MAP */
+.map-sec{padding:6rem 2rem;background:var(--ink0);position:relative;overflow:hidden}
+.map-sec::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 70% at 30% 50%,rgba(30,61,39,.25) 0%,transparent 65%)}
+.map-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1.2fr;gap:4rem;align-items:center;position:relative;z-index:1}
+.map-label{font-size:9px;letter-spacing:.3em;text-transform:uppercase;color:var(--g3);margin-bottom:1rem;font-weight:300}
+.map-title{font-family:var(--display);font-size:clamp(28px,4vw,42px);font-weight:300;color:var(--parch0);line-height:1.25;margin-bottom:1.25rem}
+.map-title em{font-style:italic;color:var(--g5)}
+.map-desc{font-size:14px;font-weight:300;color:var(--parch3);line-height:1.85;margin-bottom:2rem}
+.map-facts{display:flex;flex-direction:column;gap:.75rem}
+.map-fact{display:flex;align-items:baseline;gap:.75rem;font-size:13px;color:var(--parch3)}
+.map-fact-dot{width:5px;height:5px;background:var(--gold-grad);border-radius:50%;flex-shrink:0;margin-top:2px}
+.map-svg-wrap svg{width:100%;opacity:.75;filter:drop-shadow(0 0 40px rgba(45,90,59,.3))}
+@keyframes pin-pulse{0%,100%{transform:translate(-50%,-100%) scale(1);opacity:.9}50%{transform:translate(-50%,-110%) scale(1.08);opacity:1}}
+
+/* CTA */
+.cta-band{padding:7rem 2rem;background:linear-gradient(135deg,var(--moss0) 0%,var(--moss1) 40%,var(--ink3) 100%);
+  text-align:center;position:relative;overflow:hidden}
+.cta-band::before{content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 80% at 50% 50%,rgba(45,90,59,.35) 0%,transparent 65%)}
+.cta-inner{position:relative;z-index:1;max-width:620px;margin:0 auto}
+.cta-eyebrow{font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--g4);margin-bottom:1.25rem;font-weight:300}
+.cta-title{font-family:var(--display);font-size:clamp(32px,5vw,56px);font-weight:300;line-height:1.2;color:var(--parch0);margin-bottom:1.25rem}
+.cta-title em{font-style:italic;color:var(--g5)}
+.cta-sub{font-family:var(--display);font-style:italic;font-size:16px;color:var(--parch3);line-height:1.7;margin-bottom:2.5rem}
+.cta-btns{display:flex;align-items:center;justify-content:center;gap:1.25rem;flex-wrap:wrap}
+
+/* FOOTER */
+footer{background:var(--ink0);border-top:1px solid var(--bd-gold);padding:3rem 2rem}
+.foot-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:2rem}
+.foot-brand{font-family:var(--display);font-size:22px;font-weight:300;background:var(--gold-text);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:.15em}
+.foot-sub{font-size:10px;color:var(--g2);letter-spacing:.12em;margin-top:3px}
+.foot-links{display:flex;gap:1.75rem;justify-content:center}
+.foot-links a{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--parch3);text-decoration:none;font-weight:300;transition:color .2s}
+.foot-links a:hover{color:var(--g5)}
+.foot-copy{text-align:right;font-size:11px;color:var(--g2);font-weight:300;line-height:1.6}
+
+/* ANIMATIONS */
+@keyframes fadeUp  {from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+@keyframes fadeIn  {from{opacity:0}to{opacity:1}}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .75s ease,transform .75s ease}
+.reveal.visible{opacity:1;transform:none}
+
+/* RESPONSIVE */
+@media(max-width:860px){
+  .nav-links,.nav-cta{display:none}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat-item:nth-child(2){border-right:none}
+  .story-inner{grid-template-columns:1fr;text-align:left}
+  .story-left{padding-right:0;text-align:left}
+  .story-center{display:none}
+  .tl-spine{display:none}
+  .tl-entry{grid-template-columns:24px 1fr;gap:.75rem;align-items:start}
+  /* Mobile: even entries có content ở left */
+  .tl-entry:nth-child(even) .tl-left{opacity:1!important;text-align:left!important;padding:0!important;grid-column:2}
+  .tl-entry:nth-child(even) .tl-right{display:none!important}
+  /* Mobile: odd entries có content ở right — hiện right thay vì left */
+  .tl-entry:nth-child(odd) .tl-left{display:none!important}
+  .tl-entry:nth-child(odd) .tl-right{opacity:1!important;display:block!important;padding-left:0!important;text-align:left!important;grid-column:2}
+  .tl-mid{justify-content:flex-start;grid-column:1;grid-row:1}
+  .feat-grid{grid-template-columns:1fr}
+  .map-inner{grid-template-columns:1fr}
+  .map-svg-wrap{display:none}
+  .foot-inner{grid-template-columns:1fr;text-align:center;gap:1.5rem}
+  .foot-copy{text-align:center}
+}
+</style>
+</head>
+<body>
+
+<nav id="nav">
+  <a href="ho-nguyen-hero.html" class="nav-logo">Họ Nguyễn</a>
+  <ul class="nav-links">
+    <li><a href="ho-nguyen-hero.html" class="active">Trang chủ</a></li>
+    <li><a href="ho-nguyen-tree.html">Phả hệ</a></li>
+    <li><a href="ho-nguyen-heritage.html">Di sản</a></li>
+    <li><a href="ho-nguyen-admin.html">Quản trị</a></li>
+    <li><a href="ho-nguyen-request.html">Đăng ký</a></li>
+  </ul>
+  <div class="nav-r">
+    <a href="ho-nguyen-tree.html" class="nav-cta">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="4" r="2"/><path d="M7 6v3M4.5 12h5M4.5 9l2.5 3 2.5-3"/></svg>
+      Xem gia phả
+    </a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-field">
+    <svg viewBox="0 0 1440 280" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+      <defs>
+        <linearGradient id="skyG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#0a0804" stop-opacity="0"/><stop offset="100%" stop-color="#0a0804" stop-opacity="1"/></linearGradient>
+        <linearGradient id="wG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a2e1e" stop-opacity=".7"/><stop offset="100%" stop-color="#0a0804" stop-opacity="1"/></linearGradient>
+      </defs>
+      <rect x="0" y="160" width="1440" height="120" fill="url(#wG)"/>
+      <path d="M0 200 Q180 185 360 195 Q540 205 720 192 Q900 179 1080 190 Q1260 201 1440 188 L1440 280 L0 280Z" fill="#1e2d18" opacity=".8"/>
+      <path d="M0 215 Q120 205 240 212 Q480 220 600 208 Q840 195 960 205 Q1200 218 1440 203 L1440 280 L0 280Z" fill="#162211" opacity=".9"/>
+      <ellipse cx="720" cy="172" rx="28" ry="8" fill="rgba(212,174,58,.12)" opacity=".5"/>
+      <rect x="0" y="0" width="1440" height="280" fill="url(#skyG)"/>
+    </svg>
+  </div>
+  <div class="particles" id="particles"></div>
+
+  <div class="hero-inner">
+    <p class="hero-dynasty">Dòng họ Nguyễn · Vùng đất cổ Hà Nam · Từ cuối thế kỷ XV, đầu thế kỷ XVI đến nay</p>
+    <div class="orn reveal" style="transition-delay:.3s">
+      <div class="orn-line"></div><div class="orn-dot"></div><div class="orn-diamond"></div><div class="orn-dot"></div><div class="orn-line"></div>
+    </div>
+    <h1 class="hero-h1"><span>Hơn bốn thế kỷ</span><em>cội nguồn</em></h1>
+    <p class="hero-sub">Nơi con cháu quay về chiêm nghiệm lịch sử,<br>kết nối ngàn đời.</p>
+    <div class="hero-actions">
+      <a href="ho-nguyen-tree.html" class="btn-primary">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="4" r="2"/><path d="M7 6v3M4.5 12h5M4.5 9l2.5 3 2.5-3"/></svg>
+        Mở cây gia phả
+      </a>
+      <a href="ho-nguyen-heritage.html" class="btn-ghost">Khám phá di sản</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span class="sc-label">Cuộn xuống</span><div class="sc-line"></div></div>
+</section>
+
+<!-- STATS -->
+<section class="stats-band">
+  <div class="stats-grid">
+    <div class="stat-item reveal"><div class="stat-n" data-target="84">0</div><div class="stat-l">Thành viên</div><div class="stat-sub">Ghi nhận đầy đủ</div></div>
+    <div class="stat-item reveal" style="transition-delay:.1s"><div class="stat-n" data-target="15">0</div><div class="stat-l">Thế hệ</div><div class="stat-sub">Hoàng · Tạ · Nguyễn</div></div>
+    <div class="stat-item reveal" style="transition-delay:.2s"><div class="stat-n" data-target="3">0</div><div class="stat-l">Chi nhánh</div><div class="stat-sub">Hữu Đễ · Hữu Quyền · Hữu Hiệu</div></div>
+    <div class="stat-item reveal" style="transition-delay:.3s"><div class="stat-n" data-target="400"><sup>+</sup>0</div><div class="stat-l">Năm lịch sử</div><div class="stat-sub">Trên đất Hà Nam cổ</div></div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<section class="quote-sec">
+  <span class="quote-mark reveal">"</span>
+  <blockquote class="quote-text reveal" style="transition-delay:.15s">Cây có gốc mới nở ngành xanh ngọn,<br>nước có nguồn mới bể rộng sông sâu.</blockquote>
+  <p class="quote-attr reveal" style="transition-delay:.3s">Tục ngữ Việt Nam · Đạo lý uống nước nhớ nguồn</p>
+</section>
+
+<!-- STORY -->
+<section class="story">
+  <div style="max-width:900px;margin:0 auto 5rem;text-align:center" class="reveal">
+    <p class="sec-eyebrow">Hành trình lịch sử</p>
+    <h2 class="sec-title">Hơn bốn thế kỷ trên <em>đất Hà Nam cổ</em></h2>
+  </div>
+  <div class="story-inner">
+    <div class="story-left story-row reveal">
+      <p class="s-num">— 01</p>
+      <h3 class="s-h">Khởi nghiệp từ <em>đất nông</em></h3>
+      <p class="s-p">Từ những thửa ruộng phù sa bên sông Đáy, tổ tiên họ Nguyễn khai nghiệp trên vùng đất Hà Nam cổ từ cuối thế kỷ XV — hơn bốn thế kỷ bám đất, bám làng.</p>
+    </div>
+    <div class="story-center"><div class="story-node"></div><div class="story-vline"></div></div>
+    <div></div>
+    <div></div>
+    <div class="story-center"><div class="story-vline"></div><div class="story-node"></div><div class="story-vline"></div></div>
+    <div class="story-right story-row reveal" style="transition-delay:.12s">
+      <p class="s-num">— 02</p>
+      <h3 class="s-h">Chuyển mình theo <em>lịch sử</em></h3>
+      <p class="s-p">Qua ba đời đổi họ — Hoàng · Tạ · Nguyễn — gia tộc thích nghi, vượt qua biến động thời cuộc, gìn giữ mạch nguồn văn hoá.</p>
+    </div>
+    <div class="story-left story-row reveal" style="transition-delay:.24s">
+      <p class="s-num">— 03</p>
+      <h3 class="s-h">Toả rộng khắp <em>miền đất nước</em></h3>
+      <p class="s-p">Từ Quảng Ninh đến Hà Nội, từ Ninh Bình đến TP.HCM — con cháu mang theo hạt giống cội nguồn, gieo mầm trên những vùng đất mới.</p>
+    </div>
+    <div class="story-center"><div class="story-vline"></div><div class="story-node"></div></div>
+    <div></div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="timeline-sec">
+  <div class="sec-header reveal">
+    <p class="sec-eyebrow">Dòng thời gian</p>
+    <h2 class="sec-title">Những <em>nhân vật tiêu biểu</em></h2>
+  </div>
+  <div class="tl-container">
+    <div class="tl-spine"></div>
+    <div class="tl-entry reveal">
+      <div class="tl-left"><p class="tl-gen">Đời 1 · Thuỷ tổ</p><p class="tl-name">Hoàng quí Công</p><p class="tl-role">Người khai lập dòng họ tại đất Hà Nam cổ</p></div>
+      <div class="tl-mid"><div class="tl-gem"></div></div>
+      <div class="tl-right"></div>
+    </div>
+    <div class="tl-entry reveal" style="transition-delay:.08s">
+      <div class="tl-left"></div>
+      <div class="tl-mid"><div class="tl-gem"></div></div>
+      <div class="tl-right"><p class="tl-gen">Đời 4 · Tiền tổ</p><p class="tl-name">Nguyễn quí Công (tự Minh Luân)</p><p class="tl-role">Tổng Chánh — Thập lý hầu kiêm bản tổng</p></div>
+    </div>
+    <div class="tl-entry reveal" style="transition-delay:.16s">
+      <div class="tl-left"><p class="tl-gen">Đời 5 · Tiền tổ</p><p class="tl-name">Nguyễn quí Công (tự Hữu Thể)</p><p class="tl-role">Tổng Chánh — Sở binh dã bản phủ</p></div>
+      <div class="tl-mid"><div class="tl-gem"></div></div>
+      <div class="tl-right"></div>
+    </div>
+    <div class="tl-entry reveal" style="transition-delay:.24s">
+      <div class="tl-left"></div>
+      <div class="tl-mid"><div class="tl-gem"></div></div>
+      <div class="tl-right"><p class="tl-gen">Đời 6 · Tiền tổ</p><p class="tl-name">Nguyễn quí Công (tự Hữu Đễ)</p><p class="tl-role">Tổng Chánh — Thập lý hầu bản tổng</p></div>
+    </div>
+    <div class="tl-entry reveal" style="transition-delay:.32s">
+      <div class="tl-left"><p class="tl-gen">Đời 7 · Tiền tổ</p><p class="tl-name">Nguyễn quí Công (tự Hữu Nghi)</p><p class="tl-role">Tổng Chánh — Thập lý hầu bản tổng</p></div>
+      <div class="tl-mid"><div class="tl-gem"></div></div>
+      <div class="tl-right"></div>
+    </div>
+    <div class="tl-entry reveal" style="transition-delay:.40s">
+      <div class="tl-left"></div>
+      <div class="tl-mid"><div class="tl-gem"></div></div>
+      <div class="tl-right"><p class="tl-gen">Đời 7–9 · Tiền tổ</p><p class="tl-name">Các cụ Lý trưởng · Xã trưởng</p><p class="tl-role">Nguyễn Hữu Nhâm · Hữu Truyền · Hữu Khánh · Hữu Lã</p></div>
+    </div>
+    <div class="tl-entry reveal" style="transition-delay:.48s">
+      <div class="tl-left"><p class="tl-gen">Đời 12 · Nhánh Hữu Đễ</p><p class="tl-name">Nguyễn Văn Chinh</p><p class="tl-role">1929 – 2021 · Người kết nối thế hệ</p></div>
+      <div class="tl-mid"><div class="tl-gem"></div></div>
+      <div class="tl-right"></div>
+    </div>
+    <div class="tl-entry reveal" style="transition-delay:.56s">
+      <div class="tl-left"></div>
+      <div class="tl-mid"><div class="tl-gem"></div></div>
+      <div class="tl-right"><p class="tl-gen">Đời 15 · Thế hệ mới</p><p class="tl-name">Nguyễn Hải Minh</p><p class="tl-role">Sinh 2012 · Tương lai dòng họ</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HERITAGE PILLARS -->
+<section class="features-sec">
+  <div class="sec-header reveal">
+    <p class="sec-eyebrow">Di sản dòng họ</p>
+    <h2 class="sec-title">Ba trụ cột <em>trường tồn</em></h2>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card reveal">
+      <span class="feat-num">01</span>
+      <h3 class="feat-h">Cội nguồn &<br><em>chức sắc cổ xưa</em></h3>
+      <p class="feat-p">Từ cuối thế kỷ XV, các bậc tiền tổ đã giữ những chức vụ quan trọng: Tổng Chánh, Lý trưởng, Xã trưởng, Khán thủ — phụng sự xã tắc qua nhiều đời liên tiếp trên vùng đất Hà Nam cổ.</p>
+      <span class="feat-tag">Đời 1 → Đời 9 · Tiền tổ</span>
+    </div>
+    <div class="feat-card reveal" style="transition-delay:.1s">
+      <span class="feat-num">02</span>
+      <h3 class="feat-h">Phong tục &<br><em>giá trị truyền đời</em></h3>
+      <p class="feat-p">Lễ giỗ tổ 24/3 âm lịch, tảo mộ Thanh Minh tháng 3, cơm mới tạ ơn tháng 10 — những phong tục gìn giữ bền vững qua hơn bốn thế kỷ. Cha truyền con nối, từng thế hệ nhắc nhau về nghĩa cội nguồn.</p>
+      <span class="feat-tag">Phong tục · Lễ hội · Ký vật</span>
+    </div>
+    <div class="feat-card reveal" style="transition-delay:.2s">
+      <span class="feat-num">03</span>
+      <h3 class="feat-h">Phả hệ &<br><em>kết nối thế hệ</em></h3>
+      <p class="feat-p">84 thành viên, 15 đời, 3 chi nhánh ghi chép đầy đủ từ thuỷ tổ Hoàng quí Công. Con cháu toả rộng từ Quảng Ninh đến TP.HCM, nhưng tấm lòng luôn hướng về đất cổ Hà Nam.</p>
+      <span class="feat-tag">84 thành viên · 15 đời · 3 chi nhánh</span>
+    </div>
+  </div>
+</section>
+
+<!-- MAP -->
+<section class="map-sec">
+  <div class="map-inner">
+    <div class="map-text reveal">
+      <p class="map-label">Vùng đất khởi nguồn</p>
+      <h2 class="map-title">Đất Hà Nam cổ<br><em>Cội nguồn dòng họ</em></h2>
+      <p class="map-desc">Vùng đồng bằng phù sa sông Đáy — nơi dòng họ bén rễ từ hơn bốn thế kỷ trước. Ngày nay con cháu toả rộng khắp ba miền nhưng tấm lòng luôn hướng về vùng đất cổ.</p>
+      <div class="map-facts">
+        <div class="map-fact"><span class="map-fact-dot"></span>Thôn Tân Tiến, xã Tiên Tân</div>
+        <div class="map-fact"><span class="map-fact-dot"></span>Huyện Duy Tiên, tỉnh Hà Nam</div>
+        <div class="map-fact"><span class="map-fact-dot"></span>Vùng đồng bằng sông Hồng</div>
+        <div class="map-fact"><span class="map-fact-dot"></span>Khai nghiệp từ cuối thế kỷ XV</div>
+      </div>
+    </div>
+    <div class="map-svg-wrap reveal" style="transition-delay:.2s">
+      <svg viewBox="0 0 320 380" xmlns="http://www.w3.org/2000/svg" fill="none">
+        <defs>
+          <linearGradient id="mapG" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1e3d27" stop-opacity=".9"/><stop offset="100%" stop-color="#0d1c11" stop-opacity=".9"/></linearGradient>
+          <filter id="glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <path d="M160 20 C175 22 188 28 195 38 C205 52 210 65 208 80 C215 90 220 102 218 115 C225 125 230 138 225 150 C230 162 235 175 228 188 C232 200 236 215 230 228 C228 240 222 250 215 260 C208 272 200 282 192 292 C182 305 170 315 160 325 C150 315 138 305 128 292 C120 282 112 272 105 260 C98 250 92 240 90 228 C84 215 88 200 92 188 C85 175 90 162 95 150 C88 138 93 125 100 115 C98 102 103 90 110 80 C108 65 113 52 123 38 C130 28 143 22 160 20Z" fill="url(#mapG)" stroke="#2d5a3b" stroke-width="1.5" opacity=".7"/>
+        <path d="M100 180 Q130 170 160 175 Q190 180 215 168" stroke="#4a7c5f" stroke-width="1.5" stroke-dasharray="4,3" opacity=".6"/>
+        <circle cx="155" cy="155" r="22" fill="rgba(212,174,58,.08)" stroke="rgba(212,174,58,.25)" stroke-width="1"/>
+        <circle cx="155" cy="155" r="4" fill="#D4AE3A" filter="url(#glow)"/>
+        <g transform="translate(270,330)">
+          <circle cx="0" cy="0" r="18" fill="rgba(10,8,4,.6)" stroke="rgba(212,174,58,.3)" stroke-width="1"/>
+          <path d="M0-12 L3-4 L0-2 L-3-4Z" fill="#D4AE3A" opacity=".9"/>
+          <path d="M0 12 L3 4 L0 2 L-3 4Z" fill="#555" opacity=".6"/>
+          <text x="0" y="-14" text-anchor="middle" font-size="6" fill="#D4AE3A" font-family="Be Vietnam Pro">B</text>
+        </g>
+        <text x="155" y="140" text-anchor="middle" font-size="8" fill="#D4AE3A" font-family="Be Vietnam Pro" opacity=".9">Duy Tiên</text>
+        <text x="155" y="131" text-anchor="middle" font-size="7" fill="#8B7840" font-family="Be Vietnam Pro" opacity=".7">Hà Nam</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="cta-inner">
+    <p class="cta-eyebrow reveal">Bắt đầu hành trình</p>
+    <h2 class="cta-title reveal" style="transition-delay:.1s">Khám phá <em>gia phả</em><br>dòng họ Nguyễn</h2>
+    <p class="cta-sub reveal" style="transition-delay:.2s">84 thành viên, 15 đời, hàng nghìn câu chuyện đang chờ được khám phá.</p>
+    <div class="cta-btns reveal" style="transition-delay:.3s">
+      <a href="ho-nguyen-tree.html" class="btn-primary">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" style="width:13px;height:13px"><circle cx="7" cy="4" r="2"/><path d="M7 6v3M4.5 12h5M4.5 9l2.5 3 2.5-3"/></svg>
+        Xem cây gia phả
+      </a>
+      <a href="ho-nguyen-heritage.html" class="btn-ghost">Trang di sản →</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-inner">
+    <div><div class="foot-brand">Họ Nguyễn</div><div class="foot-sub">Đất Hà Nam cổ · Từ cuối thế kỷ XV</div></div>
+    <div class="foot-links">
+      <a href="ho-nguyen-hero.html">Trang chủ</a>
+      <a href="ho-nguyen-tree.html">Phả hệ</a>
+      <a href="ho-nguyen-heritage.html">Di sản</a>
+      <a href="ho-nguyen-request.html">Đăng ký</a>
+      <a href="ho-nguyen-admin.html">Quản trị</a>
+    </div>
+    <div class="foot-copy">Bảo tàng số di sản<br><span style="color:var(--g1)">Họ Nguyễn · Đất Hà Nam cổ</span></div>
+  </div>
+</footer>
+
+<script>
+const nav=document.getElementById('nav');
+window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>60)},{passive:true});
+
+// Particles
+(function(){
+  const wrap=document.getElementById('particles');
+  for(let i=0;i<18;i++){
+    const d=document.createElement('div');d.className='p-dot';
+    const sz=Math.random()*4+2;
+    d.style.cssText=`width:${sz}px;height:${sz}px;left:${Math.random()*100}%;bottom:${Math.random()*30}%;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*8}s`;
+    wrap.appendChild(d);
+  }
+})();
+
+// Load stats từ API — cập nhật data-target trước khi counter chạy
+fetch('/api/members').then(r=>r.ok?r.json():null).then(d=>{
+  if(!d||!d.members)return;
+  const arr=d.members;
+  const total=arr.length;
+  const genMax=Math.max(...arr.map(m=>m.g||0));
+  const branches=new Set(arr.map(m=>m.br).filter(b=>b&&b!=='Tiền tổ')).size;
+  const el=document.querySelectorAll('[data-target]');
+  if(el[0])el[0].dataset.target=total;
+  if(el[1])el[1].dataset.target=genMax;
+  if(el[2])el[2].dataset.target=branches;
+  // el[3] = 400+ năm — giữ nguyên
+}).catch(()=>{});
+
+// Reveal + counter
+const io=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(!e.isIntersecting)return;
+    const el=e.target;
+    if(el.classList.contains('reveal'))el.classList.add('visible');
+    if(el.dataset.target)animateCounter(el,parseInt(el.dataset.target));
+    io.unobserve(el);
+  });
+},{threshold:.15});
+document.querySelectorAll('.reveal,[data-target]').forEach(el=>io.observe(el));
+
+function animateCounter(el,target){
+  const dur=1800,start=performance.now();
+  const hasSup=el.innerHTML.includes('<sup>');
+  const prefix=hasSup?'<sup>+</sup>':'';
+  (function step(now){
+    const p=Math.min((now-start)/dur,1),ease=1-Math.pow(1-p,4);
+    el.innerHTML=prefix+Math.round(ease*target);
+    if(p<1)requestAnimationFrame(step);else el.innerHTML=prefix+target;
+  })(start);
+}
+
+// Parallax
+window.addEventListener('scroll',()=>{
+  const y=scrollY;
+  const field=document.querySelector('.hero-field');
+  if(field)field.style.transform=`translateY(${y*0.22}px)`;
+  const inner=document.querySelector('.hero-inner');
+  if(inner)inner.style.transform=`translateY(${y*0.12}px)`;
+},{passive:true});
+
+// Service Worker
+if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
+</script>
+</body>
+</html>

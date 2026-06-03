@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Di sản dòng họ Nguyễn Duy Tiên — giá trị văn hoá, phong tục lễ hội, câu chuyện truyền khẩu và bộ sưu tập ký vật gia tộc.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2D4A3E">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Di Sản — Họ Nguyễn Duy Tiên</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#F2E8CC;--bg2:#FAF4E4;--bg3:#EDE0C4;
+  --ink:#1A1008;--earth:#2C1808;--earth2:#5C3820;--clay:#8B5A30;
+  --straw:#C49050;--parch:#F5E8C0;
+  --moss:#1A3220;--moss2:#2A4030;--moss3:#3E6848;--moss4:#7AAA88;
+  --gold:#9A7010;--gold2:#C4A030;
+  --gold-grad:linear-gradient(135deg,#7A5808 0%,#B8901A 35%,#E8C060 60%,#C4A030 80%,#7A5808 100%);
+  --gold-text:linear-gradient(135deg,#6A4808 0%,#B8901A 40%,#E8C060 60%,#9A7010 100%);
+  --serif:'Playfair Display','EB Garamond',Georgia,serif;--sans:'Inter',sans-serif;
+}
+[data-theme="dark"]{
+  --bg:#080604;--bg2:#100c08;--bg3:#181210;
+  --ink:#E8D8A8;--earth:#D4AE58;--earth2:#E8C878;--clay:#A88040;
+  --straw:#705828;--parch:#1C1408;
+  --moss:#3A6848;--moss2:#1E3828;--moss3:#78A888;--moss4:#3A6848;
+  --gold:#D4AE3A;--gold2:#E8C878;
+  --gold-grad:linear-gradient(135deg,#8B6014 0%,#C4942A 30%,#E8C96A 55%,#D4AE3A 70%,#B8901A 100%);
+  --gold-text:linear-gradient(135deg,#A07820 0%,#D4AE3A 40%,#F5E098 60%,#C4942A 80%,#8B6014 100%);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);overflow-x:hidden;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;opacity:.35;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='g'%3E%3CfeTurbulence baseFrequency='.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='.04'/%3E%3C/svg%3E")}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:600;height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;background:rgba(240,230,204,.78);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid rgba(196,149,106,.15);transition:all .3s}
+[data-theme="dark"] nav{background:rgba(20,18,16,.82);border-bottom-color:rgba(139,97,72,.2)}
+.nav-logo{font-family:var(--serif);font-size:23px;letter-spacing:.25em;text-transform:uppercase;text-decoration:none;font-weight:700;
+  background:linear-gradient(135deg,#8A6010 0%,#D4B040 30%,#F0D060 55%,#C8A030 80%,#8A6010 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--earth);font-weight:500;text-decoration:none;transition:color .2s;padding-bottom:2px}
+.nav-links a:hover{color:var(--earth)}
+.nav-links a.active{color:var(--earth);border-bottom:1.5px solid var(--gold)}
+.nav-right{display:flex;align-items:center;gap:.75rem}
+.theme-btn{width:32px;height:32px;background:none;border:1px solid rgba(139,97,72,.25);border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--clay);transition:all .2s}
+.theme-btn:hover{background:rgba(139,97,72,.1)}
+
+/* PAGE HERO */
+.page-hero{padding:120px 0 72px;text-align:center;position:relative;overflow:hidden;background:var(--moss)}
+[data-theme="dark"] .page-hero{background:#0a120e}
+.page-hero::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(196,149,106,.02) 0,rgba(196,149,106,.02) 1px,transparent 1px,transparent 80px)}
+.ph-ey{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--moss4);margin-bottom:.75rem}
+.ph-h{font-family:var(--serif);font-size:clamp(56px,8vw,96px);font-weight:600;color:var(--parch);line-height:1.05;margin-bottom:1rem}
+.ph-sub{font-size:15px;color:var(--straw);font-family:var(--serif);font-style:italic;max-width:560px;margin:0 auto;line-height:1.7}
+.ph-scroll{display:flex;align-items:center;gap:.5rem;justify-content:center;margin-top:2rem;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:rgba(143,184,154,.5);animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(5px)}}
+.ph-scroll svg{width:14px;height:14px}
+
+/* SECTIONS */
+.section{padding:6rem 0}
+.section-alt{background:var(--bg2)}
+[data-theme="dark"] .section-alt{background:var(--bg3)}
+.inner{max-width:1100px;margin:0 auto;padding:0 4rem}
+.sec-ey{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.sec-h{font-family:var(--serif);font-size:34px;font-weight:400;color:var(--earth);margin-bottom:.5rem}
+[data-theme="dark"] .sec-h{color:var(--parch)}
+.sec-sub{font-size:13px;color:var(--clay);line-height:1.75;max-width:560px;margin-bottom:2.5rem}
+
+/* VALUES GRID */
+.values-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem}
+.val-card{background:var(--bg2);border:1px solid rgba(92,61,46,.1);border-radius:8px;padding:1.75rem;transition:all .22s;position:relative;overflow:hidden}
+[data-theme="dark"] .val-card{background:var(--bg3);border-color:rgba(139,97,72,.15)}
+.val-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2));transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.val-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(44,24,16,.07)}
+.val-card:hover::before{transform:scaleX(1)}
+.val-num{font-family:var(--serif);font-size:32px;font-weight:400;color:var(--gold);opacity:.35;position:absolute;top:1rem;right:1.25rem}
+.val-icon{font-size:22px;margin-bottom:.75rem;display:block}
+.val-h{font-family:var(--serif);font-size:18px;font-weight:500;color:var(--earth);margin-bottom:.4rem}
+[data-theme="dark"] .val-h{color:var(--parch)}
+.val-p{font-size:12.5px;color:var(--clay);line-height:1.78}
+
+/* HERITAGE ITEMS — photo-like grid */
+.heritage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(92,61,46,.08);margin-top:2.5rem}
+.hg-item{background:var(--bg2);padding:0;position:relative;overflow:hidden;cursor:pointer;aspect-ratio:4/3}
+[data-theme="dark"] .hg-item{background:var(--bg3)}
+.hg-item:first-child{grid-column:span 2}
+.hg-inner{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end}
+.hg-art{position:absolute;inset:0}
+.hg-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(44,24,16,.75) 0%,transparent 55%);transition:opacity .3s}
+.hg-item:hover .hg-overlay{opacity:.9}
+.hg-info{position:relative;z-index:2;padding:1.25rem 1.5rem}
+.hg-cat{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.hg-title{font-family:var(--serif);font-size:16px;color:var(--parch);line-height:1.3}
+.hg-desc{font-size:11px;color:rgba(232,213,176,.65);margin-top:.35rem;max-height:0;overflow:hidden;transition:max-height .3s ease}
+.hg-item:hover .hg-desc{max-height:60px}
+
+/* ORAL HISTORY */
+.oral-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem}
+.oh-card{background:var(--bg2);border:1px solid rgba(92,61,46,.1);border-radius:8px;padding:1.5rem;position:relative;transition:all .22s}
+[data-theme="dark"] .oh-card{background:var(--bg3);border-color:rgba(139,97,72,.15)}
+.oh-card:hover{border-color:rgba(184,145,58,.25);transform:translateY(-2px)}
+.oh-quote{font-size:32px;color:var(--gold);opacity:.3;position:absolute;top:.75rem;right:1rem;font-family:var(--serif);line-height:1}
+.oh-text{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--earth);line-height:1.7;margin-bottom:1rem}
+[data-theme="dark"] .oh-text{color:var(--parch)}
+.oh-author{display:flex;align-items:center;gap:.75rem}
+.oh-ava{width:36px;height:36px;border-radius:50%;background:rgba(184,145,58,.12);border:1.5px solid rgba(184,145,58,.2);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:var(--gold)}
+.oh-meta{}
+.oh-name{font-size:13px;font-weight:500;color:var(--earth);font-family:var(--serif)}
+[data-theme="dark"] .oh-name{color:var(--parch)}
+.oh-gen{font-size:10px;color:var(--clay);letter-spacing:.05em}
+
+/* TRADITIONS */
+.trad-list{display:flex;flex-direction:column;gap:0;margin-top:2.5rem;border:1px solid rgba(92,61,46,.1);border-radius:8px;overflow:hidden}
+[data-theme="dark"] .trad-list{border-color:rgba(139,97,72,.15)}
+.trad-item{display:grid;grid-template-columns:80px 1fr auto;gap:1.5rem;align-items:center;padding:1.25rem 1.5rem;background:var(--bg2);border-bottom:1px solid rgba(92,61,46,.08);transition:background .2s;cursor:pointer}
+[data-theme="dark"] .trad-item{background:var(--bg3);border-bottom-color:rgba(139,97,72,.1)}
+.trad-item:last-child{border-bottom:none}
+.trad-item:hover{background:var(--bg)}
+[data-theme="dark"] .trad-item:hover{background:var(--bg2)}
+.trad-month{font-family:var(--serif);font-size:13px;font-weight:500;color:var(--gold);text-align:center}
+.trad-lunar{font-size:9px;color:var(--clay);letter-spacing:.06em;text-align:center;margin-top:1px}
+.trad-body{}
+.trad-name{font-family:var(--serif);font-size:16px;font-weight:400;color:var(--earth);margin-bottom:2px}
+[data-theme="dark"] .trad-name{color:var(--parch)}
+.trad-desc{font-size:12px;color:var(--clay);line-height:1.6}
+.trad-tag{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--moss3);border:1px solid rgba(45,74,62,.2);border-radius:99px;padding:3px 10px;white-space:nowrap;flex-shrink:0}
+[data-theme="dark"] .trad-tag{color:var(--moss4)}
+
+/* STATS ROW */
+.heritage-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(92,61,46,.08);border:1px solid rgba(92,61,46,.08);margin-top:2.5rem;border-radius:8px;overflow:hidden}
+.hs-item{background:var(--bg2);padding:1.75rem 1.5rem;text-align:center;transition:background .2s}
+[data-theme="dark"] .hs-item{background:var(--bg3)}
+.hs-item:hover{background:var(--bg)}
+.hs-n{font-family:var(--serif);font-size:40px;font-weight:500;color:var(--earth);line-height:1}
+[data-theme="dark"] .hs-n{color:var(--parch)}
+.hs-n sup{font-size:17px;color:var(--gold)}
+.hs-l{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--clay);font-weight:300;margin-top:.3rem}
+
+/* CTA BAND */
+.cta-band{background:var(--moss);padding:5rem 0;text-align:center;position:relative;overflow:hidden}
+[data-theme="dark"] .cta-band{background:#0a120e}
+.cta-band::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(196,149,106,.025) 0,rgba(196,149,106,.025) 1px,transparent 1px,transparent 72px)}
+.cta-h{font-family:var(--serif);font-size:clamp(28px,4vw,48px);font-weight:400;color:var(--parch);margin-bottom:1rem}
+.cta-sub{font-size:13px;color:var(--straw);font-weight:300;line-height:1.75;max-width:480px;margin:0 auto 2.5rem}
+.cta-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap}
+.btn-light{display:inline-flex;align-items:center;gap:8px;background:var(--parch);color:var(--moss);padding:12px 24px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;font-family:var(--sans);border:none;cursor:pointer;border-radius:2px;text-decoration:none;transition:all .22s}
+.btn-light:hover{background:#fff;transform:translateY(-1px)}
+.btn-outline{display:inline-flex;align-items:center;gap:8px;background:none;color:var(--parch);padding:12px 24px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:400;font-family:var(--sans);border:1px solid rgba(232,213,176,.3);cursor:pointer;border-radius:2px;text-decoration:none;transition:all .22s}
+.btn-outline:hover{border-color:rgba(232,213,176,.6);transform:translateY(-1px)}
+
+/* FOOTER */
+footer{background:var(--earth);padding:2.5rem 4rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(196,149,106,.12)}
+[data-theme="dark"] footer{background:#0e0c0a}
+.foot-brand{font-family:var(--serif);font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--parch);opacity:.68}
+.foot-links{display:flex;gap:1.5rem}
+.foot-links a{font-size:10px;color:var(--straw);opacity:.5;text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:opacity .2s}
+.foot-links a:hover{opacity:.8}
+.foot-copy{font-size:10px;color:var(--straw);opacity:.38;font-weight:300}
+
+/* REVEAL */
+.reveal{opacity:0;transform:translateY(14px);transition:opacity .65s ease,transform .65s ease}
+.reveal.vis{opacity:1;transform:none}
+
+/* HISTORY SECTION */
+.hist-body{max-width:820px;margin:0 auto}
+.hist-lead{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--earth);line-height:1.85;margin-bottom:1.75rem;border-left:3px solid var(--gold);padding-left:1.25rem}
+[data-theme="dark"] .hist-lead{color:var(--parch)}
+.hist-p{font-size:14px;color:var(--clay);line-height:1.9;margin-bottom:1.25rem}
+.hist-block{background:var(--bg2);border:1px solid rgba(92,61,46,.1);border-radius:8px;padding:1.5rem 1.75rem;margin-bottom:1.25rem;position:relative}
+[data-theme="dark"] .hist-block{background:var(--bg3);border-color:rgba(139,97,72,.15)}
+.hist-block-label{font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem;font-weight:500}
+.hist-block p{font-size:13.5px;color:var(--clay);line-height:1.85}
+[data-theme="dark"] .hist-block p{color:rgba(168,128,64,.85)}
+
+/* OCCUPATION SECTION */
+.occ-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:2.5rem}
+.occ-card{background:var(--bg2);border:1px solid rgba(92,61,46,.1);border-radius:8px;padding:1.5rem 1.75rem;position:relative;transition:all .22s}
+[data-theme="dark"] .occ-card{background:var(--bg3);border-color:rgba(139,97,72,.15)}
+.occ-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:8px 8px 0 0;transform:scaleX(0);transition:transform .3s;transform-origin:left}
+.occ-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(44,24,16,.07)}.occ-card:hover::before{transform:scaleX(1)}
+.occ-era{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.occ-title{font-family:var(--serif);font-size:18px;font-weight:500;color:var(--earth);margin-bottom:.6rem;line-height:1.3}
+[data-theme="dark"] .occ-title{color:var(--parch)}
+.occ-p{font-size:13px;color:var(--clay);line-height:1.8}
+.occ-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:1rem}
+.occ-tag{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--moss3);border:1px solid rgba(45,74,62,.25);border-radius:99px;padding:3px 10px}
+[data-theme="dark"] .occ-tag{color:var(--moss4)}
+
+/* CONFUCIAN SECTION */
+.nho-wrap{max-width:820px;margin:0 auto}
+.nho-quote{font-family:var(--serif);font-size:clamp(17px,2.2vw,22px);font-style:italic;font-weight:400;color:var(--earth);line-height:1.75;text-align:center;margin:0 auto 2.5rem;padding:1.5rem 2rem;border-top:1px solid rgba(92,61,46,.15);border-bottom:1px solid rgba(92,61,46,.15)}
+[data-theme="dark"] .nho-quote{color:var(--parch);border-color:rgba(139,97,72,.2)}
+.nho-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+.nho-item{padding:1.25rem 1.5rem;border-left:3px solid var(--gold);background:var(--bg2);border-radius:0 6px 6px 0}
+[data-theme="dark"] .nho-item{background:var(--bg3)}
+.nho-item-h{font-family:var(--serif);font-size:15px;font-weight:500;color:var(--earth);margin-bottom:.5rem}
+[data-theme="dark"] .nho-item-h{color:var(--parch)}
+.nho-item-p{font-size:12.5px;color:var(--clay);line-height:1.8}
+
+@media(max-width:960px){
+  nav{padding:0 1.25rem}.nav-links{display:none}
+  .inner{padding:0 2rem}
+  .values-grid,.heritage-grid,.oral-grid,.heritage-stats,.occ-grid,.nho-cols{grid-template-columns:1fr}
+  .hg-item:first-child{grid-column:span 1}
+  .trad-item{grid-template-columns:60px 1fr}
+  .trad-tag{display:none}
+  footer{flex-direction:column;gap:1rem;text-align:center;padding:2rem}
+  .foot-links{justify-content:center}
+  .cta-btns{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="ho-nguyen-hero.html" class="nav-logo">Họ Nguyễn</a>
+  <ul class="nav-links">
+    <li><a href="ho-nguyen-hero.html">Trang chủ</a></li>
+    <li><a href="ho-nguyen-tree.html">Phả hệ</a></li>
+    <li><a href="ho-nguyen-heritage.html" class="active">Di sản</a></li>
+    <li><a href="ho-nguyen-admin.html">Quản trị</a></li>
+    <li><a href="ho-nguyen-request.html">Đăng ký</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="theme-btn" id="themeBtn" aria-label="Đổi giao diện">☾</button>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="ph-ey">Bảo tàng số · Họ Nguyễn</div>
+  <h1 class="ph-h">Di Sản Dòng Họ</h1>
+  <p class="ph-sub">Lưu giữ ký ức, phong tục và câu chuyện của những thế hệ đã đi qua — để mai sau hiểu hơn về cội nguồn.</p>
+  <div class="ph-scroll"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2v10M3 8l4 4 4-4"/></svg>Cuộn để khám phá</div>
+</div>
+
+<!-- VALUES -->
+<section class="section">
+  <div class="inner">
+    <div class="reveal"><div class="sec-ey">Giá trị cốt lõi</div><h2 class="sec-h">Đạo lý dòng họ</h2><p class="sec-sub">Những giá trị được truyền lại từ thuỷ tổ Nguyễn Quy Công — nền tảng tinh thần của mọi thế hệ.</p></div>
+    <div class="values-grid">
+      <div class="val-card reveal"><span class="val-num">01</span><span class="val-icon">🌾</span><h3 class="val-h">Cần cù lao động</h3><p class="val-p">Khởi nghiệp từ đất nông, dòng họ Nguyễn gây dựng gia nghiệp bằng đôi tay chăm chỉ trên ruộng lúa phù sa Duy Tiên. Đức tính cần cù được truyền dạy qua từng thế hệ.</p></div>
+      <div class="val-card reveal" style="transition-delay:.1s"><span class="val-num">02</span><span class="val-icon">📖</span><h3 class="val-h">Hiếu học</h3><p class="val-p">Truyền thống hiếu học là niềm tự hào của dòng họ. Cha mẹ luôn tạo điều kiện cho con cháu học hành, dù trong hoàn cảnh khó khăn của nông dân vùng Bắc Bộ.</p></div>
+      <div class="val-card reveal" style="transition-delay:.2s"><span class="val-num">03</span><span class="val-icon">🏡</span><h3 class="val-h">Đoàn kết gia tộc</h3><p class="val-p">Tám đời giữ gìn mối liên hệ huyết thống bất chấp khoảng cách địa lý. Giỗ tổ, lễ hội là dịp con cháu khắp nơi sum họp, nhắc nhở nhau về nguồn gốc.</p></div>
+      <div class="val-card reveal" style="transition-delay:.3s"><span class="val-num">04</span><span class="val-icon">🌿</span><h3 class="val-h">Gắn bó với quê hương</h3><p class="val-p">Dù con cháu toả đi khắp nơi, quê hương Duy Tiên luôn là điểm tựa tinh thần. Nhiều thành viên vẫn về giữ nhà thờ và chăm sóc mồ mả tổ tiên.</p></div>
+      <div class="val-card reveal" style="transition-delay:.4s"><span class="val-num">05</span><span class="val-icon">🤝</span><h3 class="val-h">Nghĩa tình làng xóm</h3><p class="val-p">Dòng họ Nguyễn nổi tiếng trong vùng với tình nghĩa xóm giềng. Giúp đỡ nhau trong hoạn nạn, chia sẻ lúc vui buồn là nét văn hoá được gìn giữ bền vững.</p></div>
+      <div class="val-card reveal" style="transition-delay:.5s"><span class="val-num">06</span><span class="val-icon">⚖️</span><h3 class="val-h">Công bằng & Liêm chính</h3><p class="val-p">Từ thế hệ Quyền trưởng đến nay, dòng họ đặt cao phẩm giá và sự liêm chính trong mọi việc làm — không vì lợi ích cá nhân mà quên đi đạo lý.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HISTORY -->
+<section class="section section-alt">
+  <div class="inner">
+    <div class="reveal"><div class="sec-ey">Khởi nguyên tộc hệ</div><h2 class="sec-h">Lịch sử dòng họ</h2><p class="sec-sub">Từ vùng đất cổ Hà Nam Ninh, hành trình hơn bốn thế kỷ của một dòng họ mang đậm nền nếp gia phong và tinh thần phụng sự xã hội.</p></div>
+    <div class="hist-body">
+      <p class="hist-lead reveal">Khởi nguyên của dòng họ được ghi nhận từ cụ Thuỷ tổ <strong>Hoàng quí Công, tự Nhân Đạo</strong> — người đặt nền móng đầu tiên cho tộc hệ tại vùng đồng bằng Bắc Bộ xưa, thuộc thôn Tân Tiến, xã Tiên Tân, huyện Duy Tiên, tỉnh Hà Nam (tỉnh Hà Nam Ninh xưa).</p>
+      <div class="hist-block reveal">
+        <div class="hist-block-label">Hai lần đổi họ — Dấu ấn lịch sử hiếm thấy</div>
+        <p>Trải qua những biến động lớn của lịch sử, dòng họ đã hai lần đổi họ: từ <strong>Hoàng</strong> sang <strong>Tạ</strong>, rồi từ Tạ sang <strong>Nguyễn</strong> vào đời cụ tổ thứ ba — Nguyễn quí Công, huý Kiệm, tự Pháp Thái, hiệu Như Nhật. Việc thay đổi họ tộc liên tiếp trong giai đoạn lịch sử phong kiến cho thấy tổ tiên từng trải qua thời cuộc biến động sâu sắc — có thể liên quan đến chính sự, bảo toàn huyết thống hoặc nhập tộc kế tự. Đây là một dấu ấn lịch sử đặc biệt, hiếm thấy trong gia phả các dòng họ Việt Nam.</p>
+      </div>
+      <div class="hist-block reveal">
+        <div class="hist-block-label">Từ thời Lê Trung Hưng đến triều Nguyễn — Nhiều đời công thần</div>
+        <p>Từ thời Lê Trung Hưng đến triều Nguyễn, nhiều đời tiên tổ liên tục giữ các chức vụ quan trọng trong hệ thống hương lý như <strong>Tổng Chánh, Thập lý hầu, Lý trưởng, Xã trưởng, Khán thủ, Vệ binh bản xã</strong>. Tiêu biểu như cụ Nguyễn quí Công tự Minh Luân; cụ Nguyễn quí Công tự Hữu Thể; cụ Nguyễn quí Công tự Hữu Đễ; cụ Nguyễn quí Công tự Hữu Nghi — đều từng đảm nhiệm chức Tổng Chánh bản tổng, cho thấy dòng họ nhiều đời có uy tín lớn, học thức và vị thế xã hội bền vững trong vùng.</p>
+      </div>
+      <div class="hist-block reveal">
+        <div class="hist-block-label">Dấu ấn võ nghiệp và tinh thần hộ quốc</div>
+        <p>Không chỉ có truyền thống hành chính, dòng họ còn mang dấu ấn võ nghiệp và tinh thần hộ quốc an dân qua các chức vụ liên quan quân sự địa phương như <strong>Xuất đội, Sở binh dã bản phủ, Vệ binh bản xã</strong>. Lịch sử dòng họ đậm nét nền văn hoá Nho học truyền thống qua hệ thống tên huý, tên tự, hiệu và cách ghi chép đầy đủ về mộ phần, ngày giỗ, nơi an táng của từng đời tổ tiên.</p>
+      </div>
+      <p class="hist-p reveal">Qua các thời kỳ lịch sử, con cháu trong họ tiếp tục tham gia phụng sự đất nước trong nhiều lĩnh vực khác nhau — có người là liệt sĩ trong kháng chiến, có người trở thành bác sĩ, dược sĩ, giáo viên, công chức và trí thức thời hiện đại. Từ vùng đất tổ Hà Nam Ninh, các thế hệ hậu duệ tiếp tục phát triển, lập nghiệp tại nhiều địa phương, gìn giữ truyền thống hiếu học, nghĩa tình và tinh thần phụng sự xã hội của tổ tiên để lại.</p>
+    </div>
+  </div>
+</section>
+
+<!-- HERITAGE COLLECTION -->
+<section class="section section-alt">
+  <div class="inner">
+    <div class="reveal"><div class="sec-ey">Bộ sưu tập di sản</div><h2 class="sec-h">Hình ảnh & Kỷ vật</h2><p class="sec-sub">Những hình ảnh, tài liệu và kỷ vật ghi lại dấu ấn lịch sử của dòng họ qua nhiều thế hệ.</p></div>
+    <div class="heritage-grid reveal">
+      <!-- Item 1 (large) -->
+      <div class="hg-item">
+        <svg class="hg-art" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#1a2e24"/><stop offset="100%" stop-color="#2d4a3e"/></linearGradient></defs>
+          <rect width="600" height="300" fill="url(#hg1)"/>
+          <g opacity=".12" stroke="#e8d5b0" stroke-width=".5" fill="none">
+            <line x1="0" y1="60" x2="600" y2="60"/><line x1="0" y1="120" x2="600" y2="120"/>
+            <line x1="0" y1="180" x2="600" y2="180"/><line x1="0" y1="240" x2="600" y2="240"/>
+            <line x1="100" y1="0" x2="100" y2="300"/><line x1="200" y1="0" x2="200" y2="300"/>
+            <line x1="300" y1="0" x2="300" y2="300"/><line x1="400" y1="0" x2="400" y2="300"/><line x1="500" y1="0" x2="500" y2="300"/>
+          </g>
+          <!-- Stylized rice field -->
+          <path d="M0 200 Q150 160 300 180 Q450 200 600 160 L600 300 L0 300Z" fill="#4a7c5f" opacity=".3"/>
+          <path d="M0 230 Q150 195 300 215 Q450 235 600 195 L600 300 L0 300Z" fill="#2d4a3e" opacity=".5"/>
+          <!-- Rice stalks scattered -->
+          <g opacity=".5" stroke="#8fb89a" stroke-width="1">
+            <line x1="50" y1="230" x2="48" y2="200"/><line x1="120" y1="225" x2="122" y2="195"/>
+            <line x1="190" y1="230" x2="188" y2="198"/><line x1="260" y1="222" x2="262" y2="192"/>
+            <line x1="330" y1="228" x2="328" y2="196"/><line x1="400" y1="220" x2="402" y2="190"/>
+            <line x1="470" y1="226" x2="468" y2="194"/><line x1="540" y1="222" x2="542" y2="192"/>
+          </g>
+          <!-- Moon -->
+          <circle cx="500" cy="60" r="30" fill="#e8d5b0" opacity=".12"/>
+          <circle cx="500" cy="60" r="22" fill="#e8d5b0" opacity=".1"/>
+          <!-- Text watermark -->
+          <text x="50" y="120" font-family="EB Garamond,serif" font-size="28" fill="#e8d5b0" opacity=".08" font-style="italic">Đất lành chim đậu</text>
+          <text x="50" y="155" font-family="EB Garamond,serif" font-size="16" fill="#e8d5b0" opacity=".06" font-style="italic">Duy Tiên · Hà Nam</text>
+        </svg>
+        <div class="hg-overlay"></div>
+        <div class="hg-inner"><div class="hg-info"><div class="hg-cat">Phong cảnh</div><div class="hg-title">Ruộng lúa Duy Tiên — Nơi khởi nghiệp</div><div class="hg-desc">Đồng lúa phù sa sông Đáy — vùng đất đã nuôi dưỡng tám đời họ Nguyễn.</div></div></div>
+      </div>
+      <!-- Item 2 -->
+      <div class="hg-item">
+        <svg class="hg-art" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <rect width="300" height="300" fill="#2c1810"/>
+          <!-- Gia pha illustration -->
+          <rect x="40" y="30" width="220" height="240" rx="4" fill="#f0e6cc" opacity=".06"/>
+          <rect x="50" y="40" width="200" height="220" rx="3" fill="#e8d5b0" opacity=".04"/>
+          <line x1="80" y1="80" x2="220" y2="80" stroke="#c4956a" stroke-width=".8" opacity=".3"/>
+          <line x1="80" y1="110" x2="220" y2="110" stroke="#c4956a" stroke-width=".5" opacity=".2"/>
+          <line x1="80" y1="135" x2="180" y2="135" stroke="#c4956a" stroke-width=".5" opacity=".2"/>
+          <line x1="80" y1="160" x2="200" y2="160" stroke="#c4956a" stroke-width=".5" opacity=".2"/>
+          <text x="80" y="75" font-family="EB Garamond,serif" font-size="12" fill="#e8d5b0" opacity=".25">族 譜</text>
+          <text x="80" y="105" font-family="EB Garamond,serif" font-size="9" fill="#c4956a" opacity=".2">Nguyễn Quy Công</text>
+          <text x="80" y="130" font-family="EB Garamond,serif" font-size="8" fill="#c4956a" opacity=".15">Nguyễn Hữu Hiền · Nguyễn Hữu Thanh</text>
+          <rect x="40" y="30" width="220" height="240" rx="4" fill="none" stroke="#c4956a" stroke-width=".8" opacity=".2"/>
+          <!-- Aged look -->
+          <rect width="300" height="300" fill="#5c3d2e" opacity=".3"/>
+        </svg>
+        <div class="hg-overlay"></div>
+        <div class="hg-inner"><div class="hg-info"><div class="hg-cat">Tài liệu</div><div class="hg-title">Gia phả gốc dòng họ</div><div class="hg-desc">Bản ghi chép tổ tiên qua nhiều đời, lưu giữ tại nhà thờ dòng họ.</div></div></div>
+      </div>
+      <!-- Item 3 -->
+      <div class="hg-item">
+        <svg class="hg-art" viewBox="0 0 300 225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <rect width="300" height="225" fill="#1e3328"/>
+          <!-- Nhà thờ họ illustration -->
+          <rect x="80" y="120" width="140" height="80" fill="#2d4a3e" opacity=".6"/>
+          <polygon points="150,60 60,120 240,120" fill="#253d30" opacity=".7"/>
+          <polygon points="150,40 80,100 220,100" fill="#1e3328" opacity=".8"/>
+          <rect x="130" y="150" width="40" height="50" fill="#1a2e24" opacity=".8"/>
+          <rect x="85" y="130" width="30" height="35" fill="none" stroke="#4a7c5f" stroke-width="1" opacity=".4"/>
+          <rect x="185" y="130" width="30" height="35" fill="none" stroke="#4a7c5f" stroke-width="1" opacity=".4"/>
+          <line x1="150" y1="20" x2="150" y2="45" stroke="#b8913a" stroke-width="1.5" opacity=".5"/>
+          <circle cx="150" cy="18" r="4" fill="#b8913a" opacity=".5"/>
+          <!-- Trees -->
+          <line x1="50" y1="200" x2="52" y2="140" stroke="#2d4a3e" stroke-width="3"/>
+          <ellipse cx="48" cy="132" rx="14" ry="18" fill="#2d4a3e" opacity=".6"/>
+          <line x1="250" y1="200" x2="248" y2="140" stroke="#2d4a3e" stroke-width="3"/>
+          <ellipse cx="252" cy="132" rx="14" ry="18" fill="#2d4a3e" opacity=".6"/>
+          <rect width="300" height="225" fill="#1a2e24" opacity=".25"/>
+        </svg>
+        <div class="hg-overlay"></div>
+        <div class="hg-inner"><div class="hg-info"><div class="hg-cat">Kiến trúc</div><div class="hg-title">Nhà thờ dòng họ</div><div class="hg-desc">Trung tâm tâm linh nơi con cháu tụ họp dịp giỗ tổ hàng năm.</div></div></div>
+      </div>
+      <!-- Item 4 -->
+      <div class="hg-item">
+        <svg class="hg-art" viewBox="0 0 300 225" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+          <rect width="300" height="225" fill="#14100c"/>
+          <!-- Ceramic/pottery illustration -->
+          <ellipse cx="150" cy="100" rx="50" ry="65" fill="none" stroke="#c4956a" stroke-width="1.5" opacity=".4"/>
+          <ellipse cx="150" cy="60" rx="35" ry="20" fill="#5c3d2e" opacity=".5"/>
+          <ellipse cx="150" cy="155" rx="55" ry="15" fill="#3d2814" opacity=".6"/>
+          <path d="M100 100 Q95 130 100 155" fill="none" stroke="#c4956a" stroke-width="1" opacity=".3"/>
+          <path d="M200 100 Q205 130 200 155" fill="none" stroke="#c4956a" stroke-width="1" opacity=".3"/>
+          <!-- Decorative pattern -->
+          <path d="M110 85 Q150 75 190 85 Q150 95 110 85Z" fill="#b8913a" opacity=".2"/>
+          <path d="M105 105 Q150 95 195 105 Q150 115 105 105Z" fill="#b8913a" opacity=".15"/>
+          <text x="150" y="40" text-anchor="middle" font-family="EB Garamond,serif" font-size="11" fill="#e8d5b0" opacity=".2" font-style="italic">Nguyễn</text>
+          <rect width="300" height="225" fill="#2c1810" opacity=".35"/>
+        </svg>
+        <div class="hg-overlay"></div>
+        <div class="hg-inner"><div class="hg-info"><div class="hg-cat">Hiện vật</div><div class="hg-title">Gốm sứ gia truyền</div><div class="hg-desc">Bộ gốm sứ được lưu giữ qua nhiều thế hệ trong nhà dòng họ.</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ORAL HISTORY -->
+<section class="section">
+  <div class="inner">
+    <div class="reveal"><div class="sec-ey">Lịch sử truyền khẩu</div><h2 class="sec-h">Câu chuyện từ các thế hệ</h2><p class="sec-sub">Những ký ức và câu chuyện được ghi lại từ các thành viên dòng họ — tư liệu quý giá không thể tìm thấy trong sách vở.</p></div>
+    <div class="oral-grid">
+      <div class="oh-card reveal">
+        <span class="oh-quote">"</span>
+        <p class="oh-text">Mỗi năm vào ngày giỗ tổ 24/3 âm lịch, cả dòng họ lại tụ họp về nhà thờ. Ông cha luôn dặn: dù bận đến đâu cũng phải về — vì đó là ngày con cháu nhớ ơn cụ Hoàng Nhân Đạo, người đã đặt nền móng cho tộc hệ này từ hơn bốn thế kỷ trước.</p>
+        <div class="oh-author"><div class="oh-ava">C</div><div class="oh-meta"><div class="oh-name">Nguyễn Văn Chinh</div><div class="oh-gen">Đời thứ 12 · Nhánh Hiển · 1929–2021</div></div></div>
+      </div>
+      <div class="oh-card reveal" style="transition-delay:.12s">
+        <span class="oh-quote">"</span>
+        <p class="oh-text">Bố tôi và các ông bà trong dòng họ đã dành nhiều năm nghiên cứu, dịch và phiên âm bản gia phả chữ Hán–Nôm của tổ tiên để lại. Đó là công trình thể hiện lòng kính trọng tiền nhân và khát vọng giữ gìn ký ức dòng tộc cho muôn đời sau.</p>
+        <div class="oh-author"><div class="oh-ava">H</div><div class="oh-meta"><div class="oh-name">Nguyễn Hồng Hải</div><div class="oh-gen">Đời thứ 13 · Nhánh Hiển</div></div></div>
+      </div>
+      <div class="oh-card reveal" style="transition-delay:.24s">
+        <span class="oh-quote">"</span>
+        <p class="oh-text">Ba tôi nói dòng họ ta không giàu nhưng có học. Từ hồi ông cố, đã lo cho con trai học chữ, dù phải bán thóc. Đó là món quà lớn nhất mà thế hệ trước để lại.</p>
+        <div class="oh-author"><div class="oh-ava">N</div><div class="oh-meta"><div class="oh-name">Nguyễn Hồng Nhật</div><div class="oh-gen">Đời thứ 7 · Nhánh cả</div></div></div>
+      </div>
+      <div class="oh-card reveal" style="transition-delay:.36s">
+        <span class="oh-quote">"</span>
+        <p class="oh-text">Mẹ tôi vẫn giữ chiếc hộp gỗ cũ, trong đó có tờ gia phả chép tay của ông nội. Mực đã phai, giấy đã vàng — nhưng đó là sợi dây kết nối chúng tôi với tám đời tổ tiên.</p>
+        <div class="oh-author"><div class="oh-ava">T</div><div class="oh-meta"><div class="oh-name">Nguyễn Thị Phương</div><div class="oh-gen">Đời thứ 8 · Nhánh cả</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRADITIONS -->
+<section class="section section-alt">
+  <div class="inner">
+    <div class="reveal"><div class="sec-ey">Phong tục tập quán</div><h2 class="sec-h">Lễ hội & Truyền thống</h2><p class="sec-sub">Những phong tục được gìn giữ qua nhiều thế hệ — kết nối quá khứ với hiện tại, cha ông với con cháu.</p></div>
+    <div class="trad-list reveal">
+      <div class="trad-item">
+        <div><div class="trad-month">Tháng 1</div><div class="trad-lunar">Âm lịch</div></div>
+        <div class="trad-body"><div class="trad-name">Tết Nguyên Đán — Thăm nhà thờ họ</div><div class="trad-desc">Mồng 2 Tết, con cháu tụ về nhà thờ dòng họ, thắp hương tổ tiên và chúc nhau năm mới.</div></div>
+        <span class="trad-tag">Thường niên</span>
+      </div>
+      <div class="trad-item">
+        <div><div class="trad-month">Tháng 3</div><div class="trad-lunar">Âm lịch</div></div>
+        <div class="trad-body"><div class="trad-name">Lễ Thanh Minh — Tảo mộ tổ tiên</div><div class="trad-desc">Cả dòng họ cùng nhau đi tảo mộ, dọn dẹp phần mộ tổ tiên và cúng bái đầy đủ lễ vật.</div></div>
+        <span class="trad-tag">Thường niên</span>
+      </div>
+      <div class="trad-item">
+        <div><div class="trad-month">24/3</div><div class="trad-lunar">Âm lịch</div></div>
+        <div class="trad-body"><div class="trad-name">Ngày giỗ tổ — Hoàng quí Công (Nhân Đạo)</div><div class="trad-desc">Ngày quan trọng nhất trong năm, theo ngày mất của cụ thuỷ tổ Hoàng quí Công, tự Nhân Đạo (đời thứ 1). Con cháu từ khắp nơi trở về đất Hà Nam cổ tưởng nhớ người khai lập dòng họ.</div></div>
+        <span class="trad-tag">Chính lễ</span>
+      </div>
+      <div class="trad-item">
+        <div><div class="trad-month">Tháng 10</div><div class="trad-lunar">Âm lịch</div></div>
+        <div class="trad-body"><div class="trad-name">Cơm mới — Tạ ơn mùa vụ</div><div class="trad-desc">Truyền thống nông dân, dâng cơm mới lên bàn thờ tổ tiên sau vụ thu hoạch lúa — tri ân đất trời và tiền nhân.</div></div>
+        <span class="trad-tag">Nông nghiệp</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OCCUPATION TRADITIONS -->
+<section class="section">
+  <div class="inner">
+    <div class="reveal"><div class="sec-ey">Truyền thống gia tộc</div><h2 class="sec-h">Nghề nghiệp & Chức sắc</h2><p class="sec-sub">Từ nhiều đời, dòng họ Nguyễn vốn có truyền thống học hành, đảm nhiệm chức sắc và phụng sự xã hội tại địa phương — từ thời Lê Trung Hưng đến tận ngày nay.</p></div>
+    <div class="occ-grid">
+      <div class="occ-card reveal">
+        <div class="occ-era">Thời Lê Trung Hưng — Triều Nguyễn</div>
+        <h3 class="occ-title">Chức vụ hành chính — Hào lý địa phương</h3>
+        <p class="occ-p">Nhiều tiên tổ liên tục giữ các chức vụ quan trọng trong bộ máy hương lý: <strong>Tổng Chánh, Thập lý hầu, Lý trưởng, Xã trưởng, Khán thủ</strong>. Tiêu biểu: cụ Nguyễn quí Công tự Minh Luân, tự Hữu Thể, tự Hữu Đễ, tự Hữu Nghi nhiều đời kế tiếp giữ chức Tổng Chánh bản tổng; các cụ tự Hữu Nhâm, Hữu Thản, Hữu Khánh, Hữu Lã từng đảm nhiệm Lý trưởng, Xã trưởng bản xã.</p>
+        <div class="occ-tags">
+          <span class="occ-tag">Tổng Chánh</span>
+          <span class="occ-tag">Thập lý hầu</span>
+          <span class="occ-tag">Lý trưởng</span>
+          <span class="occ-tag">Xã trưởng</span>
+          <span class="occ-tag">Khán thủ</span>
+        </div>
+      </div>
+      <div class="occ-card reveal" style="transition-delay:.1s">
+        <div class="occ-era">Truyền thống song hành</div>
+        <h3 class="occ-title">Võ nghiệp & Tinh thần hộ quốc</h3>
+        <p class="occ-p">Bên cạnh truyền thống hành chính và Nho học, dòng họ còn mang dấu ấn võ nghiệp và tinh thần trách nhiệm với quê hương đất nước. Một số tiên tổ đảm nhiệm các chức vụ quân sự địa phương như <strong>Xuất đội thực thu, Sở binh dã bản phủ, Vệ binh bản xã</strong> — thể hiện truyền thống vừa văn vừa võ của gia tộc.</p>
+        <div class="occ-tags">
+          <span class="occ-tag">Xuất đội</span>
+          <span class="occ-tag">Sở binh</span>
+          <span class="occ-tag">Vệ binh</span>
+        </div>
+      </div>
+      <div class="occ-card reveal" style="transition-delay:.2s">
+        <div class="occ-era">Thời kháng chiến</div>
+        <h3 class="occ-title">Liệt sĩ & Phụng sự đất nước</h3>
+        <p class="occ-p">Sang thời hiện đại, con cháu tiếp tục phát huy truyền thống hiếu học và phụng sự xã hội. Có người tham gia kháng chiến trở thành <strong>liệt sĩ</strong> — như cụ Nguyễn Thúc Quýnh (tức Kiều), đời thứ 12 — ghi danh vào trang sử oanh liệt của dân tộc.</p>
+        <div class="occ-tags">
+          <span class="occ-tag">Liệt sĩ</span>
+          <span class="occ-tag">Kháng chiến</span>
+        </div>
+      </div>
+      <div class="occ-card reveal" style="transition-delay:.3s">
+        <div class="occ-era">Thời hiện đại</div>
+        <h3 class="occ-title">Trí thức & Chuyên gia</h3>
+        <p class="occ-p">Các thế hệ hậu duệ tiếp tục công tác trong nhiều lĩnh vực: <strong>y tế, giáo dục, dược học, công chức nhà nước, kinh doanh</strong> và các ngành nghề trí thức khác. Dù ở thời kỳ nào, các thế hệ vẫn giữ gìn gia phong, coi trọng đạo nghĩa, học hành và tinh thần trách nhiệm với gia đình, quê hương.</p>
+        <div class="occ-tags">
+          <span class="occ-tag">Y tế · Dược học</span>
+          <span class="occ-tag">Giáo dục</span>
+          <span class="occ-tag">Công chức</span>
+          <span class="occ-tag">Kinh doanh</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONFUCIAN CULTURE -->
+<section class="section section-alt">
+  <div class="inner">
+    <div class="reveal"><div class="sec-ey">Nền tảng tinh thần</div><h2 class="sec-h">Văn hoá Nho học Bắc Bộ</h2><p class="sec-sub">Dòng họ Nguyễn mang đậm truyền thống văn hoá Nho học Bắc Bộ — nhiều đời lấy lễ nghĩa, gia phong và đạo hiếu làm nền tảng để gây dựng và duy trì tộc nghiệp.</p></div>
+    <div class="nho-wrap">
+      <blockquote class="nho-quote reveal">"Qua gia phả còn lưu giữ được hệ thống tên huý, tên tự, tên hiệu của các bậc tiên tổ như Phúc Thành, Pháp Thái, Minh Luân, Hữu Thể, Hữu Đễ, Hữu Nghi… có thể thấy tổ tiên là những người am hiểu lễ giáo, chịu ảnh hưởng sâu sắc của tư tưởng Nho học truyền thống."</blockquote>
+      <div class="nho-cols">
+        <div class="nho-item reveal">
+          <h4 class="nho-item-h">Cương thường đạo lý & Phép tắc gia tộc</h4>
+          <p class="nho-item-p">Việc ghi chép đầy đủ về thế thứ, ngày giỗ, nơi an táng, vai vế trong họ tộc — cũng như việc tôn xưng tổ cô, ghi rõ chính thất, thứ thất và hậu duệ nhiều đời — cho thấy dòng họ luôn coi trọng cương thường đạo lý và truyền thống "uống nước nhớ nguồn" của người Việt.</p>
+        </div>
+        <div class="nho-item reveal" style="transition-delay:.1s">
+          <h4 class="nho-item-h">Từ đường, mộ phần & Ngày giỗ</h4>
+          <p class="nho-item-p">Từ đường, phần mộ tổ tiên và ngày giỗ các bậc tiền nhân đều được ghi nhớ, chăm lo cẩn trọng như một sợi dây kết nối huyết thống và giáo dục đạo đức cho hậu thế. Đây là nét đặc trưng tiêu biểu của các dòng họ khoa lễ và hào lý vùng đồng bằng Bắc Bộ xưa.</p>
+        </div>
+        <div class="nho-item reveal" style="transition-delay:.2s">
+          <h4 class="nho-item-h">Hiếu học, trọng danh dự & Nhân cách</h4>
+          <p class="nho-item-p">Nền tảng Nho học đã hun đúc nên truyền thống hiếu học, trọng danh dự, trọng nhân cách và tinh thần trách nhiệm đối với cộng đồng. Con cháu trong họ luôn giữ gìn nền nếp gia phong, kính trên nhường dưới, đề cao chữ Hiếu, chữ Nghĩa và việc học hành tu dưỡng.</p>
+        </div>
+        <div class="nho-item reveal" style="transition-delay:.3s">
+          <h4 class="nho-item-h">Tiếp nối truyền thống qua các thế hệ</h4>
+          <p class="nho-item-p">Sang thời hiện đại, dù xã hội đổi thay và con cháu sinh sống ở nhiều nơi khác nhau, các thế hệ hậu duệ vẫn tiếp tục phát huy truyền thống cần cù, học tập, giữ gìn gia đạo, tôn kính tổ tiên và sống nhân nghĩa, góp phần gìn giữ bản sắc văn hoá tốt đẹp mà tổ tiên đã vun đắp từ nhiều đời.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section">
+  <div class="inner">
+    <div class="reveal"><div class="sec-ey">Tổng kết di sản</div><h2 class="sec-h">Con số ấn tượng</h2></div>
+    <div class="heritage-stats reveal">
+      <div class="hs-item"><div class="hs-n counter" data-target="15"><sup>+</sup></div><div class="hs-l">Thế hệ lịch sử</div></div>
+      <div class="hs-item"><div class="hs-n counter" data-target="84"></div><div class="hs-l">Thành viên ghi nhận</div></div>
+      <div class="hs-item"><div class="hs-n counter" data-target="4"></div><div class="hs-l">Lễ hội truyền thống / năm</div></div>
+      <div class="hs-item"><div class="hs-n counter" data-target="400"><sup>+</sup></div><div class="hs-l">Năm lịch sử</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-band">
+  <div class="ph-ey">Tham gia cùng dòng họ</div>
+  <h2 class="cta-h">Khám phá cây gia phả đầy đủ</h2>
+  <p class="cta-sub">Tìm hiểu về từng thành viên, kết nối các thế hệ và bổ sung thêm thông tin vào kho di sản số của dòng họ.</p>
+  <div class="cta-btns">
+    <a href="ho-nguyen-tree.html" class="btn-light">Mở cây gia phả →</a>
+    <a href="ho-nguyen-hero.html" class="btn-outline">Trang chủ</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="foot-brand">Họ Nguyễn · Duy Tiên · Hà Nam</span>
+  <div class="foot-links">
+    <a href="ho-nguyen-hero.html">Trang chủ</a>
+    <a href="ho-nguyen-tree.html">Phả hệ</a>
+    <a href="ho-nguyen-heritage.html">Di sản</a>
+    <a href="ho-nguyen-admin.html">Quản trị</a>
+  </div>
+  <span class="foot-copy">Bảo tàng số di sản gia tộc</span>
+</footer>
+
+<script>
+const btn=document.getElementById('themeBtn');
+const saved=localStorage.getItem('theme')||'light';
+document.documentElement.dataset.theme=saved;
+btn.textContent=saved==='dark'?'☀':'☾';
+btn.addEventListener('click',()=>{
+  const t=document.documentElement.dataset.theme==='dark'?'light':'dark';
+  document.documentElement.dataset.theme=t;
+  btn.textContent=t==='dark'?'☀':'☾';
+  localStorage.setItem('theme',t);
+});
+
+function animCounter(el){
+  const target=parseInt(el.dataset.target),sup=el.querySelector('sup'),supH=sup?sup.outerHTML:'';
+  let c=0;const step=Math.ceil(target/28);
+  const iv=setInterval(()=>{c=Math.min(c+step,target);el.innerHTML=c+(supH||'');if(c>=target)clearInterval(iv)},45);
+}
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');if(e.target.classList.contains('counter'))animCounter(e.target);io.unobserve(e.target)}})},{threshold:.1});
+document.querySelectorAll('.reveal,.counter').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>

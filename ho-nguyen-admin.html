@@ -1,0 +1,1744 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="description" content="Trang quản trị gia phả Họ Nguyễn — thêm, sửa, xoá thành viên, xuất dữ liệu JSON, thống kê 84 thành viên 15 đời.">
+<meta name="theme-color" content="#2D4A3E">
+<link rel="manifest" href="manifest.json">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quản trị Gia Phả — Họ Nguyễn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══ LIGHT DESIGN TOKENS ══ */
+:root{
+  /* Backgrounds */
+  --bg-page:  #F5EFE2;
+  --bg-card:  #FDFAF4;
+  --bg-card2: #F9F4EA;
+  --bg-input: #FFFFFF;
+  --bg-hover: rgba(139,97,72,.06);
+  --bg-sel:   rgba(184,145,58,.07);
+  --bg-side:  #2D4A3E;
+  --bg-side2: rgba(255,255,255,.07);
+  --bg-side3: rgba(255,255,255,.12);
+  /* Text */
+  --tx-primary:   #1A1210;
+  --tx-secondary: #5C3D2E;
+  --tx-muted:     #8B6148;
+  --tx-faint:     #C4956A;
+  --tx-side:      rgba(232,213,176,.85);
+  --tx-side-dim:  rgba(232,213,176,.5);
+  /* Borders */
+  --bd:      rgba(139,97,72,.14);
+  --bd2:     rgba(139,97,72,.26);
+  --bd-side: rgba(255,255,255,.1);
+  /* Accents */
+  --gold:    #B8913A;
+  --gold2:   #D4B06A;
+  --moss:    #2D4A3E;
+  --moss2:   #4A7C5F;
+  --moss3:   #8FB89A;
+  --red:     #C0453A;
+  --red2:    #E05548;
+  --amber:   #C07830;
+  /* Shadows */
+  --sh1: 0 1px 3px rgba(44,24,16,.08);
+  --sh2: 0 4px 16px rgba(44,24,16,.1);
+  --sh3: 0 16px 48px rgba(44,24,16,.14);
+  /* Misc */
+  --radius: 6px;
+  --serif:  'EB Garamond',Georgia,serif;
+  --display:'Cormorant Garamond',Georgia,serif;
+  --sans:   'Be Vietnam Pro',sans-serif;
+  --gold-grad:linear-gradient(135deg,#7A5808 0%,#B8901A 35%,#E8C060 60%,#C4A030 80%,#7A5808 100%);
+  --sidebar-w: 248px;
+  --topbar-h:  56px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:var(--sans);background:var(--bg-page);color:var(--tx-primary);
+  overflow:hidden;-webkit-font-smoothing:antialiased}
+
+/* ══ LAYOUT ══ */
+.app{display:grid;grid-template-columns:var(--sidebar-w) 1fr;
+  grid-template-rows:var(--topbar-h) 1fr;height:100vh;overflow:hidden}
+
+/* ══ TOPBAR ══ */
+.topbar{grid-column:1/-1;display:flex;align-items:center;gap:.75rem;
+  padding:0 1.25rem;background:var(--bg-card);
+  border-bottom:1px solid var(--bd);box-shadow:var(--sh1)}
+.brand{display:flex;align-items:center;gap:.65rem;width:var(--sidebar-w);
+  padding-right:1rem;flex-shrink:0}
+.brand-icon{width:30px;height:30px;background:var(--moss);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.brand-name{font-family:var(--display);font-size:14px;letter-spacing:.12em;
+  text-transform:uppercase;color:var(--tx-primary);font-weight:500}
+.brand-sub{font-size:9px;color:var(--tx-faint);letter-spacing:.06em;margin-top:-1px}
+.topbar-search{flex:1;max-width:400px;position:relative}
+.topbar-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;color:var(--tx-muted);pointer-events:none}
+.ts-input{width:100%;height:32px;padding:0 10px 0 32px;background:var(--bg-page);
+  border:1px solid var(--bd);border-radius:var(--radius);font-size:12px;
+  font-family:var(--sans);color:var(--tx-primary);outline:none;transition:border-color .2s}
+.ts-input:focus{border-color:var(--moss2);background:var(--bg-input)}
+.ts-input::placeholder{color:var(--tx-faint);opacity:.7}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:.5rem}
+.tb-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;
+  background:none;border:1px solid var(--bd);border-radius:var(--radius);
+  font-size:11px;font-family:var(--sans);color:var(--tx-secondary);
+  cursor:pointer;transition:all .15s;letter-spacing:.04em;white-space:nowrap}
+.tb-btn svg{width:13px;height:13px;flex-shrink:0}
+.tb-btn:hover{background:var(--bg-hover);border-color:var(--bd2);color:var(--tx-primary)}
+.tb-btn.primary{background:var(--moss);border-color:var(--moss);color:#E8D5B0}
+.tb-btn.primary:hover{background:#1E3328;border-color:#1E3328}
+.tb-btn.danger{border-color:rgba(192,69,58,.25);color:var(--red)}
+.tb-btn.danger:hover{background:rgba(192,69,58,.08);border-color:var(--red)}
+.tb-link{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;
+  background:none;border:1px solid var(--bd);border-radius:var(--radius);
+  font-size:11px;font-family:var(--sans);color:var(--tx-secondary);
+  cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:all .15s}
+.tb-link:hover{background:var(--bg-hover);color:var(--tx-primary)}
+.tb-link svg{width:13px;height:13px}
+.badge{min-width:18px;height:18px;padding:0 5px;background:var(--gold);
+  color:#fff;font-size:10px;font-weight:600;border-radius:99px;
+  display:inline-flex;align-items:center;justify-content:center}
+
+/* ══ SIDEBAR ══ */
+.sidebar{background:var(--bg-side);display:flex;flex-direction:column;overflow:hidden}
+.sidebar-logo{padding:1rem 1.1rem .5rem;display:flex;align-items:center;gap:.6rem;
+  border-bottom:1px solid var(--bd-side)}
+.sl-text{font-family:var(--serif);font-size:13px;letter-spacing:.15em;
+  text-transform:uppercase;color:rgba(232,213,176,.9)}
+.sl-sub{font-size:9px;color:var(--tx-side-dim);letter-spacing:.06em}
+
+.nav-section{padding:.75rem 1rem .3rem;font-size:8.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--tx-side-dim);font-weight:500}
+.nav-item{display:flex;align-items:center;gap:.65rem;padding:7px 1.1rem;
+  cursor:pointer;transition:all .15s;border-left:2px solid transparent;
+  font-size:12px;color:var(--tx-side);user-select:none;text-decoration:none}
+.nav-item:hover{background:var(--bg-side2);color:rgba(232,213,176,1)}
+.nav-item.active{background:var(--bg-side3);border-left-color:var(--gold2);color:var(--gold2)}
+.nav-item svg{width:14px;height:14px;flex-shrink:0;opacity:.75}
+.nav-item .cnt{margin-left:auto;font-size:10px;background:rgba(0,0,0,.25);
+  color:var(--tx-side-dim);padding:1px 6px;border-radius:99px}
+
+.filter-section{padding:.6rem 1.1rem;border-top:1px solid var(--bd-side)}
+.fs-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--tx-side-dim);margin-bottom:.45rem}
+.filter-chips{display:flex;flex-wrap:wrap;gap:3px}
+.fchip{padding:2px 8px;border-radius:99px;border:1px solid var(--bd-side);
+  font-size:10px;cursor:pointer;background:none;
+  font-family:var(--sans);color:var(--tx-side-dim);transition:all .15s}
+.fchip:hover{border-color:rgba(232,213,176,.3);color:var(--tx-side)}
+.fchip.on{background:var(--gold);border-color:var(--gold);color:#1a1210;font-weight:500}
+
+.sidebar-stats{padding:.85rem 1.1rem;border-top:1px solid var(--bd-side);margin-top:auto}
+.ss-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.ss-card{background:rgba(0,0,0,.2);border-radius:5px;padding:.55rem .75rem;
+  border:1px solid var(--bd-side)}
+.ss-n{font-family:var(--serif);font-size:22px;font-weight:500;color:rgba(232,213,176,.9);line-height:1}
+.ss-l{font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-side-dim);font-weight:300;margin-top:1px}
+
+/* ══ MAIN AREA ══ */
+.main{display:flex;flex-direction:column;overflow:hidden;background:var(--bg-page)}
+
+/* Table header bar */
+.tbar{display:flex;align-items:center;gap:.5rem;padding:.6rem 1.1rem;
+  background:var(--bg-card);border-bottom:1px solid var(--bd);
+  flex-shrink:0;box-shadow:var(--sh1)}
+.tbar-title{font-family:var(--serif);font-size:17px;color:var(--tx-primary);margin-right:auto}
+.tbar-title span{font-size:12px;color:var(--tx-muted);font-family:var(--sans);font-style:normal;margin-left:.4rem}
+.sort-sel{height:28px;padding:0 8px;background:var(--bg-input);border:1px solid var(--bd);
+  border-radius:var(--radius);font-size:11px;font-family:var(--sans);
+  color:var(--tx-secondary);outline:none;cursor:pointer}
+.sort-sel:focus{border-color:var(--moss2)}
+
+/* Table */
+.table-wrap{flex:1;overflow-y:auto}
+.table-wrap::-webkit-scrollbar{width:5px}
+.table-wrap::-webkit-scrollbar-thumb{background:rgba(139,97,72,.2);border-radius:99px}
+
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead{position:sticky;top:0;z-index:10}
+thead tr{background:var(--bg-card2);border-bottom:1px solid var(--bd2)}
+th{padding:9px 10px;text-align:left;font-size:9px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--tx-muted);font-weight:500;
+  white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s}
+th:hover{color:var(--tx-primary)}
+th.sorted{color:var(--gold)}
+td{padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:middle}
+tr{transition:background .1s;cursor:pointer}
+tr:hover td{background:var(--bg-hover)}
+tr.sel td{background:var(--bg-sel)}
+tr.sel td:first-child{box-shadow:inset 2px 0 0 var(--gold)}
+
+/* Cell types */
+.c-id{font-family:var(--serif);font-size:13px;color:var(--tx-muted);width:44px}
+.c-gen{width:42px}
+.gen-dot{display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border-radius:50%;font-size:10px;font-weight:600;
+  background:rgba(184,145,58,.12);color:var(--gold);font-family:var(--sans)}
+.c-name{min-width:170px;max-width:210px}
+.m-name{font-family:var(--serif);font-size:13.5px;color:var(--tx-primary);font-weight:500;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.m-alias{font-size:10px;color:var(--tx-muted);font-style:italic;margin-top:1px}
+.sex-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.sex-dot.m{background:#4A7C5F}
+.sex-dot.f{background:var(--amber)}
+.c-par{font-size:11px;color:var(--tx-secondary);max-width:150px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-yr{font-size:11px;color:var(--tx-muted);font-family:var(--serif);font-style:italic;width:110px}
+.c-br{width:88px}
+.br-tag{display:inline-block;font-size:9px;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 8px;border-radius:99px;border:1px solid var(--bd);color:var(--tx-muted)}
+.br-tag.root{border-color:rgba(184,145,58,.35);color:var(--gold);background:rgba(184,145,58,.06)}
+.br-tag.nhanh1{border-color:rgba(74,124,95,.4);color:#2D6B50;background:rgba(74,124,95,.08)}
+.br-tag.nhanh2{border-color:rgba(80,100,180,.4);color:#3A5CB0;background:rgba(80,100,180,.07)}
+.br-tag.nhanh3{border-color:rgba(160,90,30,.4);color:#9A5A20;background:rgba(160,90,30,.07)}
+.c-note{max-width:190px}
+.note-p{font-size:11px;color:var(--tx-muted);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis;max-width:175px;font-style:italic}
+.c-act{width:82px}
+.row-acts{display:flex;gap:3px;opacity:0;transition:opacity .12s}
+tr:hover .row-acts{opacity:1}
+.a-btn{width:26px;height:26px;background:none;border:1px solid var(--bd);
+  border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--tx-muted);transition:all .15s}
+.a-btn:hover{background:var(--bg-card2);border-color:var(--bd2);color:var(--tx-primary)}
+.a-btn.dup:hover{background:rgba(184,145,58,.1);border-color:var(--gold);color:var(--gold)}
+.a-btn.del:hover{background:rgba(192,69,58,.08);border-color:var(--red);color:var(--red)}
+.a-btn svg{width:12px;height:12px}
+
+/* Empty state */
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.75rem;padding:4rem 2rem;color:var(--tx-muted)}
+.empty svg{width:36px;height:36px;opacity:.3}
+.empty p{font-family:var(--serif);font-style:italic;font-size:15px}
+
+/* ══ DASHBOARD ══ */
+.dash{padding:1.5rem;overflow-y:auto;flex:1}
+.dash::-webkit-scrollbar{width:5px}
+.dash::-webkit-scrollbar-thumb{background:rgba(139,97,72,.18);border-radius:99px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:.75rem;margin-bottom:1.5rem}
+.kpi{background:var(--bg-card);border:1px solid var(--bd);border-radius:var(--radius);
+  padding:1rem 1.25rem;box-shadow:var(--sh1);position:relative;overflow:hidden}
+.kpi::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .25s;transform-origin:left}
+.kpi:hover::after{transform:scaleX(1)}
+.kpi-n{font-family:var(--display);font-size:36px;font-weight:500;color:var(--tx-primary);line-height:1}
+.kpi-n sup{font-size:14px;color:var(--gold)}
+.kpi-l{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-muted);margin-top:.25rem}
+.kpi-sub{font-size:11px;color:var(--tx-faint);margin-top:.2rem;font-style:italic}
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:.75rem}
+.chart-card{background:var(--bg-card);border:1px solid var(--bd);
+  border-radius:var(--radius);padding:1.1rem 1.25rem;box-shadow:var(--sh1)}
+.chart-title{font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:.85rem}
+.bar-row{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.bar-label{font-size:10px;color:var(--tx-secondary);width:50px;flex-shrink:0;text-align:right}
+.bar-track{flex:1;height:16px;background:rgba(139,97,72,.08);border-radius:3px;overflow:hidden}
+.bar-fill{height:100%;border-radius:3px;transition:width .7s ease;
+  background:linear-gradient(90deg,var(--moss),var(--moss2));
+  display:flex;align-items:center;padding:0 5px}
+.bar-fill.f2{background:linear-gradient(90deg,var(--amber),#d4956a)}
+.bar-val{font-size:10px;color:#fff;font-weight:600;white-space:nowrap}
+.bar-abs{font-size:10px;color:var(--tx-muted);width:28px;text-align:right}
+
+/* ══ CHANGELOG ══ */
+.cl-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.cl-list{flex:1;overflow-y:auto;padding:1rem 1.25rem}
+.cl-list::-webkit-scrollbar{width:4px}
+.cl-list::-webkit-scrollbar-thumb{background:rgba(139,97,72,.18);border-radius:99px}
+.cl-item{display:flex;gap:.75rem;padding:.65rem 0;border-bottom:1px solid var(--bd);align-items:flex-start}
+.cl-item:last-child{border-bottom:none}
+.cl-ts{font-size:10px;color:var(--tx-muted);white-space:nowrap;width:72px;
+  font-family:monospace;flex-shrink:0;padding-top:1px}
+.cl-badge{font-size:9px;letter-spacing:.07em;text-transform:uppercase;
+  padding:2px 7px;border-radius:99px;flex-shrink:0;font-family:var(--sans);border:1px solid}
+.cl-badge.add{border-color:rgba(74,124,95,.35);color:var(--moss2);background:rgba(74,124,95,.06)}
+.cl-badge.edit{border-color:rgba(184,145,58,.35);color:var(--gold);background:rgba(184,145,58,.06)}
+.cl-badge.del{border-color:rgba(192,69,58,.3);color:var(--red);background:rgba(192,69,58,.05)}
+.cl-msg{font-size:12px;color:var(--tx-secondary);line-height:1.45}
+.cl-empty{padding:3rem;text-align:center;color:var(--tx-muted);font-family:var(--serif);font-style:italic}
+
+/* ══ EXPORT ══ */
+.exp-wrap{flex:1;overflow-y:auto;padding:1.5rem}
+.exp-wrap::-webkit-scrollbar{width:5px}
+.exp-wrap::-webkit-scrollbar-thumb{background:rgba(139,97,72,.18);border-radius:99px}
+.exp-section{background:var(--bg-card);border:1px solid var(--bd);border-radius:var(--radius);
+  padding:1.25rem;margin-bottom:1rem;box-shadow:var(--sh1)}
+.exp-h{font-family:var(--serif);font-size:17px;color:var(--tx-primary);margin-bottom:.4rem}
+.exp-p{font-size:12px;color:var(--tx-muted);line-height:1.72;margin-bottom:1rem}
+.exp-btns{display:flex;gap:.65rem;flex-wrap:wrap}
+.code-box{background:var(--bg-page);border:1px solid var(--bd);border-radius:var(--radius);
+  padding:.85rem 1rem;font-size:11px;font-family:monospace;color:var(--moss2);
+  max-height:180px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;line-height:1.55}
+.imp-area{width:100%;padding:.75rem;background:var(--bg-input);border:1px solid var(--bd);
+  border-radius:var(--radius);font-size:11px;font-family:monospace;color:var(--moss2);
+  min-height:110px;resize:vertical;outline:none;transition:border-color .2s;line-height:1.55}
+.imp-area:focus{border-color:var(--moss2)}
+.imp-result{margin-top:.5rem;font-size:12px}
+
+/* ══ UNDO BAR ══ */
+.undo-bar{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(70px);
+  background:var(--tx-primary);color:#fff;padding:9px 16px;border-radius:var(--radius);
+  display:flex;align-items:center;gap:1rem;z-index:900;
+  box-shadow:var(--sh3);transition:transform .28s;font-size:12px;white-space:nowrap}
+.undo-bar.show{transform:translateX(-50%) translateY(0)}
+.undo-btn{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);
+  color:#fff;padding:4px 12px;border-radius:4px;font-size:11px;
+  cursor:pointer;font-family:var(--sans);transition:all .15s}
+.undo-btn:hover{background:rgba(255,255,255,.25)}
+
+/* ══ MODAL ══ */
+.overlay{position:fixed;inset:0;background:rgba(26,18,12,.45);z-index:800;
+  display:none;align-items:center;justify-content:center;padding:1rem;
+  backdrop-filter:blur(3px)}
+.overlay.open{display:flex}
+.modal{background:var(--bg-card);border:1px solid var(--bd);border-radius:10px;
+  width:100%;max-width:600px;max-height:90vh;display:flex;flex-direction:column;
+  box-shadow:var(--sh3);animation:mIn .2s ease}
+.modal.sm{max-width:400px}
+@keyframes mIn{from{opacity:0;transform:translateY(10px) scale(.98)}}
+.m-hdr{padding:1.2rem 1.5rem .9rem;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.m-title{font-family:var(--serif);font-size:20px;color:var(--tx-primary)}
+.m-title span{font-size:12px;color:var(--tx-muted);font-family:var(--sans);margin-left:.4rem}
+.m-close{width:28px;height:28px;background:none;border:1px solid var(--bd);border-radius:50%;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  color:var(--tx-muted);font-size:13px;transition:all .15s}
+.m-close:hover{background:var(--bg-hover);color:var(--tx-primary)}
+.m-body{flex:1;overflow-y:auto;padding:1.2rem 1.5rem}
+.m-body::-webkit-scrollbar{width:4px}
+.m-body::-webkit-scrollbar-thumb{background:rgba(139,97,72,.2);border-radius:99px}
+.m-footer{padding:.9rem 1.5rem;border-top:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:flex-end;gap:.65rem;flex-shrink:0}
+
+/* Form */
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:.85rem}
+.f-row.full{grid-template-columns:1fr}
+.f-group{display:flex;flex-direction:column;gap:4px}
+.f-label{font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--tx-muted);font-weight:500}
+.f-label .req{color:var(--red);margin-left:2px}
+.f-input{height:34px;padding:0 10px;background:var(--bg-input);border:1px solid var(--bd);
+  border-radius:var(--radius);font-size:13px;font-family:var(--sans);
+  color:var(--tx-primary);outline:none;transition:border-color .2s}
+.f-input:focus{border-color:var(--moss2)}
+.f-input.err{border-color:var(--red)}
+.f-select{height:34px;padding:0 10px;background:var(--bg-input);border:1px solid var(--bd);
+  border-radius:var(--radius);font-size:12px;font-family:var(--sans);
+  color:var(--tx-primary);outline:none;cursor:pointer;transition:border-color .2s}
+.f-select:focus{border-color:var(--moss2)}
+.f-select.err{border-color:var(--red)}
+.f-textarea{padding:8px 10px;background:var(--bg-input);border:1px solid var(--bd);
+  border-radius:var(--radius);font-size:12px;font-family:var(--sans);
+  color:var(--tx-primary);outline:none;resize:vertical;min-height:84px;
+  line-height:1.65;transition:border-color .2s;width:100%}
+.f-textarea:focus{border-color:var(--moss2)}
+.f-hint{font-size:10px;color:var(--tx-muted)}
+.f-error{font-size:10px;color:var(--red);display:none}
+.f-group.has-err .f-error{display:block}
+.f-group.has-err .f-input,.f-group.has-err .f-select{border-color:var(--red)}
+.gender-radio{display:flex;gap:.85rem}
+.gr-opt{display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px;color:var(--tx-secondary)}
+.gr-opt input{accent-color:var(--gold);width:14px;height:14px;cursor:pointer}
+.f-section{font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--gold);margin:.85rem 0 .6rem}
+.f-divider{height:1px;background:var(--bd);margin:.85rem 0}
+.f-father-hint{font-size:10px;color:var(--tx-muted);margin-top:2px;font-style:italic}
+
+/* Modal buttons */
+.m-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 16px;
+  border-radius:var(--radius);font-size:12px;font-family:var(--sans);
+  cursor:pointer;transition:all .15s;letter-spacing:.04em;border:1px solid}
+.m-btn svg{width:12px;height:12px}
+.m-btn.save{background:var(--moss);border-color:var(--moss);color:#E8D5B0}
+.m-btn.save:hover{background:#1E3328;border-color:#1E3328}
+.m-btn.cancel{background:none;border-color:var(--bd);color:var(--tx-muted)}
+.m-btn.cancel:hover{background:var(--bg-hover);color:var(--tx-primary)}
+.m-btn.del-ok{background:rgba(192,69,58,.08);border-color:var(--red);color:var(--red)}
+.m-btn.del-ok:hover{background:var(--red);color:#fff}
+
+/* Detail */
+.det-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55rem}
+.det-row{display:flex;flex-direction:column;gap:2px;padding:.6rem .75rem;
+  background:var(--bg-page);border-radius:var(--radius);border:1px solid var(--bd)}
+.det-row.full{grid-column:1/-1}
+.det-key{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx-muted);font-weight:500}
+.det-val{font-size:13px;color:var(--tx-primary);font-family:var(--display);line-height:1.5}
+.det-val.note{font-size:12px;white-space:pre-wrap;font-family:var(--sans);color:var(--tx-secondary)}
+
+/* ══ SHORTCUTS MODAL ══ */
+.sc-grid{display:grid;grid-template-columns:1fr 1fr;gap:.45rem}
+.sc-row{display:flex;align-items:center;gap:.6rem;padding:.4rem .6rem;
+  background:var(--bg-page);border-radius:4px}
+.sc-keys{display:flex;gap:3px;flex-shrink:0}
+.kbd{background:var(--bg-card2);border:1px solid var(--bd);border-bottom-width:2px;
+  border-radius:4px;padding:2px 7px;font-size:10px;font-family:monospace;color:var(--tx-secondary)}
+.sc-desc{font-size:11px;color:var(--tx-muted)}
+
+/* ══ TOAST ══ */
+.toast-wrap{position:fixed;bottom:20px;right:20px;z-index:1000;
+  display:flex;flex-direction:column;gap:5px;align-items:flex-end}
+.t-item{display:flex;align-items:center;gap:7px;padding:9px 14px;border-radius:var(--radius);
+  font-size:12px;opacity:0;transform:translateY(8px);transition:opacity .22s,transform .22s;
+  box-shadow:var(--sh2);min-width:220px;max-width:340px;pointer-events:auto}
+.t-item.show{opacity:1;transform:none}
+.t-item.success{background:var(--bg-card);border:1px solid rgba(74,124,95,.35);color:var(--moss2)}
+.t-item.error{background:var(--bg-card);border:1px solid rgba(192,69,58,.3);color:var(--red)}
+.t-item.info{background:var(--bg-card);border:1px solid var(--bd2);color:var(--tx-secondary)}
+
+/* ══ BULK EDIT ══ */
+.bulk-badge{display:inline-flex;align-items:center;justify-content:center;
+  min-width:18px;height:18px;padding:0 5px;background:rgba(184,145,58,.15);
+  color:var(--gold);font-size:10px;font-weight:600;border-radius:99px;margin-left:4px}
+/* ══ COLUMN TOGGLE ══ */
+.col-toggle-wrap{position:relative;display:inline-block}
+.col-toggle-menu{position:absolute;top:calc(100% + 4px);right:0;z-index:300;
+  background:var(--bg-card);border:1px solid var(--bd2);border-radius:var(--radius);
+  box-shadow:var(--sh2);padding:.5rem;min-width:160px;display:none}
+.col-toggle-menu.open{display:block}
+.col-opt{display:flex;align-items:center;gap:.5rem;padding:5px 8px;border-radius:4px;
+  cursor:pointer;font-size:12px;color:var(--tx-secondary);transition:background .12s;user-select:none}
+.col-opt:hover{background:var(--bg-hover)}
+.col-opt input{accent-color:var(--gold);cursor:pointer;width:13px;height:13px}
+/* ══ AVATAR ══ */
+.m-ava{width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--serif);font-size:13px;font-weight:500;
+  border:1.5px solid;cursor:pointer;transition:opacity .15s}
+.m-ava:hover{opacity:.8}
+/* ══ LOGIN OVERLAY ══ */
+.login-wall{position:fixed;inset:0;z-index:9999;background:linear-gradient(135deg,#1A1208 0%,#2D4A3E 100%);
+  display:flex;align-items:center;justify-content:center}
+.login-box{background:var(--bg-card);border:1px solid var(--bd);border-radius:10px;
+  padding:2.5rem 2.25rem;width:360px;box-shadow:0 24px 64px rgba(0,0,0,.4)}
+.login-logo{font-family:var(--serif);font-size:22px;letter-spacing:.15em;color:var(--gold);
+  text-align:center;margin-bottom:.35rem}
+.login-sub{font-size:11px;color:var(--tx-muted);text-align:center;letter-spacing:.08em;margin-bottom:2rem}
+.login-field{margin-bottom:1rem}
+.login-field label{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--tx-secondary);margin-bottom:.4rem;font-weight:500}
+.login-field input{width:100%;padding:9px 12px;border:1px solid var(--bd);border-radius:5px;
+  background:var(--bg-input);color:var(--tx-primary);font-size:13px;font-family:var(--sans);
+  outline:none;transition:border-color .15s}
+.login-field input:focus{border-color:var(--gold)}
+.login-err{font-size:11px;color:var(--red);margin-bottom:.75rem;min-height:16px;text-align:center}
+.login-btn{width:100%;padding:10px;background:var(--moss);border:none;border-radius:5px;
+  color:#E8D5B0;font-size:12px;font-weight:600;letter-spacing:.1em;font-family:var(--sans);
+  cursor:pointer;transition:background .15s;text-transform:uppercase}
+.login-btn:hover{background:var(--moss2)}
+/* ══ REQUEST CARDS ══ */
+.req-card{background:var(--bg-card);border:1px solid var(--bd);border-radius:8px;
+  padding:1.25rem 1.5rem;margin-bottom:1rem;transition:border-color .15s}
+.req-card:hover{border-color:rgba(184,145,58,.3)}
+.req-hdr{display:flex;align-items:center;gap:.75rem;margin-bottom:.75rem}
+.req-type{font-size:9px;letter-spacing:.12em;text-transform:uppercase;padding:3px 10px;
+  border-radius:99px;border:1px solid;font-weight:600;flex-shrink:0}
+.req-type.add{border-color:rgba(74,124,95,.4);color:#2D6B50;background:rgba(74,124,95,.08)}
+.req-type.edit{border-color:rgba(80,100,180,.4);color:#3A5CB0;background:rgba(80,100,180,.08)}
+.req-name{font-family:var(--serif);font-size:15px;color:var(--tx-primary);font-weight:500}
+.req-ts{font-size:10px;color:var(--tx-muted);margin-left:auto}
+.req-fields{display:grid;grid-template-columns:1fr 1fr;gap:.5rem .75rem;
+  font-size:12px;color:var(--tx-secondary);margin-bottom:.85rem}
+.req-field span:first-child{color:var(--tx-muted);font-size:10px;letter-spacing:.06em;text-transform:uppercase;display:block}
+.req-note{font-size:12px;color:var(--tx-muted);border-left:2px solid var(--bd);padding-left:.75rem;
+  margin-bottom:.85rem;font-style:italic;white-space:pre-wrap}
+.req-acts{display:flex;gap:.5rem}
+/* ══ PRINT ══ */
+@media print{
+  .sidebar,.topbar,.tbar,.c-act,.row-acts,.undo-bar,.toast-wrap,
+  .overlay,#vDashboard,#vChangelog,#vExport{display:none!important}
+  .app{display:block}
+  table{width:100%;font-size:11px}
+  .c-note{display:table-cell!important}
+  td,th{padding:5px 8px;border-bottom:1px solid #ddd}
+  thead tr{background:#f5f0e8}
+  body{background:#fff;color:#000}
+  .m-name{max-width:none;white-space:normal}
+  .note-p{max-width:none;white-space:normal;overflow:visible}
+}
+/* ══ RESPONSIVE ══ */
+@media(max-width:860px){
+  .app{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .c-br,.c-note,.c-yr{display:none}
+  .brand{display:none}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ══ TOPBAR ══ -->
+<header class="topbar">
+  <div class="brand">
+    <div class="brand-icon">🌳</div>
+    <div><div class="brand-name">Quản trị gia phả</div><div class="brand-sub">Họ Nguyễn · Duy Tiên · Hà Nam</div></div>
+  </div>
+  <div class="topbar-search">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l2.5 2.5"/></svg>
+    <input class="ts-input" id="gSearch" type="text" placeholder="Tìm kiếm tên, ghi chú… (Ctrl+K)" autocomplete="off">
+    <span id="searchBadge" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);
+      font-size:10px;color:var(--tx-muted);display:none;background:var(--bg-page);padding:0 4px;
+      border-radius:3px;pointer-events:none"></span>
+  </div>
+  <div class="topbar-right">
+    <button class="tb-btn" id="btnUndo" style="display:none" onclick="undo()">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 7a5 5 0 105-5H4M2 5V2l3 3-3 3"/></svg>Hoàn tác
+    </button>
+    <button class="tb-btn" onclick="showShortcuts()">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="3" width="12" height="8" rx="1.5"/><path d="M3 6h1M6 6h1M9 6h1M4 9h6"/></svg>Phím tắt
+    </button>
+    <button class="tb-btn primary" onclick="openAdd()">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M7 2v10M2 7h10"/></svg>Thêm thành viên
+    </button>
+    <a href="ho-nguyen-tree.html" class="tb-link">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="3.5" r="1.8"/><path d="M7 5.3v3.5M4.5 12h5M4.5 9l2.5 3 2.5-3"/></svg>Xem cây
+    </a>
+    <a href="ho-nguyen-heritage.html" class="tb-link">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2H2v10h10V2zM5 5h4M5 7h4M5 9h2"/></svg>Di sản
+    </a>
+    <a href="ho-nguyen-hero.html" class="tb-link">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 7l6-5 6 5v6H9V9H5v4H1z"/></svg>Trang chủ
+    </a>
+  </div>
+</header>
+
+<!-- ══ SIDEBAR ══ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div><div class="sl-text">Họ Nguyễn</div><div class="sl-sub">Bảo tàng số di sản</div></div>
+  </div>
+
+  <div class="nav-section">Điều hướng</div>
+  <div class="nav-item active" onclick="setView('list')">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 3h10M2 7h10M2 11h7"/><circle cx="1.2" cy="3" r=".8" fill="currentColor"/><circle cx="1.2" cy="7" r=".8" fill="currentColor"/><circle cx="1.2" cy="11" r=".8" fill="currentColor"/></svg>
+    Danh sách thành viên <span class="cnt" id="navCnt">84</span>
+  </div>
+  <div class="nav-item" onclick="setView('dashboard')">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="5" height="5" rx="1"/><rect x="8" y="1" width="5" height="5" rx="1"/><rect x="1" y="8" width="5" height="5" rx="1"/><rect x="8" y="8" width="5" height="5" rx="1"/></svg>
+    Tổng quan &amp; Biểu đồ
+  </div>
+  <div class="nav-item" onclick="setView('changelog')">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 1h10v12H2z"/><path d="M4 4h6M4 7h6M4 10h4"/></svg>
+    Nhật ký thay đổi <span class="cnt" id="navLog">0</span>
+  </div>
+  <div class="nav-item" onclick="setView('export')">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 1h8l3 3v9H2z"/><path d="M9 1v3h3"/><path d="M5 8h4M5 11h2"/></svg>
+    Xuất / Nhập dữ liệu
+  </div>
+  <div class="nav-item" onclick="setView('requests')">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 1v12M1 7h12"/><circle cx="7" cy="7" r="5.5"/></svg>
+    Yêu cầu bổ sung <span class="cnt" id="navReq">0</span>
+  </div>
+
+  <div class="filter-section">
+    <div class="fs-label">Lọc theo đời</div>
+    <div class="filter-chips" id="genChips">
+      <button class="fchip on" data-gen="all">Tất cả</button>
+      <button class="fchip" data-gen="1">Đ1</button><button class="fchip" data-gen="2">Đ2</button>
+      <button class="fchip" data-gen="3">Đ3</button><button class="fchip" data-gen="4">Đ4</button>
+      <button class="fchip" data-gen="5">Đ5</button><button class="fchip" data-gen="6">Đ6</button>
+      <button class="fchip" data-gen="7">Đ7</button><button class="fchip" data-gen="8">Đ8</button>
+      <button class="fchip" data-gen="9">Đ9</button><button class="fchip" data-gen="10">Đ10</button>
+      <button class="fchip" data-gen="11">Đ11</button><button class="fchip" data-gen="12">Đ12</button>
+      <button class="fchip" data-gen="13">Đ13</button><button class="fchip" data-gen="14">Đ14</button>
+      <button class="fchip" data-gen="15">Đ15</button>
+    </div>
+  </div>
+  <div class="filter-section" style="padding-top:.4rem">
+    <div class="fs-label">Lọc theo giới tính</div>
+    <div class="filter-chips" id="sexChips">
+      <button class="fchip on" data-sex="all">Tất cả</button>
+      <button class="fchip" data-sex="male">♂ Nam</button>
+      <button class="fchip" data-sex="female">♀ Nữ</button>
+    </div>
+  </div>
+  <div class="filter-section" style="padding-top:.4rem">
+    <div class="fs-label">Lọc theo chi nhánh</div>
+    <div class="filter-chips" id="brChips">
+      <button class="fchip on" data-br="all">Tất cả</button>
+      <button class="fchip" data-br="Tiền tổ">Tiền tổ</button>
+      <button class="fchip" data-br="Nhánh Hữu Đễ">Hữu Đễ</button>
+      <button class="fchip" data-br="Nhánh Hữu Quyền">Hữu Quyền</button>
+      <button class="fchip" data-br="Nhánh Hữu Hiệu">Hữu Hiệu</button>
+    </div>
+  </div>
+
+  <div class="sidebar-stats">
+    <div class="ss-grid">
+      <div class="ss-card"><div class="ss-n" id="ssTot">…</div><div class="ss-l">Tổng</div></div>
+      <div class="ss-card"><div class="ss-n" id="ssShow">…</div><div class="ss-l">Hiển thị</div></div>
+      <div class="ss-card"><div class="ss-n" id="ssMale">…</div><div class="ss-l">Nam</div></div>
+      <div class="ss-card"><div class="ss-n" id="ssFem">…</div><div class="ss-l">Nữ</div></div>
+    </div>
+  </div>
+</aside>
+
+<!-- ══ MAIN ══ -->
+<main class="main">
+
+  <!-- LIST VIEW -->
+  <div id="vList" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+    <div class="tbar">
+      <h2 class="tbar-title">Thành viên <span id="tblCount"></span></h2>
+      <select class="sort-sel" id="sortSel" onchange="renderTable()">
+        <option value="id">Sắp xếp: ID</option>
+        <option value="gen" selected>Sắp xếp: Đời</option>
+        <option value="name">Sắp xếp: Tên A→Z</option>
+        <option value="born">Sắp xếp: Năm sinh</option>
+      </select>
+      <button class="tb-btn" onclick="selectAll()">Chọn tất cả</button>
+      <button class="tb-btn danger" id="btnDelSel" style="display:none" onclick="deleteSelected()">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h10M5 4V2h4v2"/><path d="M3 4l1 8h6l1-8"/></svg>
+        Xoá (<span id="selCnt">0</span>)
+      </button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th style="width:32px"><input type="checkbox" id="chkAll" onchange="toggleAll(this)" style="accent-color:var(--gold);cursor:pointer"></th>
+          <th style="width:38px"></th>
+          <th onclick="sortBy('id')">ID</th>
+          <th onclick="sortBy('gen')">Đời</th>
+          <th onclick="sortBy('name')">Họ tên</th>
+          <th>GT</th>
+          <th>Cha / Mẹ</th>
+          <th onclick="sortBy('born')">Năm sinh/mất</th>
+          <th>Chi nhánh</th>
+          <th>Ghi chú</th>
+          <th></th>
+        </tr></thead>
+        <tbody id="tBody"></tbody>
+      </table>
+      <div class="empty" id="emptyState" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <p>Không tìm thấy thành viên nào</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="vDashboard" class="dash" style="display:none"></div>
+
+  <!-- CHANGELOG VIEW -->
+  <div id="vChangelog" class="cl-wrap" style="display:none">
+    <div class="tbar">
+      <h2 class="tbar-title">Nhật ký thay đổi <span id="clCount"></span></h2>
+      <button class="tb-btn danger" onclick="clearLog()">Xoá nhật ký</button>
+    </div>
+    <div class="cl-list" id="clList"></div>
+  </div>
+
+  <!-- EXPORT VIEW -->
+  <div id="vExport" class="exp-wrap" style="display:none">
+    <div class="exp-section">
+      <h3 class="exp-h">Xuất dữ liệu JSON</h3>
+      <p class="exp-p">Tải về file <code>data.json</code> đầy đủ <strong id="expCnt"></strong> thành viên để tích hợp vào website gia phả hoặc lưu trữ dự phòng.</p>
+      <div class="exp-btns">
+        <button class="tb-btn primary" onclick="downloadJSON()">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 1v8M4 6l3 3 3-3"/><path d="M1 12h12"/></svg>Tải về data.json
+        </button>
+        <button class="tb-btn" onclick="copyJSON()">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="8" height="8" rx="1"/><path d="M2 9V2h7"/></svg>Sao chép JSON
+        </button>
+      </div>
+    </div>
+    <div class="exp-section">
+      <h3 class="exp-h">Xem trước JSON</h3>
+      <div class="code-box" id="jsonPreview"></div>
+    </div>
+    <div class="exp-section">
+      <h3 class="exp-h">Nhập dữ liệu JSON</h3>
+      <p class="exp-p">Dán nội dung JSON để thay thế toàn bộ dữ liệu hiện tại. Kiểm tra trước khi nhập.</p>
+      <textarea class="imp-area" id="impArea" placeholder='[{"id":"1","name":"...","generation":1,...}]'></textarea>
+      <div style="margin-top:.6rem;display:flex;gap:.5rem">
+        <button class="tb-btn" onclick="validateImport()">Kiểm tra</button>
+        <button class="tb-btn danger" onclick="importJSON()">Nhập và thay thế</button>
+      </div>
+      <div class="imp-result" id="impResult"></div>
+    </div>
+    <div class="exp-section">
+      <h3 class="exp-h">Thống kê phân bổ</h3>
+      <div id="expStats" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:.6rem;margin-top:.75rem"></div>
+    </div>
+  </div>
+
+  <!-- REQUESTS VIEW -->
+  <div id="vRequests" class="exp-wrap" style="display:none">
+    <div class="tbar">
+      <h2 class="tbar-title">Yêu cầu bổ sung &amp; chỉnh sửa <span id="reqCount"></span></h2>
+      <button class="tb-btn" onclick="refreshRequests()">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 7a5 5 0 1 0 1-3.5"/><path d="M2 2v3h3"/></svg>Làm mới
+      </button>
+      <a href="ho-nguyen-request.html" target="_blank" class="tb-btn primary" style="text-decoration:none">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 1v12M1 7h12"/></svg>Trang đăng ký
+      </a>
+    </div>
+    <div id="reqList" style="padding:1.5rem;overflow-y:auto;flex:1"></div>
+  </div>
+
+</main>
+</div>
+
+<!-- MEMBER FORM MODAL -->
+<div class="overlay" id="formModal">
+  <div class="modal">
+    <div class="m-hdr">
+      <div class="m-title" id="formTitle">Thêm thành viên</div>
+      <button class="m-close" onclick="closeForm()">✕</button>
+    </div>
+    <div class="m-body">
+      <div class="f-section">Thông tin cơ bản</div>
+      <div class="f-row">
+        <div class="f-group" id="fg-id">
+          <label class="f-label">ID <span class="req">*</span></label>
+          <input class="f-input" id="fId" type="text" placeholder="Ví dụ: 85">
+          <span class="f-error" id="err-id">ID không hợp lệ hoặc đã tồn tại</span>
+        </div>
+        <div class="f-group" id="fg-gen">
+          <label class="f-label">Đời thứ <span class="req">*</span></label>
+          <select class="f-select" id="fGen">
+            <option value="">— Chọn đời —</option>
+            <option value="1">Đời 1</option><option value="2">Đời 2</option><option value="3">Đời 3</option>
+            <option value="4">Đời 4</option><option value="5">Đời 5</option><option value="6">Đời 6</option>
+            <option value="7">Đời 7</option><option value="8">Đời 8</option><option value="9">Đời 9</option>
+            <option value="10">Đời 10</option><option value="11">Đời 11</option><option value="12">Đời 12</option>
+            <option value="13">Đời 13</option><option value="14">Đời 14</option><option value="15">Đời 15</option>
+            <option value="16">Đời 16</option>
+          </select>
+          <span class="f-error" id="err-gen">Vui lòng chọn đời</span>
+        </div>
+      </div>
+      <div class="f-row full">
+        <div class="f-group" id="fg-name">
+          <label class="f-label">Họ và tên <span class="req">*</span></label>
+          <input class="f-input" id="fName" type="text" placeholder="Ví dụ: Nguyễn Văn A (tự Hữu...)">
+          <span class="f-hint">Có thể thêm biệt danh, tự trong ngoặc đơn</span>
+          <span class="f-error" id="err-name">Vui lòng nhập họ tên</span>
+        </div>
+      </div>
+      <div class="f-row">
+        <div class="f-group">
+          <label class="f-label">Giới tính <span class="req">*</span></label>
+          <div class="gender-radio">
+            <label class="gr-opt"><input type="radio" name="fSex" id="fSexM" value="male" checked><span>♂ Nam</span></label>
+            <label class="gr-opt"><input type="radio" name="fSex" id="fSexF" value="female"><span>♀ Nữ</span></label>
+          </div>
+        </div>
+        <div class="f-group">
+          <label class="f-label">Cha / Mẹ</label>
+          <select class="f-select" id="fFather" onchange="updFatherHint()">
+            <option value="">— Không có (Thuỷ tổ) —</option>
+          </select>
+          <div class="f-father-hint" id="fatherHint"></div>
+        </div>
+      </div>
+      <div class="f-divider"></div>
+      <div class="f-section">Thông tin thời gian</div>
+      <div class="f-row">
+        <div class="f-group">
+          <label class="f-label">Năm sinh</label>
+          <input class="f-input" id="fBorn" type="text" placeholder="Ví dụ: 1949, xxxx">
+        </div>
+        <div class="f-group">
+          <label class="f-label">Năm / Ngày mất</label>
+          <input class="f-input" id="fDied" type="text" placeholder="Ví dụ: 15/8 âm lịch (2021)">
+        </div>
+      </div>
+      <div class="f-divider"></div>
+      <div class="f-section">Ghi chú gia phả</div>
+      <div class="f-row full">
+        <div class="f-group">
+          <label class="f-label">Ghi chú</label>
+          <textarea class="f-textarea" id="fNote" placeholder="Chức vụ, nơi chôn cất, thông tin vợ/chồng, nơi sinh sống…"></textarea>
+          <span class="f-hint">Hỗ trợ nhiều dòng. Hiển thị trong panel chi tiết của cây gia phả.</span>
+        </div>
+      </div>
+    </div>
+    <div class="m-footer">
+      <button class="m-btn cancel" onclick="closeForm()">Huỷ</button>
+      <button class="m-btn save" id="btnSave" onclick="saveForm()">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l4 4 6-6"/></svg>Lưu thành viên
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- DETAIL MODAL -->
+<div class="overlay" id="detailModal">
+  <div class="modal" style="max-width:540px">
+    <div class="m-hdr">
+      <div class="m-title" id="detTitle">Chi tiết thành viên</div>
+      <button class="m-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="m-body" id="detBody"></div>
+    <div class="m-footer">
+      <button class="m-btn cancel" onclick="closeDetail()">Đóng</button>
+      <button class="m-btn cancel" id="btnEditDet">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2l3 3-7 7H2v-3z"/></svg>Chỉnh sửa
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM MODAL -->
+<div class="overlay" id="confirmModal">
+  <div class="modal sm">
+    <div class="m-hdr">
+      <div class="m-title">Xác nhận</div>
+      <button class="m-close" onclick="closeConfirm()">✕</button>
+    </div>
+    <div class="m-body" style="padding:1.5rem">
+      <div style="font-size:28px;margin-bottom:.75rem" id="confIcon">⚠️</div>
+      <div style="font-family:var(--serif);font-size:16px;color:var(--tx-primary);margin-bottom:.4rem" id="confMsg"></div>
+      <div style="font-size:12px;color:var(--tx-muted);line-height:1.65" id="confSub"></div>
+    </div>
+    <div class="m-footer">
+      <button class="m-btn cancel" onclick="closeConfirm()">Huỷ</button>
+      <button class="m-btn del-ok" id="confOk">Xác nhận xoá</button>
+    </div>
+  </div>
+</div>
+
+<!-- SHORTCUTS MODAL -->
+<div class="overlay" id="scModal">
+  <div class="modal sm" style="max-width:460px">
+    <div class="m-hdr"><div class="m-title">Phím tắt</div><button class="m-close" onclick="closeModal('scModal')">✕</button></div>
+    <div class="m-body">
+      <div class="sc-grid">
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">Ctrl</span><span class="kbd">K</span></div><span class="sc-desc">Tìm kiếm</span></div>
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">Ctrl</span><span class="kbd">N</span></div><span class="sc-desc">Thêm thành viên</span></div>
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">Ctrl</span><span class="kbd">Z</span></div><span class="sc-desc">Hoàn tác</span></div>
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">Ctrl</span><span class="kbd">E</span></div><span class="sc-desc">Xuất JSON</span></div>
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">Ctrl</span><span class="kbd">A</span></div><span class="sc-desc">Chọn tất cả</span></div>
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">Del</span></div><span class="sc-desc">Xoá đã chọn</span></div>
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">1</span></div><span class="sc-desc">Danh sách</span></div>
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">2</span></div><span class="sc-desc">Tổng quan</span></div>
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">3</span></div><span class="sc-desc">Nhật ký</span></div>
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">4</span></div><span class="sc-desc">Xuất / Nhập</span></div>
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">?</span></div><span class="sc-desc">Mở trợ giúp này</span></div>
+        <div class="sc-row"><div class="sc-keys"><span class="kbd">Esc</span></div><span class="sc-desc">Đóng modal</span></div>
+      </div>
+    </div>
+    <div class="m-footer"><button class="m-btn cancel" onclick="closeModal('scModal')">Đóng</button></div>
+  </div>
+</div>
+
+<!-- UNDO BAR -->
+<div class="undo-bar" id="undoBar">
+  <span id="undoMsg">Thao tác đã thực hiện</span>
+  <button class="undo-btn" onclick="undo()">↩ Hoàn tác (Ctrl+Z)</button>
+</div>
+
+<!-- TOAST -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+/* ══════════════════════════════════════════
+   DATA
+══════════════════════════════════════════ */
+let DB = [{"name":"Hoàng quí Công (tự Nhân Đạo)","birthYear":"xxxx","deathYear":"24/3 âm lịch","gender":"male","fatherId":null,"note":"Nơi chôn cất: Bờ trung tại ruộng nhà ông Văn Chấn.\nVợ: Nguyễn nhất Nam, hiệu Từ Huệ. Chết ngày 21/11 âm lịch. Nơi chôn cất: Đống Kiều.","id":"60","generation":1},{"name":"Tạ quí Công (tự Phúc Thành)","birthYear":"xxxx","deathYear":"5/1 âm lịch","gender":"male","fatherId":"60","note":"Đời cụ tổ thứ 2 thì đổi họ Hoàng sang họ Tạ.\nTên: Tạ quí Công, huý Hạo, tự Phúc Thành. Thọ 30 tuổi.\nNơi chôn cất: Nội mạc nhìn về cạnh hướng đông.\nVợ: Nguyễn Nhị, huý Dĩ, hiệu diệu Phương (sau khi cụ Phúc Thành mất thì bà đi tái giá nên trong gia phả không ghi ngày giỗ).\nSinh được 1 trai và 2 gái.","id":"59","generation":2},{"name":"Hoàng nhất Long, hiệu Từ Hảo (Tổ cô)","birthYear":"xxxx","deathYear":"3/9 âm lịch","gender":"female","fatherId":"60","note":"Bà Tổ cô: Hoàng nhất Long, huý Ngạnh, hiệu Từ Hảo. Nơi chôn cất: Bờ trung.","id":"61","generation":2},{"name":"Nguyễn quí Công (huý Kiệm)","birthYear":"xxxx","deathYear":"17/11 âm lịch","gender":"male","fatherId":"59","note":"Đến đời cụ tổ thứ 3 thì đổi từ họ Tạ sang họ Nguyễn.\nTên: Nguyễn quí Công, huý Kiệm, tự Pháp Thái, hiệu Như Nhật. Thọ 55 tuổi.\nNơi chôn cất: Đống Kiều.\nVợ: Nguyễn hàng Nhất, huý Pháp, hiệu diệu Bình, thọ 84 tuổi, chết ngày 3/3 âm lịch. Nơi chôn cất: Đống Kiều. \nSinh được 2 con trai.","id":"58","generation":3},{"name":"Tạ qúi Thị, hiệu Mỹ hoa Nàng (Tổ cô)","birthYear":"xxxx","deathYear":"24/7 âm lịch","gender":"female","fatherId":"59","note":"Tên: Tạ qúi Thị, huý Bích, hiệu Mỹ hoa Nàng. Thọ 07 tuổi.\nNơi chôn cất: Mả Hạc.","id":"62","generation":3},{"name":"Nguyễn quí Công (tự Minh Luân)","birthYear":"xxxx","deathYear":"6/8 âm lịch","gender":"male","fatherId":"58","note":"Là con trai trưởng.\nChức vụ: Thập lý hầu kiêm bản tổng, Tổng Chánh\nNơi chôn: vườn sau. Thọ 35 tuổi.\nSinh được 1 con trai và 5 con gái.\nVợ thứ 1: Nguyễn quí Thị, huý Hoan, hiệu Từ ý. Sinh được 3 con gái. Chết ngày 5/8 âm lịch. Nơi chôn cất: Mả kho.\nVợ thứ 2: Nguyễn quí Thị, huý Tiềm, hiệu Từ Thanh. Sinh được 1 trai và 2 gái. Chết ngày 7/7 âm lịch. Nơi chôn cất: Đông Kiều.","id":"57","generation":4},{"name":"Nguyễn văn Lẫm","birthYear":"xxxx","deathYear":"18/5 âm lịch","gender":"male","fatherId":"58","note":"Là con trai thứ. Thọ 07 tuổi. Nơi chôn cất: Mả Kho.","id":"63","generation":4},{"name":"Nguyễn quí Công (tự Hữu Thể)","birthYear":"xxxx","deathYear":"12/1/xxxx","gender":"male","fatherId":"57","note":"Tên: Nguyễn quí Công, huý Duyệt, tự Hữu Thể.\nChức vụ: Sở binh dã bản phủ, phủ sinh kiêm thập lý hầu lịch bản đương Tổng Chánh.\nNơi chôn: vườn sau.\nMẹ là bà Nguyễn quí Thị, huý Tiềm, hiệu Từ Thanh.\nCó 2 chị em gái ruột và 3 chị em gái cùng cha khác mẹ.\nVợ: Ngô quí Thị, huý Dòng, hiệu Từ Thuận, chết ngày 7/8 âm lịch, nơi chôn vườn quan.\nSinh được 3 trai và 5 gái","id":"56","generation":5},{"name":"Nguyễn quí Công (tự Hữu Đễ)","birthYear":"","deathYear":"7/3/xxxx","gender":"male","fatherId":"56","note":"Tên: Nguyễn quí Công, huý Đồng, tự Hữu Đễ (con trưởng).\nChức vụ: Thập lý hầu bản tổng - Tổng Chánh.\nNơi chôn cất: Vườn cầu.\nVợ thứ 1: Ngô quí Thị, huý Lãnh, hiệu Từ Mẫn, chết ngày 22/8, chôn nội mạc.\nVợ thứ 2: Trần quí Thị, hiệu Từ Chinh, chết ngày 24/11, chôn chùa làng.","id":"53","generation":6},{"name":"Nguyễn quí Công (tự Hữu Quyền)","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"56","note":"Tên: Nguyễn quí Công, huý Ba, tự Hữu Quyền.\nLà con trai thứ 2 của cụ tổ thứ 5. Không có con trai, trong gia phả không ghi ngày chết.\nVợ: Chu quí Thị, huý Từ Khuyên. Chết ngày 29/5 âm lịch. Nơi chôn cất: chùa làng. Sinh được 2 gái.","id":"64","generation":6},{"name":"Nguyễn quí Công (tự Hữu Hiệu)","birthYear":"xxxx","deathYear":"21/12 âm lịch","gender":"male","fatherId":"56","note":"Tên: Nguyễn quí Công, tự Hữu Hiệu. Là con trai thứ 3 của cụ tổ thứ 5.\nNơi chôn cất: Nội mạc.\nVợ: Nguyễn quí Thị, hiệu diệu Tề, chết ngày 4/4 âm lịch. Nơi chôn cất: Mả Hạc. Sinh được 05 con trai.","id":"65","generation":6},{"name":"Nguyễn quí Công (tự Hữu Tố)","birthYear":"xxxx","deathYear":"21/8/xxxx","gender":"male","fatherId":"53","note":"Là con trai thứ 2 của cụ tổ thứ 6 Hữu Đồng.\nXuất đội thực thu; Chôn tại mả vườn trong, cạnh đông. \nVợ: Nguyễn Quý Thị Từ Liêm, chết 29/7/xxxx, chôn tại chùa làng cạnh đông.","id":"1","generation":7},{"name":"Nguyễn thị Minh (Tổ cô)","birthYear":"xxxx","deathYear":"19/10 âm lịch","gender":"female","fatherId":"64","note":"Con gái thứ 1. Nơi chôn cất: Chùa làng.","id":"66","generation":7},{"name":"Nguyễn thị Nữ","birthYear":"xxxx","deathYear":"7/4 âm lịch","gender":"female","fatherId":"64","note":"Con gái thứ 2. Nơi chôn cất: Chùa làng.","id":"67","generation":7},{"name":"Nguyễn quí Công (tự Hữu Nghi)","birthYear":"xxxx","deathYear":"26/12 âm lịch","gender":"male","fatherId":"53","note":"Tên: Nguyễn quí Công, huý Nghê, tự Hữu Nghi. Là con trai trưởng của cụ Tổ thứ 6.\nChức vụ: Thập lý hầu bản tổng, Tổng Chánh. Nơi chôn cất: Cầu thể xứ, mệnh chung xã, huyện Gia Viễn, tỉnh Ninh Bình cũ.\nVợ thứ 1: Doãn quí Thị, huý Dương, hiệu Từ Hiếu, chết ngày 9/7 âm lịch.\nVợ thứ 2: Nguyễn quí Thị, huý Từ Khải, chết ngày 2/3 âm lịch.\nVợ thứ 3: Trần quí Thị, huý Tỵ, hiệu Từ Cẩm, chết ngày 10/8 âm lịch.","id":"68","generation":7},{"name":"Nguyễn quí Công (tự Hữu Tiêu)","birthYear":"xxxx","deathYear":"26/2 âm lịch","gender":"male","fatherId":"53","note":"Là con trai thứ 3 của cụ Tổ thứ 6. Nơi chôn cất: Đường vuông.\nSinh được 4 con gái.","id":"69","generation":7},{"name":"Nguyễn hữu Liêu","birthYear":"xxxx","deathYear":"20/5 âm lịch","gender":"male","fatherId":"65","note":"Là con trưởng. Nơi chôn cất: Đường Thuỵ.","id":"70","generation":7},{"name":"Nguyễn hữu Tưởng","birthYear":"xxxx","deathYear":"4/4 âm lịch","gender":"male","fatherId":"65","note":"Là con trai thứ 2. Nơi chôn cất: Đường Thuỵ.","id":"71","generation":7},{"name":"Nguyễn quí Công (tự Hữu Nhâm)","birthYear":"xxxx","deathYear":"4/5 âm lịch","gender":"male","fatherId":"65","note":"Là con trai thứ 3.\nChức vụ: Lý trưởng bản xã. Nơi chôn cất: Đường Thuỵ.\nVợ: Nguyễn quí Thị, hiệu Từ Nhu, chết ngày 16/11 âm lịch.\nSinh được 3 con trai và 1 con gái.","id":"72","generation":7},{"name":"Nguyễn hữu Phấn","birthYear":"xxxx","deathYear":"25/2 âm lịch","gender":"male","fatherId":"65","note":"Là con trai thứ 4. Nơi chôn cất: Mả Hạc.\nVợ: Nguyễn thị Kiến","id":"73","generation":7},{"name":"Nguyễn hữu Ái","birthYear":"xxxx","deathYear":"25/11 âm lịch","gender":"male","fatherId":"65","note":"Là con trai thứ 5. Nơi chôn cất: Đường Thuỵ.\nVợ: Nguyễn thị Khôi.","id":"74","generation":7},{"name":"Nguyễn quí Công (tự Hữu Hiển)","birthYear":"xxxx","deathYear":"11/5 âm lịch","gender":"male","fatherId":"1","note":"Chôn tại mả hạc cao, canh NMM. \nVợ: Nguyễn Thị Chữ, chết 17/6/xxxx, chôn tại ruộng xã Phú Hoàn.","id":"2","generation":8},{"name":"Nguyễn quí Công (tự Hữu Mậu)","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"1","note":"","id":"3","generation":8},{"name":"Nguyễn...","birthYear":"xxxx","deathYear":"xxxx","gender":"female","fatherId":"1","note":"Lấy chồng họ Tạ, họ nhà ông Đan.","id":"4","generation":8},{"name":"Nguyễn quí Công (tự Hữu Truyền)","birthYear":"xxxx","deathYear":"10/2 âm lịch","gender":"male","fatherId":"68","note":"Con trai trưởng, mẹ là bà Từ Hiếu. Tên: Nguyễn quí Công, huý Diệu, tự Hữu Truyền. Thọ 54 tuổi. Nơi chôn cất: Vườn ba.\nChức vụ: Bản xã xã trưởng. Vợ: Nguyễn quí Thị, huý Biệt, hiệu Từ Đàm, chết ngày 9/5, nơi chôn cất: Mả Hạc.\nSinh được 4 con trai và 1 con gái.","id":"75","generation":8},{"name":"Nguyễn quí Công (tự Hữu Tuấn)","birthYear":"xxxx","deathYear":"4/4 âm lịch","gender":"male","fatherId":"68","note":"Con trai thứ 2, Mẹ là bà Từ Khải. Tên: Nguyễn quí Công, huý Hữu Tuấn.\nNơi chôn cất: Đống Kiều.\nVợ: Tạ quí Thị, hiệu Từ Đức, chết ngày 2/7 âm lịch. Nơi chôn cất: Đường vòng xứ.\nSinh được 1 con trai.","id":"76","generation":8},{"name":"Nguyễn quí Công (tự Hữu Thản)","birthYear":"xxxx","deathYear":"20/5 âm lịch","gender":"male","fatherId":"68","note":"Là con trai thứ 3, mẹ là Bà Từ Cẩm. Nơi chôn cất: Vườn sau (tại ruộng của cháu ngoại là Dương văn Thi).\nChức vụ: Lý trưởng.\nVợ thứ 1: Dương quí Thị, hiệu Từ Phúc, chết ngày 9/6, nơi chôn cất ở Vườn sau. Sinh được 1 con gái.\nVợ thứ 2: Ngô quí Thị, huý Nhiên, hiệu Từ Khiêm, chết ngày 20/5, nơi chôn cất ở Vườn sau. Sinh được 1 con trai và 1 con gái.","id":"77","generation":8},{"name":"Nguyễn quí Công (tự Hữu Nghị)","birthYear":"xxxx","deathYear":"22/2 âm lịch","gender":"male","fatherId":"68","note":"Là con trai thứ 4, mẹ là Bà Từ Cẩm. Tên: Nguyễn quí Công, huý Giang, tự Hữu Nghị. Nơi chôn cất: Đống ốc. Sinh được 1 trai và 5 gái.\nCụ lấy 4 vợ, nhưng trong gia phả chi ghi 2 vợ.\nVợ thứ 1: Dương quí thị, huý Duyên, hiệu Đoan Chính, chết ngày 10/8 âm lịch, nơi chôn cất ở vườn trong.\nVợ thứ 2: Nguyễn quí Thị, huý Miền, hiệu Từ Hiền, chết ngày 4/3 âm lịch, nơi chôn cất ở Đường vuông.","id":"78","generation":8},{"name":"Nguyễn Hữu Diệm","birthYear":"xxxx","deathYear":"24/1/xxxx","gender":"male","fatherId":"2","note":"Chôn mả vườn sau cạnh xóm bà Khê. \nVợ: Nguyễn Thị Vĩnh, chết 17/5/xxxx, chôn vườn sau cạnh đông.","id":"5","generation":9},{"name":"Nguyễn Hữu Triệm","birthYear":"xxxx","deathYear":"24/4/xxxx","gender":"male","fatherId":"2","note":"Chôn tại mả kho. \nVợ: Nguyễn Thị Cành, chết 12/3/xxxx, chôn tại mả kho.","id":"6","generation":9},{"name":"Nguyễn Hữu Lương (Ông Điều)","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"3","note":"","id":"8","generation":9},{"name":"Nguyễn Văn Hiệu","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"3","note":"","id":"9","generation":9},{"name":"Nguyễn quí Công (tự Hữu Khánh)","birthYear":"xxxx","deathYear":"22/7 âm lịch","gender":"male","fatherId":"76","note":"Là con trai trưởng. Tên: Nguyễn quí Công, huý Lương, tự Hữu Khánh. Nơi chôn cất: Vườn sau.\nChức vụ: Lý trưởng.\nVợ: Đỗ quí Thị, huý Trù, hiệu Từ Ninh, chết ngày 25/8 âm lịch, nơi chôn cất ở nội mạc.\nSinh được 2 con trai, 3 con gái và nuôi 1 con nuôi gái.","id":"79","generation":9},{"name":"Nguyễn hữu Thuyết","birthYear":"xxxx","deathYear":"7/9 âm lịch","gender":"male","fatherId":"77","note":"Nơi chôn cất: Vườn sau.","id":"80","generation":9},{"name":"Nguyễn quí Công (tự Hữu Lã)","birthYear":"xxxx","deathYear":"4/10 âm lịch","gender":"male","fatherId":"75","note":"Con trai trưởng. Tên: Nguyễn quí Công, huý Hiệp, tự Hữu Lã, thọ 68 tuổi.\nChức vụ: Xã trưởng bản thôn.\nVợ: Nguyễn quí Thị, huý Lữu, hiệu Từ Thiện, thọ 53 tuổi, nơi chôn cất ở Mả Hạc.\nSinh được 3 con trai và 1 con gái.","id":"81","generation":9},{"name":"Nguyễn quí Công (tự Hữu Độ)","birthYear":"xxxx","deathYear":"17/7 âm lịch","gender":"male","fatherId":"75","note":"Là con trai thứ 2. Nơi chôn cất: Ao sau.\nChức vụ: Khán thủ.\nVợ: Dương quí Thị, hiệu Từ Đức, chết ngày 24/8 âm lịch, nơi chôn cất ở Đường miện.\nSinh được 2 con trai.","id":"82","generation":9},{"name":"Nguyễn quí Công (tự Phúc Thường)","birthYear":"xxxx","deathYear":"9/11 âm lịch","gender":"male","fatherId":"75","note":"Là con trai thứ 3. Tên: Nguyễn quí Công, huý Ngân, tự Phúc Thường. Thọ 75 tuổi.\nChức vụ: Vệ binh bản xã.\nVợ thứ 1: Nguyễn quí Thị, hiệu Từ Tĩnh, chết ngày 9/2 âm lịch. Sinh được 1 con trai (không có tên trong gia phả cũ).\nVợ thứ 2: Nguyễn quí Thị, hiệu Từ Thuẫn, chết ngày 21/6 âm lịch, nơi chôn cất ở ao sau xứ. Sinh được 1 trai và 1 gái (đều không có tên trong gia phả cũ).","id":"83","generation":9},{"name":"Nguyễn quí Công (tự Hữu Soạn)","birthYear":"xxxx","deathYear":"13/7","gender":"male","fatherId":"75","note":"Là con thứ 4. Nơi chôn cất: Mả Hạc.\nVợ: Nguyễn quí Thị, huý Thám, hiệu diệu Hoa, chết ngày 15/10 âm lịch. Sinh được 1 con trai (không có tên trong gia phả cũ).","id":"84","generation":9},{"name":"Nguyễn Hữu Tiệm","birthYear":"xxxx","deathYear":"18/8/xxxx","gender":"male","fatherId":"6","note":"Chôn ở thôn Đan, không có vợ.","id":"7","generation":10},{"name":"Nguyễn Văn Động","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"5","note":"Chôn mả mạc. Không có vợ.","id":"10","generation":10},{"name":"Nguyễn Văn Ngưu (Quyền trưởng)","birthYear":"xxxx","deathYear":"25/7/xxxx","gender":"male","fatherId":"5","note":"Chôn Nghĩa trang Ba Làng. \nVợ thứ 1: Dương Thị Quy, chết 24/7/xxxx. \nVợ thứ 2: Phạm Thị Huyền, chết 5/1/xxxx, không con.","id":"11","generation":10},{"name":"Nguyễn Thị V","birthYear":"xxxx","deathYear":"xxxx","gender":"female","fatherId":"5","note":"Chồng: Dương Văn Vũ, chết 22/5.","id":"12","generation":10},{"name":"Nguyễn Văn Quy (Ông Cai...)","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"8","note":"","id":"13","generation":10},{"name":"Nguyễn Văn Bộc","birthYear":"xxxx","deathYear":"21/5/xxxx","gender":"male","fatherId":"9","note":"Chôn thôn mạc. Vợ: Ngô Thị Anh.","id":"14","generation":10},{"name":"Nguyễn Văn Đuyến","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"5","note":"Chôn mả mạc. Không có vợ","id":"31","generation":10},{"name":"Nguyễn Văn Mộc","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"9","note":"","id":"32","generation":10},{"name":"Bà Đại","birthYear":"xxxx","deathYear":"xxxx","gender":"female","fatherId":"8","note":"Bà mẹ ông Kính","id":"37","generation":10},{"name":"Nguyễn Văn Chu","birthYear":"xxxx","deathYear":"9/11/xxxx","gender":"male","fatherId":"11","note":"Chôn nghĩa trang gốc khế, phường Hà Tu, tỉnh Quảng Ninh. \nVợ: Phạm Thị Thi, chết 22/3 chôn nghĩa trang gốc khế, phường Hà Tu, tỉnh Quảng Ninh. ","id":"15","generation":11},{"name":"Nguyễn Văn Châu","birthYear":"xxxx","deathYear":"16/8/xxxx","gender":"male","fatherId":"11","note":"Chôn nghĩa trang Ba Làng.\nVợ: Hoàng Thị Long, chết 8/8, chôn nghĩa trang Ba Làng.","id":"16","generation":11},{"name":"Nguyễn Thị Mô","birthYear":"xxxx","deathYear":"xxxx","gender":"female","fatherId":"13","note":"","id":"17","generation":11},{"name":"Nguyễn Văn Tế","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"13","note":"","id":"33","generation":11},{"name":"Nguyễn Văn Răng","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"13","note":"","id":"34","generation":11},{"name":"Nguyễn Văn Tời","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"13","note":"","id":"35","generation":11},{"name":"Nguyễn Văn Chít","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"13","note":"","id":"36","generation":11},{"name":"Nguyễn Thị Tính Ất","birthYear":"xxxx","deathYear":"xxxx","gender":"female","fatherId":"14","note":"","id":"38","generation":11},{"name":"Nguyễn Thị Thanh Thuật","birthYear":"xxxx","deathYear":"xxxx","gender":"female","fatherId":"14","note":"","id":"39","generation":11},{"name":"Nguyễn Văn Tuất","birthYear":"xxxx","deathYear":"1/6/xxxx","gender":"male","fatherId":"14","note":"Chôn Hà Nội","id":"40","generation":11},{"name":"Nguyễn Văn Chinh (tức Chính)","birthYear":"1929","deathYear":"9/8 âm lịch (năm 2021)","gender":"male","fatherId":"15","note":"Mẹ là bà Phạm Thị Thi.\nVợ thứ 1: Doãn Thị Lan (Ly hôn). \nVợ thứ 2: Nguyễn Thị San (Bác sỹ), mất 26/2 âm lịch (năm 2007).","id":"18","generation":12},{"name":"Nguyễn Hồng Nhâm (Quyền trưởng)","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"16","note":"Dược sỹ đại học. \nVợ: Trương Thị Thêm, giáo viên, (mất 18/7 nhuận).","id":"19","generation":12},{"name":"Nguyễn Thúc Quýnh (tức Kiều)","birthYear":"xxxx","deathYear":"xxxx","gender":"female","fatherId":"16","note":"Liệt sỹ.","id":"20","generation":12},{"name":"Nguyễn Thị Chỉnh","birthYear":"xxxx","deathYear":"22/12/xxxx","gender":"female","fatherId":"16","note":"Các con: Tiến, Sơn, Minh, Nghĩa, Hiệp","id":"41","generation":12},{"name":"Nguyễn Thị Chịnh","birthYear":"xxxx","deathYear":"28/11/xxxx","gender":"female","fatherId":"16","note":"Con: Đoàn Thị Thu, Doãn Hồng Thắng","id":"42","generation":12},{"name":"Nguyễn Thị Sinh","birthYear":"xxxx","deathYear":"13/10/xxxx","gender":"female","fatherId":"16","note":"","id":"43","generation":12},{"name":"Nguyễn Kỳ Hùng (Trưởng)","birthYear":"1949","deathYear":"","gender":"male","fatherId":"18","note":"Mẹ là bà Doãn Thị Lan (đã mất)\nVợ: Ngô Thị Lý.\nHiện đang sinh sống tại phường Cao Xanh, tỉnh Quảng Ninh.","id":"21","generation":13},{"name":"Nguyễn Phạm Tuyết Anh","birthYear":"","deathYear":"","gender":"female","fatherId":"18","note":"Mẹ là bà Nguyễn Thị San\nChồng: Cao Tuấn Anh.\nHiện đang sinh sống tại Hà Nội.","id":"22","generation":13},{"name":"Nguyễn Hồng Nhất","birthYear":"","deathYear":"","gender":"male","fatherId":"19","note":"Vợ: Phạm Thị Hạnh (giáo viên)\nHiện đang sinh sống tại phường Hà Nam, tỉnh Ninh Bình","id":"23","generation":13},{"name":"Nguyễn Hồng Nam","birthYear":"","deathYear":"","gender":"male","fatherId":"19","note":"Vợ: Vũ Thị Vinh.\nHiện đang sinh sống tại phường Hà Nam, tỉnh Ninh Bình","id":"24","generation":13},{"name":"Nguyễn Hồng Cương","birthYear":"","deathYear":"","gender":"male","fatherId":"19","note":"Vợ: Nguyễn Thị Tươi.\nHiện đang sinh sống tại phường Hà Nam, tỉnh Ninh Bình","id":"25","generation":13},{"name":"Nguyễn Hồng Hải","birthYear":"1956","deathYear":"","gender":"male","fatherId":"18","note":"Mẹ là bà Nguyễn Thị San (đã mất)\nVợ: Trần Thị Thanh Hải (1957)\nĐang sinh sống tại phường Hạ Long, tỉnh Quảng Ninh.","id":"44","generation":13},{"name":"Nguyễn Văn Việt","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"18","note":"Mẹ là bà Doãn Thị Lan\nVợ: Nguyễn Thị Thuần\nHiện đang sinh sống tại Hà Nội","id":"45","generation":13},{"name":"Cao Tuấn Nghĩa","birthYear":"","deathYear":"","gender":"male","fatherId":"22","note":"","id":"26","generation":14},{"name":"Nguyễn Hùng Cường","birthYear":"1984","deathYear":"","gender":"male","fatherId":"21","note":"Hiện đang sinh sống tại phường Cao Xanh, tỉnh Quảng Ninh\nNghề nghiệp: Kinh doanh bất động sản","id":"27","generation":14},{"name":"Nguyễn Thị Phương Dung","birthYear":"","deathYear":"","gender":"female","fatherId":"23","note":"","id":"28","generation":14},{"name":"Nguyễn Hải Hà","birthYear":"1984","deathYear":"","gender":"male","fatherId":"44","note":"Vợ: Nguyễn Thị Thanh Tú\nHiện đang sinh sống tại phường Hạ Long, tỉnh Quảng Ninh\nNghề nghiệp: Công chức nhà nước","id":"29","generation":14},{"name":"Nguyễn Minh Thắng","birthYear":"xxxx","deathYear":"xxxx","gender":"male","fatherId":"45","note":"","id":"30","generation":14},{"name":"Nguyễn Thị Thương","birthYear":"1982","deathYear":"","gender":"female","fatherId":"21","note":"Hiện đang sinh sống tại phường Hồng Gai, tỉnh Quảng Ninh","id":"46","generation":14},{"name":"Nguyễn Thị Huyền Trang","birthYear":"1987","deathYear":"","gender":"female","fatherId":"44","note":"Hiện đang sinh sống tại Hà Nội\nNghề nghiệp: Thiết kế đồ hoạ","id":"47","generation":14},{"name":"Nguyễn Hồng Phong","birthYear":"","deathYear":"","gender":"male","fatherId":"23","note":"","id":"48","generation":14},{"name":"Nguyễn Thanh Thủy","birthYear":"","deathYear":"","gender":"male","fatherId":"24","note":"","id":"49","generation":14},{"name":"Nguyễn Thị Phương Lan","birthYear":"","deathYear":"","gender":"female","fatherId":"24","note":"","id":"50","generation":14},{"name":"Nguyễn Hồng Ngọc","birthYear":"","deathYear":"","gender":"female","fatherId":"25","note":"","id":"51","generation":14},{"name":"Nguyễn Hồng Cường","birthYear":"","deathYear":"","gender":"male","fatherId":"25","note":"","id":"52","generation":14},{"name":"Nguyễn Hải Minh","birthYear":"2012","deathYear":"","gender":"male","fatherId":"29","note":"","id":"54","generation":15},{"name":"Nguyễn Hải Phúc","birthYear":"2017","deathYear":"","gender":"male","fatherId":"29","note":"","id":"55","generation":15}];
+
+/* ══ DATA PERSISTENCE ══ */
+/* Chuyển đổi admin-format → tree-format để tree page đọc trực tiếp */
+function toTreeFmt(m){
+  const br=getBranch(m);
+  return{
+    id:String(m.id),
+    n:m.name,
+    al:m._al||'',
+    g:Number(m.generation)||1,
+    sx:m.gender==='female'?'f':'m',
+    role:m.role||'',
+    born:(m.birthYear&&m.birthYear!=='xxxx'&&m.birthYear!=='')?String(m.birthYear):'',
+    died:(m.deathYear&&m.deathYear!=='xxxx'&&m.deathYear!=='')?String(m.deathYear):'',
+    ori:m._ori||'',
+    occ:m._occ||'',
+    note:m.note||'',
+    par:m.fatherId?String(m.fatherId):null,
+    br:m._br||br.label
+  };
+}
+// BroadcastChannel để thông báo real-time cho tree page
+let _syncChannel=null;
+try{_syncChannel=new BroadcastChannel('hn-sync');}catch(e){}
+
+async function saveData(){
+  try{
+    // Lưu theo tree format để trang cây đọc được
+    const treeData=DB.map(toTreeFmt);
+    const r=await fetch('/api/members',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({members:treeData})
+    });
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    if(_syncChannel) _syncChannel.postMessage('data-updated');
+  }catch(e){console.error('saveData error:',e);toast('error','✗','Lỗi lưu dữ liệu: '+e.message)}
+}
+async function loadData(){
+  try{
+    const r=await fetch('/api/members');
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const json=await r.json();
+    const arr=json.members||[];
+    if(!Array.isArray(arr)||!arr.length)return;
+    const first=arr[0]||{};
+    if('name' in first){
+      // Đã là admin format
+      DB=arr;
+    } else {
+      // Tree format → convert sang admin format (giữ nguyên tất cả trường)
+      DB=arr.map(m=>({
+        id:String(m.id||''),
+        name:m.n||'',
+        generation:Number(m.g)||1,
+        gender:m.sx==='f'?'female':'male',
+        fatherId:m.par?String(m.par):null,
+        birthYear:m.born||'',
+        deathYear:m.died||'',
+        note:m.note||'',
+        role:m.role||'',
+        _al:m.al||'',
+        _ori:m.ori||'',
+        _occ:m.occ||'',
+        _br:m.br||''
+      }));
+    }
+  }catch(e){console.error('loadData error:',e)}
+}
+
+/* ══ HELPERS ══ */
+const byId=id=>DB.find(m=>m.id===id);
+const nextId=()=>String(Math.max(...DB.map(m=>parseInt(m.id)||0))+1);
+const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const tr=(s,n)=>s&&s.length>n?s.slice(0,n-1)+'…':(s||'');
+
+function getBranch(m){
+  const PRE=new Set(['60','59','61','58','62','57','63','56']); // Tiền tổ đời 1-5
+  if(PRE.has(m.id))return{label:'Tiền tổ',cls:'root'};
+  let cur=m;
+  for(let i=0;i<30;i++){
+    if(cur.id==='53')return{label:'Nhánh Hữu Đễ',cls:'nhanh1'};
+    if(cur.id==='64')return{label:'Nhánh Hữu Quyền',cls:'nhanh2'};
+    if(cur.id==='65')return{label:'Nhánh Hữu Hiệu',cls:'nhanh3'};
+    if(PRE.has(cur.id))return{label:'Tiền tổ',cls:'root'};
+    if(!cur.fatherId)break;
+    const par=byId(cur.fatherId);if(!par)break;
+    cur=par;
+  }
+  return{label:'Tiền tổ',cls:'root'};
+}
+
+/* ══ COLOR HELPERS ══ */
+function clrBg(m){if(m.generation<=2)return'#2C1810';if(m.gender==='female')return'#F9F1EC';return'#EDF2EE'}
+function clrTx(m){if(m.generation<=2)return'#E8D5B0';if(m.gender==='female')return'#5C3D2E';return'#1E3328'}
+function clrBd(m){if(m.generation<=2)return'#B8913A';if(m.gender==='female')return'#C4956A';return'#4A7C5F'}
+function ini2(name){const w=name.trim().split(' ');return w.length>=2?(w[w.length-2][0]||'')+(w[w.length-1][0]||''):name[0]||'?'}
+
+/* ══ STATE ══ */
+let filterGen='all', filterSex='all', filterBr='all', searchQ='', sortCol='gen', sortDir=1;
+let selected=new Set(), editingId=null, detailId=null, curView='list';
+let undoStack=[], changeLog=[], undoTimer=null;
+
+/* ══ FILTER & RENDER TABLE ══ */
+function getFiltered(){
+  let rows=[...DB];
+  if(filterGen!=='all')rows=rows.filter(m=>m.generation==filterGen);
+  if(filterSex!=='all')rows=rows.filter(m=>m.gender===filterSex);
+  if(filterBr!=='all')rows=rows.filter(m=>getBranch(m).label===filterBr);
+  if(searchQ){const q=searchQ.toLowerCase();rows=rows.filter(m=>m.name.toLowerCase().includes(q)||(m.note||'').toLowerCase().includes(q)||m.id.includes(q)||(m.birthYear||'').includes(q))}
+  rows.sort((a,b)=>{
+    let va,vb;
+    if(sortCol==='id'){va=parseInt(a.id)||0;vb=parseInt(b.id)||0}
+    else if(sortCol==='gen'){va=a.generation||0;vb=b.generation||0;if(va===vb){va=parseInt(a.id)||0;vb=parseInt(b.id)||0}}
+    else if(sortCol==='name'){va=a.name||'';vb=b.name||''}
+    else if(sortCol==='born'){va=a.birthYear||'';vb=b.birthYear||''}
+    else{va=a[sortCol]||'';vb=b[sortCol]||''}
+    return va<vb?-1*sortDir:va>vb?sortDir:0;
+  });
+  return rows;
+}
+
+function renderTable(){
+  const rows=getFiltered();
+  const tbody=document.getElementById('tBody');
+  const empty=document.getElementById('emptyState');
+  document.getElementById('tblCount').textContent='· '+rows.length+' thành viên';
+  // Search badge
+  const sb=document.getElementById('searchBadge');
+  if(searchQ&&rows.length<DB.length){sb.textContent=rows.length+'/'+DB.length;sb.style.display='block'}
+  else sb.style.display='none';
+  document.getElementById('navCnt').textContent=rows.length;
+  if(!rows.length){tbody.innerHTML='';empty.style.display='flex';updSideStats(0);return}
+  empty.style.display='none';
+  tbody.innerHTML=rows.map(m=>{
+    const par=byId(m.fatherId);const br=getBranch(m);
+    const born=[m.birthYear,m.deathYear].filter(v=>v&&v!=='xxxx').join('—')||'—';
+    const isSel=selected.has(m.id);
+    return`<tr class="${isSel?'sel':''}" onclick="openDetail('${m.id}')">
+      <td onclick="event.stopPropagation()"><input type="checkbox" ${isSel?'checked':''} onchange="toggleSel('${m.id}',this.checked)" style="accent-color:var(--gold);cursor:pointer"></td>
+      <td style="width:38px;text-align:center">
+        <div class="m-ava" style="background:${clrBg(m)};color:${clrTx(m)};border-color:${clrBd(m)}60;margin:0 auto"
+          onclick="event.stopPropagation();openDetail('${m.id}')" title="${esc(m.name)}">${ini2(m.name)}</div>
+      </td>
+      <td class="c-id">${m.id}</td>
+      <td class="c-gen"><span class="gen-dot">${m.generation}</span></td>
+      <td class="c-name">
+        <div class="m-name" title="${esc(m.name)}">${(()=>{
+          const raw=esc(tr(m.name,26));
+          if(!searchQ)return raw;
+          const q=searchQ.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+          return raw.replace(new RegExp('('+q+')','gi'),'<mark style="background:rgba(184,145,58,.28);border-radius:2px;padding:0 1px">$1</mark>');
+        })()}</div>
+        ${m.alias||m.role?`<div class="m-alias">${esc(tr(m.alias||m.role||'',20))}</div>`:''}
+      </td>
+      <td style="width:38px"><span class="sex-dot ${m.gender==='male'?'m':'f'}" title="${m.gender==='male'?'Nam':'Nữ'}"></span></td>
+      <td class="c-par">${par?esc(tr(par.name,22)):'<em style="color:var(--tx-faint)">Thuỷ tổ</em>'}</td>
+      <td class="c-yr">${esc(born)}</td>
+      <td class="c-br"><span class="br-tag ${br.cls}">${br.label}</span></td>
+      <td class="c-note"><div class="note-p" title="${esc(m.note||'')}">${esc(tr((m.note||'').split('\n')[0],34))}</div></td>
+      <td class="c-act"><div class="row-acts">
+        <button class="a-btn dup" title="Nhân đôi" onclick="event.stopPropagation();dupMember('${m.id}')"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="4" y="4" width="8" height="8" rx="1"/><path d="M2 9V2h7"/></svg></button>
+        <button class="a-btn" title="Chỉnh sửa" onclick="event.stopPropagation();openEdit('${m.id}')"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2l3 3-7 7H2v-3z"/></svg></button>
+        <button class="a-btn del" title="Xoá" onclick="event.stopPropagation();confirmDel('${m.id}')"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4h10M5 4V2h4v2"/><path d="M3 4l1 8h6l1-8"/></svg></button>
+      </div></td>
+    </tr>`;
+  }).join('');
+  updSelUI();updSideStats(rows.length);
+}
+
+function updSelUI(){
+  const n=selected.size;
+  document.getElementById('btnDelSel').style.display=n>0?'flex':'none';
+  document.getElementById('btnBulkEdit').style.display=n>1?'flex':'none';
+  document.getElementById('bulkBadge').textContent=n;
+  document.getElementById('selCnt').textContent=n;
+  document.getElementById('chkAll').indeterminate=n>0&&n<DB.length;
+  document.getElementById('chkAll').checked=n>0&&n===getFiltered().length;
+}
+
+function updSideStats(rows){
+  try{
+    const total=DB.length;
+    const shown=(rows!==undefined)?rows:total;
+    const male=DB.filter(m=>(m.gender==='male')||(m.sx==='m')).length;
+    const female=total-male;
+    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    set('ssTot',total);
+    set('ssShow',shown);
+    set('ssMale',male);
+    set('ssFem',female);
+  }catch(e){console.error('updSideStats error:',e)}
+}
+
+/* ══ SELECTION ══ */
+function toggleSel(id,checked){if(checked)selected.add(id);else selected.delete(id);updSelUI()}
+function toggleAll(cb){const rows=getFiltered();if(cb.checked)rows.forEach(m=>selected.add(m.id));else rows.forEach(m=>selected.delete(m.id));renderTable()}
+function selectAll(){getFiltered().forEach(m=>selected.add(m.id));renderTable()}
+function sortBy(col){if(sortCol===col)sortDir*=-1;else{sortCol=col;sortDir=1}renderTable()}
+
+/* ══ CRUD ══ */
+function populateFather(excl=null){
+  const sel=document.getElementById('fFather');
+  const sorted=[...DB].sort((a,b)=>(a.generation-b.generation)||a.id.localeCompare(b.id,undefined,{numeric:true}));
+  sel.innerHTML='<option value="">— Không có (Thuỷ tổ) —</option>'+
+    sorted.filter(m=>m.id!==excl).map(m=>`<option value="${m.id}">[Đ${m.generation}] ${esc(m.name)}</option>`).join('');
+}
+
+function openAdd(){
+  editingId=null;
+  document.getElementById('formTitle').textContent='Thêm thành viên mới';
+  document.getElementById('btnSave').innerHTML='<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l4 4 6-6"/></svg>Lưu thành viên';
+  clearForm();
+  document.getElementById('fId').value=nextId();
+  document.getElementById('fId').removeAttribute('readonly');
+  populateFather();clearErrors();
+  document.getElementById('formModal').classList.add('open');
+  setTimeout(()=>document.getElementById('fName').focus(),80);
+}
+
+function openEdit(id){
+  const m=byId(id);if(!m)return;
+  editingId=id;
+  document.getElementById('formTitle').textContent='Chỉnh sửa thành viên';
+  document.getElementById('btnSave').innerHTML='<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l4 4 6-6"/></svg>Cập nhật';
+  clearForm();
+  document.getElementById('fId').value=m.id;
+  document.getElementById('fId').setAttribute('readonly',true);
+  document.getElementById('fGen').value=m.generation;
+  document.getElementById('fName').value=m.name;
+  document.getElementById(m.gender==='female'?'fSexF':'fSexM').checked=true;
+  populateFather(id);
+  document.getElementById('fFather').value=m.fatherId||'';
+  updFatherHint();
+  document.getElementById('fBorn').value=m.birthYear||'';
+  document.getElementById('fDied').value=m.deathYear||'';
+  document.getElementById('fNote').value=m.note||'';
+  clearErrors();
+  document.getElementById('formModal').classList.add('open');
+  setTimeout(()=>document.getElementById('fName').focus(),80);
+}
+
+function clearForm(){['fId','fName','fBorn','fDied','fNote'].forEach(id=>{document.getElementById(id).value=''});document.getElementById('fGen').value='';document.getElementById('fSexM').checked=true;document.getElementById('fFather').value='';document.getElementById('fatherHint').textContent=''}
+function clearErrors(){document.querySelectorAll('.f-group').forEach(g=>g.classList.remove('has-err'))}
+function updFatherHint(){const fid=document.getElementById('fFather').value;const h=document.getElementById('fatherHint');if(!fid){h.textContent='';return}const f=byId(fid);h.textContent=f?`Đời ${f.generation} · ${f.name}`:''}
+
+async function saveForm(){
+  clearErrors();let valid=true;
+  const id=document.getElementById('fId').value.trim();
+  const gen=document.getElementById('fGen').value;
+  const name=document.getElementById('fName').value.trim();
+  const gender=document.querySelector('input[name="fSex"]:checked').value;
+  const fatherId=document.getElementById('fFather').value||null;
+  const born=document.getElementById('fBorn').value.trim();
+  const died=document.getElementById('fDied').value.trim();
+  const note=document.getElementById('fNote').value.trim();
+  if(!id){document.getElementById('fg-id').classList.add('has-err');valid=false}
+  else if(!editingId&&byId(id)){document.getElementById('err-id').textContent=`ID "${id}" đã tồn tại`;document.getElementById('fg-id').classList.add('has-err');valid=false}
+  if(!gen){document.getElementById('fg-gen').classList.add('has-err');valid=false}
+  if(!name){document.getElementById('fg-name').classList.add('has-err');valid=false}
+  if(!valid)return;
+
+  const member={id,name,birthYear:born||'',gender,fatherId:fatherId||null,
+    note,generation:parseInt(gen),deathYear:died||''};
+  // Giữ lại các trường gốc nếu đang chỉnh sửa
+  if(editingId){const old=byId(editingId)||{};member._al=old._al||'';member._ori=old._ori||'';member._occ=old._occ||'';member._br=old._br||'';}
+
+  const treePayload=toTreeFmt(member);
+
+  if(editingId){
+    try{
+      const r=await fetch(`/api/members/${editingId}`,{
+        method:'PUT',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(treePayload)
+      });
+      if(!r.ok)throw new Error('HTTP '+r.status);
+    }catch(e){toast('error','✗','Lỗi lưu: '+e.message);return;}
+    const idx=DB.findIndex(m=>m.id===editingId);
+    const before={...DB[idx]};
+    if(idx>=0)DB[idx]=member;
+    pushUndo('edit',{before,after:member});
+    addLog('edit',`Sửa [${editingId}] ${name}`);
+    toast('success','✓',`Đã cập nhật: ${name}`);
+  }else{
+    try{
+      const r=await fetch('/api/members/add',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(treePayload)
+      });
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      const res=await r.json();
+      if(res.member)member.id=String(res.member.id||member.id);
+    }catch(e){toast('error','✗','Lỗi thêm mới: '+e.message);return;}
+    DB.push(member);
+    pushUndo('add',member);
+    addLog('add',`Thêm [${member.id}] ${name} — Đời ${gen}`);
+    toast('success','✓',`Đã thêm: ${name} (Đời ${gen})`);
+  }
+  if(_syncChannel)_syncChannel.postMessage('data-updated');
+  closeForm();renderTable();updSideStats();
+}
+
+function closeForm(){document.getElementById('formModal').classList.remove('open');editingId=null}
+
+/* ══ DUPLICATE ══ */
+async function dupMember(id){
+  const m=byId(id);if(!m)return;
+  const newId=nextId();
+  const copy={...m,id:newId,name:m.name+' (bản sao)',note:m.note||''};
+  try{
+    const r=await fetch('/api/members/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(toTreeFmt(copy))});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+  }catch(e){toast('error','✗','Lỗi nhân đôi: '+e.message);return;}
+  DB.push(copy);pushUndo('dup',copy);
+  addLog('add',`Nhân đôi [${id}] → [${newId}] ${m.name}`);
+  if(_syncChannel)_syncChannel.postMessage('data-updated');
+  renderTable();updSideStats();toast('success','✓',`Đã nhân đôi → ID ${newId}`);
+}
+
+/* ══ DETAIL ══ */
+function openDetail(id){
+  const m=byId(id);if(!m)return;
+  detailId=id;
+  const par=byId(m.fatherId);
+  const kids=DB.filter(c=>c.fatherId===id);
+  const br=getBranch(m);
+  document.getElementById('detTitle').innerHTML=`<span style="font-size:13px;color:var(--gold);margin-right:.4rem">ID ${m.id}</span>${esc(m.name)}`;
+  document.getElementById('detBody').innerHTML=`<div class="det-grid">
+    <div class="det-row"><span class="det-key">Giới tính</span><span class="det-val">${m.gender==='male'?'♂ Nam':'♀ Nữ'}</span></div>
+    <div class="det-row"><span class="det-key">Đời thứ</span><span class="det-val">${m.generation}</span></div>
+    <div class="det-row"><span class="det-key">Chi nhánh</span><span class="det-val">${br.label}</span></div>
+    <div class="det-row"><span class="det-key">Năm sinh</span><span class="det-val">${m.birthYear||'—'}</span></div>
+    <div class="det-row"><span class="det-key">Năm mất</span><span class="det-val">${m.deathYear||'—'}</span></div>
+    <div class="det-row"><span class="det-key">Cha / Mẹ</span><span class="det-val">${par?`[${par.id}] ${esc(par.name)}`:'<em>Thuỷ tổ</em>'}</span></div>
+    <div class="det-row full"><span class="det-key">Con cái (${kids.length})</span><span class="det-val">${kids.length?kids.map(c=>`[${c.id}] ${esc(c.name)}`).join('<br>'):'<em>Không có con ghi nhận</em>'}</span></div>
+    ${m.note?`<div class="det-row full"><span class="det-key">Ghi chú gia phả</span><span class="det-val note">${esc(m.note)}</span></div>`:''}
+  </div>`;
+  document.getElementById('btnEditDet').onclick=()=>{closeDetail();openEdit(id)};
+  document.getElementById('detailModal').classList.add('open');
+}
+function closeDetail(){document.getElementById('detailModal').classList.remove('open');detailId=null}
+
+/* ══ DELETE ══ */
+function confirmDel(id){
+  const m=byId(id);if(!m)return;
+  const kids=DB.filter(c=>c.fatherId===id);
+  document.getElementById('confIcon').textContent='🗑️';
+  document.getElementById('confMsg').textContent=`Xoá "${m.name}"?`;
+  document.getElementById('confSub').innerHTML=kids.length
+    ?`<span style="color:var(--red)">⚠ Thành viên này có ${kids.length} con cháu trực tiếp. Quan hệ cha/mẹ sẽ bị mất.</span>`
+    :`Đời thứ ${m.generation} · ${getBranch(m).label}. Không thể hoàn tác sau khi tải lại trang.`;
+  document.getElementById('confOk').onclick=()=>{closeConfirm();doDelete(id)};
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+async function doDelete(id){
+  const m=byId(id);
+  // Gọi DELETE endpoint trực tiếp — atomic, không cần convert toàn bộ DB
+  try{
+    const r=await fetch(`/api/members/${id}`,{method:'DELETE'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+  }catch(e){
+    toast('error','✗',`Lỗi xoá [${id}]: ${e.message}`);
+    return;
+  }
+  pushUndo('del',{...m});
+  DB=DB.filter(r=>r.id!==id);selected.delete(id);
+  addLog('del',`Xoá [${id}] ${m?.name||id}`);
+  renderTable();updSideStats();
+  if(_syncChannel)_syncChannel.postMessage('data-updated');
+  toast('info','🗑',`Đã xoá: ${m?.name||id}`);
+}
+
+function deleteSelected(){
+  if(!selected.size)return;
+  document.getElementById('confIcon').textContent='⚠️';
+  document.getElementById('confMsg').textContent=`Xoá ${selected.size} thành viên đã chọn?`;
+  const selList=[...selected].slice(0,5).map(id=>{const m=byId(id);return m?m.name.slice(0,25):id}).join(', ');
+  document.getElementById('confSub').innerHTML='<span style="color:var(--tx-muted);font-size:11px">'+selList+(selected.size>5?' và '+(selected.size-5)+' người khác…':'')+'</span><br><span style="color:var(--red);font-size:11px;margin-top:4px;display:block">⚠ Không thể hoàn tác sau khi tải lại trang</span>';
+  document.getElementById('confOk').onclick=async()=>{
+    const n=selected.size;
+    const deleted=DB.filter(m=>selected.has(m.id)).map(m=>({...m}));
+    closeConfirm();
+    // Xoá từng thành viên qua DELETE endpoint
+    let failed=0;
+    for(const id of [...selected]){
+      try{
+        const r=await fetch(`/api/members/${id}`,{method:'DELETE'});
+        if(!r.ok)throw new Error('HTTP '+r.status);
+      }catch(e){failed++;console.error('Delete failed:',id,e)}
+    }
+    pushUndo('bulk',deleted);
+    deleted.forEach(m=>addLog('del',`Xoá [${m.id}] ${m.name}`));
+    selected.forEach(id=>{DB=DB.filter(r=>r.id!==id)});
+    selected.clear();
+    renderTable();updSideStats();
+    if(_syncChannel)_syncChannel.postMessage('data-updated');
+    if(failed)toast('error','✗',`Xoá ${n-failed}/${n} (${failed} lỗi)`);
+    else toast('info','🗑',`Đã xoá ${n} thành viên`);
+  };
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+function closeConfirm(){document.getElementById('confirmModal').classList.remove('open')}
+function closeModal(id){document.getElementById(id).classList.remove('open')}
+
+/* ══ UNDO ══ */
+function pushUndo(action,data){
+  undoStack.push({action,data});if(undoStack.length>20)undoStack.shift();
+  document.getElementById('btnUndo').style.display='flex';
+  const labels={add:'Thêm thành viên',edit:'Chỉnh sửa',del:'Xoá thành viên',bulk:'Xoá hàng loạt',dup:'Nhân đôi'};
+  document.getElementById('undoMsg').textContent=labels[action]||action;
+  document.getElementById('undoBar').classList.add('show');
+  clearTimeout(undoTimer);undoTimer=setTimeout(()=>document.getElementById('undoBar').classList.remove('show'),5000);
+}
+
+async function undo(){
+  if(!undoStack.length){toast('info','↩','Không có gì để hoàn tác');return}
+  const{action,data}=undoStack.pop();
+  try{
+    if(action==='add'||action==='dup'){
+      // Hoàn tác thêm → xoá khỏi API
+      await fetch(`/api/members/${data.id}`,{method:'DELETE'});
+      DB=DB.filter(m=>m.id!==data.id);
+      toast('info','↩',`Hoàn tác: Thêm "${data.name}"`);
+    }else if(action==='edit'){
+      // Hoàn tác sửa → PUT lại trạng thái cũ
+      const r=await fetch(`/api/members/${data.after.id}`,{
+        method:'PUT',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify(toTreeFmt(data.before))
+      });
+      if(!r.ok)throw new Error('HTTP '+r.status);
+      const idx=DB.findIndex(m=>m.id===data.after.id);
+      if(idx>=0)DB[idx]=data.before;
+      toast('info','↩',`Hoàn tác: Sửa "${data.before.name}"`);
+    }else if(action==='del'){
+      // Hoàn tác xoá → thêm lại
+      await fetch('/api/members/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(toTreeFmt(data))});
+      DB.push(data);DB.sort((a,b)=>parseInt(a.id)-parseInt(b.id));
+      toast('info','↩',`Khôi phục: "${data.name}"`);
+    }else if(action==='bulk'){
+      // Hoàn tác xoá hàng loạt → thêm lại từng thành viên
+      for(const m of data)await fetch('/api/members/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(toTreeFmt(m))});
+      DB.push(...data);DB.sort((a,b)=>parseInt(a.id)-parseInt(b.id));
+      toast('info','↩',`Khôi phục ${data.length} thành viên`);
+    }
+    if(_syncChannel)_syncChannel.postMessage('data-updated');
+  }catch(e){toast('error','✗','Lỗi hoàn tác: '+e.message)}
+  if(!undoStack.length)document.getElementById('btnUndo').style.display='none';
+  document.getElementById('undoBar').classList.remove('show');
+  renderTable();updSideStats();
+}
+
+/* ══ CHANGELOG ══ */
+function addLog(type,msg){
+  const ts=new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  changeLog.unshift({type,msg,ts});if(changeLog.length>200)changeLog=changeLog.slice(0,200);
+  document.getElementById('navLog').textContent=changeLog.length;
+}
+
+function renderChangelog(){
+  const el=document.getElementById('clList');
+  document.getElementById('clCount').textContent='· '+changeLog.length+' mục';
+  if(!changeLog.length){el.innerHTML='<div class="cl-empty">Chưa có thay đổi nào được ghi lại.</div>';return}
+  el.innerHTML=changeLog.map(e=>`<div class="cl-item">
+    <span class="cl-ts">${e.ts}</span>
+    <span class="cl-badge ${e.type==='add'?'add':e.type==='edit'?'edit':'del'}">${e.type==='add'?'Thêm':e.type==='edit'?'Sửa':'Xoá'}</span>
+    <span class="cl-msg">${esc(e.msg)}</span>
+  </div>`).join('');
+}
+
+function clearLog(){changeLog=[];document.getElementById('navLog').textContent='0';renderChangelog();toast('info','🗑','Đã xoá nhật ký')}
+
+/* ══ DASHBOARD ══ */
+function renderDashboard(){
+  const el=document.getElementById('vDashboard');
+  const total=DB.length,male=DB.filter(m=>m.gender==='male').length,female=total-male;
+  const genMax=Math.max(...DB.map(m=>m.generation||0));
+  const withNote=DB.filter(m=>m.note&&m.note.trim()).length;
+  const withBorn=DB.filter(m=>m.birthYear&&m.birthYear!=='xxxx'&&m.birthYear!=='').length;
+  const genDist={};DB.forEach(m=>{genDist[m.generation]=(genDist[m.generation]||0)+1});
+  const maxG=Math.max(...Object.values(genDist));
+  const brDist={};DB.forEach(m=>{const br=getBranch(m).label;brDist[br]=(brDist[br]||0)+1});
+
+  const barRows=Object.entries(genDist).sort(([a],[b])=>+a-+b).map(([g,n])=>{
+    const pct=Math.round((n/maxG)*100);
+    return`<div class="bar-row"><span class="bar-label">Đời ${g}</span><div class="bar-track"><div class="bar-fill" style="width:${pct}%"><span class="bar-val">${n}</span></div></div><span class="bar-abs">${Math.round(n/total*100)}%</span></div>`;
+  }).join('');
+
+  const brRows=Object.entries(brDist).sort(([,a],[,b])=>b-a).map(([br,n])=>{
+    const pct=Math.round((n/total)*100);
+    return`<div class="bar-row"><span class="bar-label" style="width:70px;text-align:right">${br}</span><div class="bar-track"><div class="bar-fill f2" style="width:${pct}%"><span class="bar-val">${n}</span></div></div><span class="bar-abs">${pct}%</span></div>`;
+  }).join('');
+
+  el.innerHTML=`
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-n">${total}</div><div class="kpi-l">Tổng thành viên</div><div class="kpi-sub">${genMax} đời · ${new Set(DB.map(m=>getBranch(m).label).filter(b=>b!=='Tiền tổ')).size} nhánh</div></div>
+      <div class="kpi"><div class="kpi-n">${genMax}</div><div class="kpi-l">Số đời</div><div class="kpi-sub">Hoàng → Tạ → Nguyễn</div></div>
+      <div class="kpi"><div class="kpi-n">${male}</div><div class="kpi-l">Nam (${Math.round(male/total*100)}%)</div><div class="kpi-sub">${female} nữ · ${Math.round(female/total*100)}%</div></div>
+      <div class="kpi"><div class="kpi-n">${withNote}</div><div class="kpi-l">Có ghi chú</div><div class="kpi-sub">${total-withNote} chưa có thông tin</div></div>
+      <div class="kpi"><div class="kpi-n">${withBorn}</div><div class="kpi-l">Có năm sinh</div><div class="kpi-sub">${Math.round(withBorn/total*100)}% đầy đủ</div></div>
+      <div class="kpi"><div class="kpi-n">${changeLog.length}</div><div class="kpi-l">Thay đổi phiên này</div><div class="kpi-sub">Từ khi mở trang</div></div>
+    </div>
+    <div class="chart-row">
+      <div class="chart-card"><div class="chart-title">Phân bổ theo đời</div><div>${barRows}</div></div>
+      <div class="chart-card"><div class="chart-title">Phân bổ theo chi nhánh</div><div>${brRows}</div></div>
+    </div>
+          </div>
+    </div>
+    <div class="chart-card" style="margin-bottom:1rem">
+      <div class="chart-title">Thành viên thế hệ mới nhất (Đời 13–15)</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem;margin-top:.6rem">
+        ${DB.filter(m=>m.generation>=13).slice(0,10).map(m=>`
+          <div style="background:var(--bg-page);border:1px solid var(--bd);border-radius:5px;padding:.6rem .8rem;cursor:pointer;transition:border-color .15s" onclick="openDetail('${m.id}')" onmouseenter="this.style.borderColor='var(--gold)'" onmouseleave="this.style.borderColor='var(--bd)'">
+            <div style="font-size:9px;color:var(--gold);margin-bottom:2px">Đời ${m.generation} · ${m.gender==='male'?'♂':'♀'}</div>
+            <div style="font-family:var(--serif);font-size:13px;color:var(--tx-primary)">${esc(tr(m.name,24))}</div>
+            ${m.birthYear&&m.birthYear!=='xxxx'?`<div style="font-size:10px;color:var(--tx-muted)">Sinh: ${m.birthYear}</div>`:''}
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  // Role stats block
+  const roleStats=document.getElementById('dashRoles');
+  if(roleStats){
+    const roles=[
+      {l:'Chức vụ lịch sử',kw:['Tổng Chánh','Lý trưởng','Xã trưởng','Khán thủ','Vệ binh']},
+      {l:'Quyền/Trưởng nhánh',kw:['Quyền trưởng','Trưởng nhánh','Trưởng']},
+      {l:'Liệt sỹ',kw:['Liệt sỹ']},
+      {l:'Không rõ năm sinh',kw:['xxxx']},
+      {l:'Còn sống',kw:['']},
+      {l:'Đã mất',kw:['âm lịch','xxxx']},
+    ];
+    let html2='<div class="chart-title">Thống kê đặc biệt</div><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.5rem;margin-top:.6rem">';
+    roles.forEach(r=>{
+      let cnt=0;
+      if(r.l==='Còn sống')cnt=DB.filter(m=>!m.deathYear||m.deathYear==='').length;
+      else if(r.l==='Đã mất')cnt=DB.filter(m=>m.deathYear&&m.deathYear!==''&&m.deathYear!=='xxxx').length;
+      else cnt=DB.filter(m=>r.kw.some(k=>k&&(m.name.includes(k)||(m.note||'').includes(k)||(m.role||'').includes(k)))).length;
+      html2+='<div style="background:var(--bg-page);border:1px solid var(--bd);border-radius:5px;padding:.6rem .8rem"><div style="font-family:var(--serif);font-size:22px;color:var(--tx-primary)">'+cnt+'</div><div style="font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-muted)">'+r.l+'</div></div>';
+    });
+    html2+='</div>';
+    roleStats.innerHTML=html2;
+  }
+}
+
+/* ══ EXPORT / IMPORT ══ */
+function getJSON(){return JSON.stringify(DB,null,2)}
+
+function refreshExport(){
+  document.getElementById('expCnt').textContent=DB.length;
+  const json=getJSON();
+  document.getElementById('jsonPreview').textContent=json.slice(0,2200)+(json.length>2200?'\n...(còn tiếp)':'');
+  const genDist={};DB.forEach(m=>{genDist[m.generation]=(genDist[m.generation]||0)+1});
+  document.getElementById('expStats').innerHTML=Object.entries(genDist).sort(([a],[b])=>+a-+b).map(([g,n])=>`
+    <div style="background:var(--bg-card);border:1px solid var(--bd);border-radius:5px;padding:.55rem .7rem;box-shadow:var(--sh1)">
+      <div style="font-family:var(--serif);font-size:20px;color:var(--tx-primary)">${n}</div>
+      <div style="font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx-muted)">Đời ${g}</div>
+    </div>`).join('');
+}
+
+function downloadJSON(){
+  const blob=new Blob([getJSON()],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='data.json';a.click();
+  toast('success','✓','Đã tải về data.json');
+}
+
+function copyJSON(){navigator.clipboard?.writeText(getJSON()).then(()=>toast('success','✓','Đã sao chép JSON!'))}
+
+function validateImport(){
+  const txt=document.getElementById('impArea').value.trim();
+  const res=document.getElementById('impResult');
+  try{
+    const d=JSON.parse(txt);
+    if(!Array.isArray(d))throw new Error('Phải là mảng JSON');
+    const noId=d.filter(m=>!m.id);
+    if(noId.length)throw new Error(`${noId.length} bản ghi không có ID`);
+    res.style.color='var(--moss2)';
+    res.textContent=`✓ Hợp lệ — ${d.length} thành viên, ${new Set(d.map(m=>m.generation)).size} đời`;
+  }catch(e){res.style.color='var(--red)';res.textContent='✗ Lỗi: '+e.message}
+}
+
+function importJSON(){
+  const txt=document.getElementById('impArea').value.trim();
+  try{
+    const d=JSON.parse(txt);if(!Array.isArray(d))throw new Error('Không hợp lệ');
+    DB=d;renderTable();refreshExport();
+    toast('success','✓',`Đã nhập ${DB.length} thành viên`);
+    document.getElementById('impResult').textContent='';
+    document.getElementById('impArea').value='';
+  }catch(e){toast('error','✗','JSON không hợp lệ: '+e.message)}
+}
+
+/* ══ VIEW SWITCHING ══ */
+function setView(v){
+  try{localStorage.setItem('hn-admin-view',v)}catch(e){}
+  curView=v;
+  const views={list:'vList',dashboard:'vDashboard',changelog:'vChangelog',export:'vExport',requests:'vRequests'};
+  Object.values(views).forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none'});
+  const active=document.getElementById(views[v]);
+  if(active){active.style.display=v==='list'?'flex':'block';if(v==='list')active.style.flexDirection='column'}
+  document.querySelectorAll('.nav-item').forEach((el,i)=>{
+    const map={0:'list',1:'dashboard',2:'changelog',3:'export',4:'requests'};
+    el.classList.toggle('active',map[i]===v);
+  });
+  if(v==='dashboard')renderDashboard();
+  if(v==='changelog')renderChangelog();
+  if(v==='export')refreshExport();
+  if(v==='requests')refreshRequests();
+}
+
+/* ══ TOAST ══ */
+function toast(type,icon,msg){
+  const wrap=document.getElementById('toastWrap');
+  const el=document.createElement('div');
+  el.className=`t-item ${type}`;
+  el.innerHTML=`<span>${icon}</span><span>${esc(msg)}</span>`;
+  wrap.appendChild(el);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
+  setTimeout(()=>{el.classList.remove('show');setTimeout(()=>el.remove(),280)},3000);
+}
+
+/* ══ SHORTCUTS ══ */
+function showShortcuts(){document.getElementById('scModal').classList.add('open')}
+document.getElementById('scModal').addEventListener('click',e=>{if(e.target===document.getElementById('scModal'))closeModal('scModal')});
+
+/* ══ FILTER EVENTS ══ */
+document.getElementById('genChips').addEventListener('click',e=>{
+  const chip=e.target.closest('[data-gen]');if(!chip)return;
+  filterGen=chip.dataset.gen;
+  document.querySelectorAll('[data-gen]').forEach(c=>c.classList.toggle('on',c===chip));
+  renderTable();
+});
+document.getElementById('sexChips').addEventListener('click',e=>{
+  const chip=e.target.closest('[data-sex]');if(!chip)return;
+  filterSex=chip.dataset.sex;
+  document.querySelectorAll('[data-sex]').forEach(c=>c.classList.toggle('on',c===chip));
+  renderTable();
+});
+document.getElementById('gSearch').addEventListener('input',e=>{searchQ=e.target.value.trim();renderTable()});
+
+/* ══ BULK EDIT ══ */
+function openBulkEdit(){
+  if(!selected.size){toast('info','ℹ','Chọn ít nhất 1 thành viên để sửa hàng loạt');return}
+  document.getElementById('confIcon').textContent='✏️';
+  document.getElementById('confMsg').textContent=`Sửa hàng loạt ${selected.size} thành viên`;
+  document.getElementById('confSub').innerHTML=`
+    <div style="margin-top:.75rem;display:flex;flex-direction:column;gap:.5rem">
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <label style="font-size:12px;color:var(--tx-secondary);width:80px">Đời thứ:</label>
+        <select id="bulkGen" style="flex:1;padding:5px 8px;background:var(--bg-input);border:1px solid var(--bd);border-radius:4px;font-size:12px;font-family:var(--sans);color:var(--tx-primary);outline:none">
+          <option value="">— Giữ nguyên —</option>
+          ${Array.from({length:16},(_,i)=>`<option value="${i+1}">Đời ${i+1}</option>`).join('')}
+        </select>
+      </div>
+      <div style="display:flex;align-items:center;gap:.5rem">
+        <label style="font-size:12px;color:var(--tx-secondary);width:80px">Giới tính:</label>
+        <select id="bulkSex" style="flex:1;padding:5px 8px;background:var(--bg-input);border:1px solid var(--bd);border-radius:4px;font-size:12px;font-family:var(--sans);color:var(--tx-primary);outline:none">
+          <option value="">— Giữ nguyên —</option>
+          <option value="male">♂ Nam</option>
+          <option value="female">♀ Nữ</option>
+        </select>
+      </div>
+    </div>`;
+  document.getElementById('confOk').textContent='Áp dụng';
+  document.getElementById('confOk').className='m-btn save';
+  document.getElementById('confOk').onclick=()=>{
+    const gen=document.getElementById('bulkGen')?.value;
+    const sex=document.getElementById('bulkSex')?.value;
+    let changed=0;
+    selected.forEach(id=>{
+      const idx=DB.findIndex(m=>m.id===id);
+      if(idx<0)return;
+      const before={...DB[idx]};
+      if(gen)DB[idx].generation=parseInt(gen);
+      if(sex)DB[idx].gender=sex;
+      if(gen||sex){pushUndo('edit',{before,after:{...DB[idx]}});addLog('edit',`Bulk sửa [${id}]${gen?' đời→'+gen:''}${sex?' gt→'+sex:''}`);changed++}
+    });
+    closeConfirm();renderTable();
+    if(changed)toast('success','✓',`Đã cập nhật ${changed} thành viên`);
+  };
+  document.getElementById('confirmModal').classList.add('open');
+}
+
+/* ══ COLUMN TOGGLE ══ */
+const hiddenCols=new Set();
+function toggleColMenu(){document.getElementById('colMenu').classList.toggle('open')}
+function toggleCol(cls,show){
+  if(show)hiddenCols.delete(cls);else hiddenCols.add(cls);
+  document.querySelectorAll('.'+cls).forEach(el=>el.style.display=show?'':'none');
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('#colToggleWrap'))document.getElementById('colMenu').classList.remove('open');
+});
+
+/* ══ KEYBOARD ══ */
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')return;
+  if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();document.getElementById('gSearch').focus();return}
+  if(e.key==='Escape'){['formModal','detailModal','confirmModal','scModal'].forEach(id=>document.getElementById(id).classList.remove('open'));document.getElementById('undoBar').classList.remove('show');return}
+  if((e.ctrlKey||e.metaKey)&&e.key==='n'){e.preventDefault();openAdd();return}
+  if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undo();return}
+  if((e.ctrlKey||e.metaKey)&&e.key==='e'){e.preventDefault();setView('export');return}
+  if((e.ctrlKey||e.metaKey)&&e.key==='a'){e.preventDefault();selectAll();return}
+  if(e.key==='1')setView('list');
+  if(e.key==='2')setView('dashboard');
+  if(e.key==='3')setView('changelog');
+  if(e.key==='4')setView('export');
+  if(e.key==='?'||e.key==='/')showShortcuts();
+  if(e.key==='Delete'&&selected.size>0)deleteSelected();
+});
+
+/* ══ MODAL BACKDROP ══ */
+['formModal','detailModal','confirmModal'].forEach(id=>{
+  document.getElementById(id).addEventListener('click',e=>{if(e.target===document.getElementById(id))closeModal(id)});
+});
+
+/* ══ INIT ══ */
+(async function(){
+  try{
+    await loadData();
+  }catch(e){console.error('loadData failed:',e)}
+  // Cập nhật stats ngay — không phụ thuộc renderTable
+  updSideStats();
+  try{
+    renderTable();
+  }catch(e){
+    console.error('renderTable failed:',e);
+    // Cập nhật stats dù renderTable lỗi
+    updSideStats();
+  }
+  toast('info','🌳',`Đã tải ${DB.length} thành viên · Ctrl+N thêm · Ctrl+K tìm`);
+})();
+
+/* ══ BRANCH FILTER ══ */
+document.getElementById('brChips').addEventListener('click',e=>{
+  const b=e.target.closest('.fchip');if(!b)return;
+  filterBr=b.dataset.br;
+  document.querySelectorAll('#brChips .fchip').forEach(x=>x.classList.toggle('on',x===b));
+  renderTable();
+});
+
+/* ══ REQUESTS ══ */
+async function refreshRequests(){
+  let reqs=[];
+  try{
+    const r=await fetch('/api/requests');
+    if(r.ok){const j=await r.json();reqs=j.requests||[];}
+  }catch(e){console.error('refreshRequests:',e)}
+  const pending=reqs.filter(r=>r.status==='pending');
+  document.getElementById('navReq').textContent=pending.length||'';
+  document.getElementById('reqCount').textContent=`· ${pending.length} chờ duyệt / ${reqs.length} tổng`;
+  const el=document.getElementById('reqList');
+  if(!pending.length){
+    el.innerHTML='<div style="text-align:center;color:var(--tx-muted);padding:3rem;font-family:var(--serif);font-style:italic">Chưa có yêu cầu nào đang chờ duyệt.</div>';
+    return;
+  }
+  el.innerHTML=pending.map(r=>{
+    const isEdit=r.type==='edit';
+    const orig=isEdit?byId(r.editTargetId):null;
+    // Tạo diff hiển thị cho yêu cầu chỉnh sửa
+    function diffRow(label,oldVal,newVal){
+      if(!newVal||newVal===oldVal)return`<div class="req-field"><span>${label}</span>${esc(oldVal||'—')}</div>`;
+      return`<div class="req-field" style="grid-column:span 2"><span>${label}</span>
+        <span style="color:var(--red);text-decoration:line-through">${esc(oldVal||'—')}</span>
+        <span style="color:var(--green);margin-left:.5rem">→ ${esc(newVal)}</span></div>`;
+    }
+    return`<div class="req-card" id="rc-${r.id}">
+      <div class="req-hdr">
+        <span class="req-type ${r.type}">${isEdit?'✏️ Chỉnh sửa':'➕ Thêm mới'}</span>
+        <span class="req-name">${esc(r.name)}</span>
+        <span class="req-ts">${r.ts}</span>
+      </div>
+      <div class="req-fields">
+        ${isEdit&&orig?`<div class="req-field" style="grid-column:span 2"><span>Thành viên gốc (ID ${orig.id})</span>${esc(orig.name)}</div>`:''}
+        ${isEdit&&orig?diffRow('Họ tên',orig.name,r.name!==orig.name?r.name:''):''}
+        ${isEdit&&orig?diffRow('Năm sinh',orig.birthYear,r.birthYear!==orig.birthYear?r.birthYear:''):''}
+        ${isEdit&&orig?diffRow('Năm mất',orig.deathYear,r.deathYear&&r.deathYear!==orig.deathYear?r.deathYear:''):''}
+        ${isEdit&&orig?diffRow('Giới tính',orig.gender==='male'?'Nam':'Nữ',r.gender&&r.gender!==orig.gender?(r.gender==='male'?'Nam':'Nữ'):''):''}
+        ${!isEdit?`<div class="req-field"><span>Đời</span>${r.generation||'—'}</div>`:''}
+        ${!isEdit?`<div class="req-field"><span>Giới tính</span>${r.gender==='male'?'♂ Nam':'♀ Nữ'}</div>`:''}
+        ${!isEdit&&r.fatherId?`<div class="req-field"><span>Cha/Mẹ (ID)</span>${r.fatherId}</div>`:''}
+        ${!isEdit?`<div class="req-field"><span>Năm sinh</span>${r.birthYear||'—'}</div>`:''}
+        ${r.origin?`<div class="req-field"><span>Địa chỉ</span>${esc(r.origin)}</div>`:''}
+        ${r.occupation?`<div class="req-field"><span>Nghề nghiệp</span>${esc(r.occupation)}</div>`:''}
+      </div>
+      ${r.note?`<div class="req-note">${esc(r.note)}</div>`:''}
+      <div class="req-acts">
+        <button class="tb-btn primary" onclick="approveReq('${r.id}')">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7l4 4 6-6"/></svg>Phê duyệt
+        </button>
+        <button class="tb-btn danger" onclick="rejectReq('${r.id}')">
+          <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2l10 10M12 2L2 12"/></svg>Từ chối
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function removeReqCard(id){
+  // Xoá card ngay khỏi DOM và cập nhật counter
+  const card=document.getElementById('rc-'+id);
+  if(card){
+    card.style.transition='opacity .25s,transform .25s';
+    card.style.opacity='0';card.style.transform='translateX(30px)';
+    setTimeout(()=>{
+      card.remove();
+      // Cập nhật badge + tiêu đề
+      const remaining=document.querySelectorAll('.req-card').length;
+      document.getElementById('navReq').textContent=remaining||'';
+      if(!remaining){
+        document.getElementById('reqList').innerHTML=
+          '<div style="text-align:center;color:var(--tx-muted);padding:3rem;font-family:var(--serif);font-style:italic">Chưa có yêu cầu nào đang chờ duyệt.</div>';
+        document.getElementById('reqCount').textContent='· 0 chờ duyệt';
+      } else {
+        document.getElementById('reqCount').textContent=`· ${remaining} chờ duyệt`;
+      }
+    },260);
+  }
+}
+
+async function approveReq(id){
+  try{
+    const r=await fetch(`/api/requests/${id}/approve`,{method:'POST'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    const json=await r.json();
+    removeReqCard(id);
+    if(json.newMember){
+      // Server đã thêm thành viên mới vào data.json — reload DB
+      await loadData();
+      renderTable();updSideStats();
+      toast('success','✓',`Đã thêm ${json.newMember.n} vào gia phả`);
+    } else {
+      // Chỉnh sửa: reload lại DB
+      await loadData();
+      renderTable();updSideStats();
+      toast('success','✓','Đã phê duyệt yêu cầu chỉnh sửa');
+    }
+    if(_syncChannel) _syncChannel.postMessage('data-updated');
+  }catch(e){toast('error','✗','Lỗi phê duyệt: '+e.message)}
+}
+
+async function rejectReq(id){
+  const nameEl=document.querySelector(`#rc-${id} .req-name`);
+  const name=nameEl?nameEl.textContent:'';
+  try{
+    const r=await fetch(`/api/requests/${id}/reject`,{method:'POST'});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    removeReqCard(id);
+    toast('info','✕',`Đã từ chối yêu cầu của: ${name}`);
+  }catch(e){toast('error','✗','Lỗi từ chối: '+e.message)}
+}
+
+/* ══ LOGIN ══ */
+(function initAuth(){
+  const UNAME='Administrator';
+  const PHASH='R2lhcGhhQGhvTmd1eWVuMjQz'; // btoa('Giapha@hoNguyen243')
+  if(sessionStorage.getItem('hn-auth')==='ok')return;
+  const wall=document.createElement('div');
+  wall.className='login-wall';
+  wall.id='loginWall';
+  wall.innerHTML=`
+    <div class="login-box">
+      <div class="login-logo">🌳 Họ Nguyễn</div>
+      <div class="login-sub">Trang quản trị gia phả · Đăng nhập để tiếp tục</div>
+      <div class="login-field">
+        <label>Tài khoản</label>
+        <input type="text" id="loginUser" autocomplete="username" placeholder="Tài khoản quản trị">
+      </div>
+      <div class="login-field">
+        <label>Mật khẩu</label>
+        <input type="password" id="loginPass" autocomplete="current-password" placeholder="••••••••">
+      </div>
+      <div class="login-err" id="loginErr"></div>
+      <button class="login-btn" onclick="doLogin()">Đăng nhập</button>
+    </div>`;
+  document.body.appendChild(wall);
+  document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+  document.getElementById('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('loginPass').focus()});
+  function doLogin(){
+    const u=document.getElementById('loginUser').value.trim();
+    const p=document.getElementById('loginPass').value;
+    if(u===UNAME&&btoa(p)===PHASH){
+      sessionStorage.setItem('hn-auth','ok');
+      wall.style.opacity='0';wall.style.transition='opacity .4s';
+      setTimeout(()=>wall.remove(),400);
+    } else {
+      document.getElementById('loginErr').textContent='Tài khoản hoặc mật khẩu không đúng.';
+      document.getElementById('loginPass').value='';
+      document.getElementById('loginPass').focus();
+    }
+  }
+  window.doLogin=doLogin;
+  setTimeout(()=>document.getElementById('loginUser').focus(),100);
+}());
+
+refreshRequests();
+</script>
+</body>
+</html>

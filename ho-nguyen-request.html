@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đăng ký bổ sung thành viên — Họ Nguyễn</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#F5EFE2;--bg2:#FDFAF4;--bg3:#F0E8D4;
+  --ink:#1A1208;--earth:#2C1808;--earth2:#5C3820;--clay:#8B6148;
+  --moss:#2D4A3E;--moss2:#4A7C5F;
+  --gold:#B8913A;--gold2:#D4B06A;
+  --bd:rgba(139,97,72,.14);--bd2:rgba(139,97,72,.28);
+  --red:#C0453A;--green:#2D6B50;
+  --sh:0 4px 20px rgba(44,24,8,.1);
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'Inter',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--sans);background:var(--bg);color:var(--ink);-webkit-font-smoothing:antialiased;min-height:100vh}
+
+/* NAV */
+nav{background:rgba(245,239,226,.92);backdrop-filter:blur(18px);border-bottom:1px solid var(--bd);
+  padding:0 2rem;height:60px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100}
+.nav-logo{font-family:var(--serif);font-size:22px;font-weight:700;letter-spacing:.22em;
+  background:linear-gradient(135deg,#8A6010,#D4B040,#F0D060,#C8A030,#8A6010);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  text-decoration:none}
+.nav-back{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--earth);font-weight:500;
+  text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
+.nav-back:hover{color:var(--earth)}
+.nav-back svg{width:14px;height:14px}
+
+/* HERO */
+.hero{background:var(--moss);padding:3.5rem 2rem 3rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(90deg,rgba(196,149,106,.025) 0,rgba(196,149,106,.025) 1px,transparent 1px,transparent 72px)}
+.hero-ey{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:rgba(122,170,136,.8);margin-bottom:.6rem}
+.hero-h{font-family:var(--serif);font-size:clamp(32px,5vw,52px);font-weight:500;
+  color:#F0E8CC;line-height:1.15;margin-bottom:.75rem}
+.hero-sub{font-size:14px;color:rgba(196,170,120,.75);line-height:1.7;max-width:520px;margin:0 auto}
+
+/* TABS */
+.tabs{display:flex;justify-content:center;gap:0;margin:2.5rem auto 0;max-width:480px;
+  background:rgba(44,24,8,.08);border-radius:8px;padding:4px}
+.tab{flex:1;padding:9px 16px;border:none;background:none;font-family:var(--sans);
+  font-size:12px;font-weight:500;letter-spacing:.06em;color:var(--clay);cursor:pointer;
+  border-radius:6px;transition:all .18s}
+.tab.on{background:var(--bg2);color:var(--earth);box-shadow:var(--sh)}
+
+/* MAIN */
+.page{max-width:680px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+
+/* FORM */
+.form-card{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:2rem;margin-top:1.5rem}
+.form-section{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);
+  font-weight:600;margin-bottom:1rem;padding-bottom:.5rem;border-bottom:1px solid var(--bd)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem 1rem;margin-bottom:.75rem}
+.field-row.full{grid-template-columns:1fr}
+.field{display:flex;flex-direction:column;gap:.35rem}
+.field label{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--earth2);font-weight:500}
+.field input,.field select,.field textarea{
+  padding:9px 12px;border:1px solid var(--bd2);border-radius:6px;
+  background:white;color:var(--ink);font-size:13px;font-family:var(--sans);
+  outline:none;transition:border-color .15s,box-shadow .15s;
+  resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--moss2);box-shadow:0 0 0 3px rgba(74,124,95,.1)}
+.field .hint{font-size:10px;color:var(--clay);line-height:1.5}
+.field-req::after{content:' *';color:var(--red)}
+.radio-group{display:flex;gap:1rem;padding-top:2px}
+.radio-group label{display:flex;align-items:center;gap:.5rem;font-size:13px;color:var(--earth2);cursor:pointer}
+.radio-group input{accent-color:var(--moss);width:15px;height:15px}
+
+/* EDIT TARGET */
+.member-search{position:relative}
+.member-search input{width:100%}
+.member-search{position:relative}
+.ms-drop{position:absolute;top:calc(100% + 3px);left:0;right:0;
+  background:#fff;border:1.5px solid var(--moss2);border-radius:8px;
+  box-shadow:0 8px 32px rgba(44,24,8,.14);
+  max-height:260px;overflow-y:auto;z-index:200;display:none;
+  scrollbar-width:thin;scrollbar-color:rgba(139,97,72,.25) transparent}
+.ms-drop::-webkit-scrollbar{width:4px}
+.ms-drop::-webkit-scrollbar-thumb{background:rgba(139,97,72,.25);border-radius:99px}
+.ms-drop.open{display:block}
+.ms-item{padding:9px 14px;cursor:pointer;border-bottom:1px solid rgba(139,97,72,.08);
+  transition:background .1s;user-select:none}
+.ms-item:last-of-type{border-bottom:none}
+.ms-item:hover,.ms-item:active{background:rgba(74,124,95,.07)}
+.ms-name{font-family:var(--serif);font-size:13.5px;color:var(--earth);font-weight:500;line-height:1.3}
+.ms-name mark{background:rgba(184,145,58,.25);color:var(--earth);border-radius:2px;padding:0 1px}
+.ms-meta{font-size:10.5px;color:var(--clay);margin-top:2px;line-height:1.4}
+.ms-empty{padding:14px;font-size:12px;color:var(--clay);text-align:center;font-style:italic}
+.ms-more{padding:8px 14px;font-size:10px;color:var(--clay);text-align:center;
+  border-top:1px dashed rgba(139,97,72,.15);font-style:italic;background:rgba(245,239,226,.6)}
+.selected-member{display:none;align-items:center;gap:.75rem;padding:.75rem 1rem;
+  background:rgba(74,124,95,.08);border:1px solid rgba(74,124,95,.25);border-radius:6px;margin-top:.5rem}
+.selected-member.show{display:flex}
+.sm-name{font-family:var(--serif);font-size:14px;color:var(--earth);font-weight:500}
+.sm-meta{font-size:11px;color:var(--clay);margin-top:1px}
+.sm-clear{margin-left:auto;font-size:11px;color:var(--red);cursor:pointer;background:none;border:none;padding:2px 6px}
+
+/* SUBMIT */
+.submit-area{margin-top:1.5rem;display:flex;flex-direction:column;gap:.75rem}
+.btn-submit{padding:13px 24px;background:var(--moss);border:none;border-radius:6px;
+  color:#E8D5B0;font-family:var(--sans);font-size:12px;font-weight:600;
+  letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:background .18s;width:100%}
+.btn-submit:hover{background:var(--moss2)}
+.btn-submit:disabled{opacity:.5;cursor:default}
+.form-note{font-size:12px;color:var(--clay);text-align:center;line-height:1.65}
+.form-note a{color:var(--gold);text-decoration:none}
+
+/* SUCCESS */
+.success-box{display:none;text-align:center;padding:3rem 2rem;background:var(--bg2);
+  border:1px solid rgba(74,124,95,.3);border-radius:10px;margin-top:1.5rem}
+.success-box.show{display:block}
+.success-icon{font-size:48px;margin-bottom:1rem}
+.success-h{font-family:var(--serif);font-size:24px;color:var(--earth);margin-bottom:.5rem}
+.success-p{font-size:13px;color:var(--clay);line-height:1.75;margin-bottom:1.5rem}
+.btn-reset{padding:10px 24px;background:none;border:1px solid var(--bd2);border-radius:6px;
+  font-family:var(--sans);font-size:12px;color:var(--clay);cursor:pointer;transition:all .18s}
+.btn-reset:hover{border-color:var(--moss2);color:var(--moss)}
+
+/* INFO BOX */
+.info-box{background:rgba(184,145,58,.07);border:1px solid rgba(184,145,58,.25);border-radius:8px;
+  padding:1rem 1.25rem;margin-top:1.5rem;font-size:12.5px;color:var(--earth2);line-height:1.75}
+.info-box strong{color:var(--earth)}
+.info-steps{list-style:none;margin-top:.5rem;display:flex;flex-direction:column;gap:.4rem}
+.info-steps li{display:flex;align-items:baseline;gap:.5rem}
+.info-steps li::before{content:counter(step);counter-increment:step;
+  width:18px;height:18px;border-radius:50%;background:var(--gold);color:white;
+  font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.info-steps{counter-reset:step}
+
+/* STEP BANNER */
+.step-banner{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap}
+.step-num{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;
+  background:var(--moss);color:#E8D5B0;padding:3px 10px;border-radius:99px;flex-shrink:0}
+.step-title{font-family:var(--serif);font-size:16px;font-weight:500;color:var(--earth)}
+
+/* CURRENT INFO BOX */
+.current-info{background:rgba(184,145,58,.07);border:1px solid rgba(184,145,58,.25);
+  border-radius:8px;padding:1rem 1.25rem;margin-top:1rem}
+.ci-title{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);
+  font-weight:600;margin-bottom:.6rem}
+.ci-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.35rem .75rem}
+.ci-row{font-size:12px;color:var(--earth2)}
+.ci-row span:first-child{color:var(--clay);display:block;font-size:10px;letter-spacing:.05em;text-transform:uppercase}
+.ci-note{font-size:12px;color:var(--clay);font-style:italic;margin-top:.6rem;
+  border-top:1px solid rgba(184,145,58,.2);padding-top:.6rem;line-height:1.6;
+  white-space:pre-wrap;max-height:80px;overflow-y:auto}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  nav{padding:0 1rem}
+  .hero{padding:2.5rem 1rem 2rem}
+  .page{padding:1.5rem 1rem 4rem}
+  .form-card{padding:1.25rem}
+  .field-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="ho-nguyen-hero.html" class="nav-logo">Họ Nguyễn</a>
+  <a href="ho-nguyen-hero.html" class="nav-back">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 2L4 7l5 5"/></svg>
+    Về trang chủ
+  </a>
+</nav>
+
+<div class="hero">
+  <div class="hero-ey">Bảo tàng số · Họ Nguyễn</div>
+  <h1 class="hero-h">Đăng ký bổ sung<br>thành viên gia phả</h1>
+  <p class="hero-sub">Gửi yêu cầu bổ sung thành viên mới hoặc đề nghị chỉnh sửa thông tin đã có. Quản trị viên sẽ xem xét và phê duyệt trong thời gian sớm nhất.</p>
+  <div class="tabs" id="tabs">
+    <button class="tab on" onclick="switchTab('add')">➕ Thêm thành viên mới</button>
+    <button class="tab" onclick="switchTab('edit')">✏️ Đề nghị chỉnh sửa</button>
+  </div>
+</div>
+
+<div class="page">
+
+  <!-- INFO BOX -->
+  <div class="info-box">
+    <strong>Quy trình đăng ký:</strong>
+    <ol class="info-steps">
+      <li>Điền đầy đủ thông tin vào biểu mẫu bên dưới</li>
+      <li>Gửi yêu cầu — dữ liệu được lưu để quản trị viên xem xét</li>
+      <li>Quản trị viên phê duyệt và cập nhật vào gia phả</li>
+    </ol>
+  </div>
+
+  <!-- ADD FORM -->
+  <div id="formAdd">
+    <div class="form-card">
+      <div class="form-section">Thông tin thành viên mới</div>
+      <div class="field-row full">
+        <div class="field">
+          <label class="field-req">Họ và tên đầy đủ</label>
+          <input type="text" id="addName" placeholder="Ví dụ: Nguyễn Văn An" maxlength="80">
+        </div>
+      </div>
+      <input type="hidden" id="addGen">
+      <div class="field-row">
+        <div class="field">
+          <label class="field-req">Giới tính</label>
+          <div class="radio-group">
+            <label><input type="radio" name="addGender" value="male" checked> ♂ Nam</label>
+            <label><input type="radio" name="addGender" value="female"> ♀ Nữ</label>
+          </div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Năm sinh</label>
+          <input type="text" id="addBorn" placeholder="Ví dụ: 1985" maxlength="20">
+        </div>
+        <div class="field">
+          <label>Năm / ngày mất (nếu đã mất)</label>
+          <input type="text" id="addDied" placeholder="Ví dụ: 2010 hoặc 15/3 âm lịch" maxlength="40">
+        </div>
+      </div>
+      <div class="field-row full" style="margin-bottom:.75rem">
+        <div class="field">
+          <label>Tên cha / mẹ (để xác định vị trí trong cây)</label>
+          <div class="member-search">
+            <input type="text" id="addParentSearch" placeholder="Nhập tên cha/mẹ để tìm…" autocomplete="off">
+            <div class="ms-drop" id="addParentDrop"></div>
+          </div>
+          <div class="selected-member" id="addParentSel">
+            <div>
+              <div class="sm-name" id="addParentName">—</div>
+              <div class="sm-meta" id="addParentMeta">—</div>
+            </div>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:.75rem">
+              <div id="addGenBadge" style="display:none;background:rgba(184,145,58,.12);border:1px solid rgba(184,145,58,.3);border-radius:4px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--gold);white-space:nowrap"></div>
+              <button class="sm-clear" onclick="clearParent()">✕ Xóa</button>
+            </div>
+          </div>
+          <span class="hint" id="addGenHint" style="display:none"></span>
+          <input type="hidden" id="addParentId">
+        </div>
+      </div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Ghi chú thêm (chức vụ, địa chỉ, nghề nghiệp…)</label>
+          <textarea id="addNote" rows="3" placeholder="Thêm thông tin bổ sung nếu có…" maxlength="1000"></textarea>
+        </div>
+      </div>
+      <div class="field-row full">
+        <div class="field">
+          <label class="field-req">Người đăng ký (tên của bạn)</label>
+          <input type="text" id="addSubmitter" placeholder="Họ tên của bạn để liên hệ khi cần" maxlength="60">
+          <span class="hint">Thông tin này chỉ dùng để quản trị viên liên hệ khi cần xác nhận thêm.</span>
+        </div>
+      </div>
+      <div class="submit-area">
+        <button class="btn-submit" onclick="submitAdd()">Gửi yêu cầu thêm thành viên</button>
+        <p class="form-note">Yêu cầu của bạn sẽ được quản trị viên xem xét trong vòng 1–3 ngày làm việc.<br>Sau khi phê duyệt, thông tin sẽ được cập nhật vào <a href="ho-nguyen-tree.html">cây gia phả</a>.</p>
+      </div>
+    </div>
+    <div class="success-box" id="addSuccess">
+      <div class="success-icon">✅</div>
+      <h2 class="success-h">Gửi yêu cầu thành công!</h2>
+      <p class="success-p">Cảm ơn bạn đã đóng góp thông tin cho gia phả dòng họ Nguyễn.<br>Quản trị viên sẽ xem xét và phê duyệt yêu cầu trong thời gian sớm nhất.</p>
+      <button class="btn-reset" onclick="resetAdd()">Gửi yêu cầu khác</button>
+    </div>
+  </div>
+
+  <!-- EDIT FORM -->
+  <div id="formEdit" style="display:none">
+    <!-- BƯỚC 1: Tìm thành viên -->
+    <div class="form-card" id="editStep1">
+      <div class="step-banner">
+        <span class="step-num">Bước 1</span>
+        <span class="step-title">Chọn thành viên cần chỉnh sửa</span>
+      </div>
+      <div class="field-row full" style="margin-top:1rem">
+        <div class="field">
+          <label class="field-req">Tìm theo tên thành viên</label>
+          <div class="member-search">
+            <input type="text" id="editSearch" placeholder="Click vào đây để xem danh sách hoặc nhập tên tìm kiếm…" autocomplete="off">
+            <div class="ms-drop" id="editDrop"></div>
+          </div>
+          <span class="hint" style="margin-top:.4rem;display:block">Nhấn vào ô trên để xem toàn bộ danh sách 84 thành viên, hoặc gõ tên để lọc nhanh.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- BƯỚC 2: Form chỉnh sửa — hiện sau khi chọn thành viên -->
+    <div class="form-card" id="editStep2" style="display:none;margin-top:1rem">
+      <div class="step-banner">
+        <span class="step-num">Bước 2</span>
+        <span class="step-title">Điền thông tin chỉnh sửa đề nghị</span>
+        <button class="sm-clear" style="margin-left:auto" onclick="clearEdit()">← Chọn người khác</button>
+      </div>
+
+      <!-- Thông tin hiện tại -->
+      <div class="current-info" id="editCurrentInfo"></div>
+
+      <div class="form-section" style="margin-top:1.25rem">Thông tin đề nghị thay đổi <span style="font-size:10px;font-weight:400;color:var(--clay)">(chỉ điền trường muốn sửa)</span></div>
+
+      <div class="field-row full">
+        <div class="field">
+          <label>Họ và tên mới <span style="color:var(--clay);font-size:10px">(nếu cần sửa)</span></label>
+          <input type="text" id="editName" maxlength="80" placeholder="Để trống nếu không thay đổi">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Năm sinh <span style="color:var(--clay);font-size:10px">(nếu cần sửa)</span></label>
+          <input type="text" id="editBorn" maxlength="20" placeholder="Ví dụ: 1975">
+        </div>
+        <div class="field">
+          <label>Năm / ngày mất <span style="color:var(--clay);font-size:10px">(nếu cần sửa)</span></label>
+          <input type="text" id="editDied" maxlength="40" placeholder="Ví dụ: 2020 hoặc 15/3 âm lịch">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Giới tính <span style="color:var(--clay);font-size:10px">(nếu cần sửa)</span></label>
+          <div class="radio-group">
+            <label><input type="radio" name="editGender" value=""> Giữ nguyên</label>
+            <label><input type="radio" name="editGender" value="male"> ♂ Nam</label>
+            <label><input type="radio" name="editGender" value="female"> ♀ Nữ</label>
+          </div>
+        </div>
+      </div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Địa chỉ / Nơi sinh sống <span style="color:var(--clay);font-size:10px">(nếu cần sửa)</span></label>
+          <input type="text" id="editOri" maxlength="100" placeholder="Tỉnh/thành phố hiện đang sinh sống">
+        </div>
+      </div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Nghề nghiệp <span style="color:var(--clay);font-size:10px">(nếu cần sửa)</span></label>
+          <input type="text" id="editOcc" maxlength="100" placeholder="Nghề nghiệp / Chức vụ hiện tại">
+        </div>
+      </div>
+      <div class="field-row full">
+        <div class="field">
+          <label>Thông tin bổ sung / Lý do chỉnh sửa <span style="color:var(--clay);font-size:10px">(bắt buộc)</span></label>
+          <textarea id="editNote" rows="4" placeholder="Mô tả rõ thông tin cần thay đổi, lý do, và nguồn thông tin (nếu có)…" maxlength="2000"></textarea>
+          <span class="hint">Ví dụ: "Sửa năm sinh từ 1980 thành 1978 theo giấy khai sinh", "Bổ sung thông tin nơi ở hiện tại"…</span>
+        </div>
+      </div>
+      <div class="field-row full">
+        <div class="field">
+          <label class="field-req">Người đề nghị</label>
+          <input type="text" id="editSubmitter" placeholder="Họ tên của bạn và mối quan hệ với thành viên này" maxlength="80">
+          <span class="hint">Ví dụ: "Nguyễn Văn An — con trai của thành viên"</span>
+        </div>
+      </div>
+      <div class="submit-area">
+        <button class="btn-submit" onclick="submitEdit()">Gửi đề nghị chỉnh sửa</button>
+        <p class="form-note">Quản trị viên sẽ so sánh với dữ liệu hiện có và phê duyệt. Sau khi phê duyệt, thông tin được cập nhật vào <a href="ho-nguyen-tree.html">cây gia phả</a>.</p>
+      </div>
+    </div>
+
+    <div class="success-box" id="editSuccess">
+      <div class="success-icon">✅</div>
+      <h2 class="success-h">Đề nghị đã được ghi nhận!</h2>
+      <p class="success-p">Cảm ơn bạn đã đóng góp cập nhật thông tin gia phả dòng họ Nguyễn.<br>Quản trị viên sẽ xem xét đề nghị và phản hồi trong thời gian sớm nhất.</p>
+      <button class="btn-reset" onclick="resetEdit()">Gửi đề nghị khác</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ── DATA — 84 thành viên đầy đủ ── */
+const FALLBACK_DB=[
+  {id:'60',name:'Hoàng quí Công (tự Nhân Đạo)',generation:1,gender:'male',fatherId:null,birthYear:''},
+  {id:'59',name:'Tạ quí Công (tự Phúc Thành)',generation:2,gender:'male',fatherId:'60',birthYear:''},
+  {id:'61',name:'Hoàng nhất Long (Tổ cô)',generation:2,gender:'female',fatherId:'60',birthYear:''},
+  {id:'58',name:'Nguyễn quí Công (huý Kiệm)',generation:3,gender:'male',fatherId:'59',birthYear:''},
+  {id:'62',name:'Tạ quí Thị (Tổ cô)',generation:3,gender:'female',fatherId:'59',birthYear:''},
+  {id:'57',name:'Nguyễn quí Công (tự Minh Luân)',generation:4,gender:'male',fatherId:'58',birthYear:''},
+  {id:'63',name:'Nguyễn văn Lẫm',generation:4,gender:'male',fatherId:'58',birthYear:''},
+  {id:'56',name:'Nguyễn quí Công (tự Hữu Thể)',generation:5,gender:'male',fatherId:'57',birthYear:''},
+  {id:'53',name:'Nguyễn quí Công (tự Hữu Đễ)',generation:6,gender:'male',fatherId:'56',birthYear:''},
+  {id:'64',name:'Nguyễn quí Công (tự Hữu Quyền)',generation:6,gender:'male',fatherId:'56',birthYear:''},
+  {id:'65',name:'Nguyễn quí Công (tự Hữu Hiệu)',generation:6,gender:'male',fatherId:'56',birthYear:''},
+  {id:'1',name:'Nguyễn quí Công (tự Hữu Tố)',generation:7,gender:'male',fatherId:'53',birthYear:''},
+  {id:'66',name:'Nguyễn thị Minh (Tổ cô)',generation:7,gender:'female',fatherId:'64',birthYear:''},
+  {id:'67',name:'Nguyễn thị Nữ',generation:7,gender:'female',fatherId:'64',birthYear:''},
+  {id:'68',name:'Nguyễn quí Công (tự Hữu Nghi)',generation:7,gender:'male',fatherId:'53',birthYear:''},
+  {id:'69',name:'Nguyễn quí Công (tự Hữu Tiêu)',generation:7,gender:'male',fatherId:'53',birthYear:''},
+  {id:'70',name:'Nguyễn hữu Liêu',generation:7,gender:'male',fatherId:'65',birthYear:''},
+  {id:'71',name:'Nguyễn hữu Tưởng',generation:7,gender:'male',fatherId:'65',birthYear:''},
+  {id:'72',name:'Nguyễn quí Công (tự Hữu Nhâm)',generation:7,gender:'male',fatherId:'65',birthYear:''},
+  {id:'73',name:'Nguyễn hữu Phấn',generation:7,gender:'male',fatherId:'65',birthYear:''},
+  {id:'74',name:'Nguyễn hữu Ái',generation:7,gender:'male',fatherId:'65',birthYear:''},
+  {id:'2',name:'Nguyễn quí Công (tự Hữu Hiển)',generation:8,gender:'male',fatherId:'1',birthYear:''},
+  {id:'3',name:'Nguyễn quí Công (tự Hữu Mậu)',generation:8,gender:'male',fatherId:'1',birthYear:''},
+  {id:'4',name:'Nguyễn... (Con gái)',generation:8,gender:'female',fatherId:'1',birthYear:''},
+  {id:'75',name:'Nguyễn quí Công (tự Hữu Truyền)',generation:8,gender:'male',fatherId:'68',birthYear:''},
+  {id:'76',name:'Nguyễn quí Công (tự Hữu Tuấn)',generation:8,gender:'male',fatherId:'68',birthYear:''},
+  {id:'77',name:'Nguyễn quí Công (tự Hữu Thản)',generation:8,gender:'male',fatherId:'68',birthYear:''},
+  {id:'78',name:'Nguyễn quí Công (tự Hữu Nghị)',generation:8,gender:'male',fatherId:'68',birthYear:''},
+  {id:'5',name:'Nguyễn Hữu Diệm',generation:9,gender:'male',fatherId:'2',birthYear:''},
+  {id:'6',name:'Nguyễn Hữu Triệm',generation:9,gender:'male',fatherId:'2',birthYear:''},
+  {id:'8',name:'Nguyễn Hữu Lương (Ông Điều)',generation:9,gender:'male',fatherId:'3',birthYear:''},
+  {id:'9',name:'Nguyễn Văn Hiệu',generation:9,gender:'male',fatherId:'3',birthYear:''},
+  {id:'79',name:'Nguyễn quí Công (tự Hữu Khánh)',generation:9,gender:'male',fatherId:'76',birthYear:''},
+  {id:'80',name:'Nguyễn hữu Thuyết',generation:9,gender:'male',fatherId:'77',birthYear:''},
+  {id:'81',name:'Nguyễn quí Công (tự Hữu Lã)',generation:9,gender:'male',fatherId:'75',birthYear:''},
+  {id:'82',name:'Nguyễn quí Công (tự Hữu Độ)',generation:9,gender:'male',fatherId:'75',birthYear:''},
+  {id:'83',name:'Nguyễn quí Công (tự Phúc Thường)',generation:9,gender:'male',fatherId:'75',birthYear:''},
+  {id:'84',name:'Nguyễn quí Công (tự Hữu Soạn)',generation:9,gender:'male',fatherId:'75',birthYear:''},
+  {id:'7',name:'Nguyễn Hữu Tiệm',generation:10,gender:'male',fatherId:'6',birthYear:''},
+  {id:'10',name:'Nguyễn Văn Động',generation:10,gender:'male',fatherId:'5',birthYear:''},
+  {id:'11',name:'Nguyễn Văn Ngưu (Quyền trưởng)',generation:10,gender:'male',fatherId:'5',birthYear:''},
+  {id:'12',name:'Nguyễn Thị V',generation:10,gender:'female',fatherId:'5',birthYear:''},
+  {id:'13',name:'Nguyễn Văn Quy (Ông Cai)',generation:10,gender:'male',fatherId:'8',birthYear:''},
+  {id:'14',name:'Nguyễn Văn Bộc',generation:10,gender:'male',fatherId:'9',birthYear:''},
+  {id:'31',name:'Nguyễn Văn Đuyến',generation:10,gender:'male',fatherId:'5',birthYear:''},
+  {id:'32',name:'Nguyễn Văn Mộc',generation:10,gender:'male',fatherId:'9',birthYear:''},
+  {id:'37',name:'Bà Đại',generation:10,gender:'female',fatherId:'8',birthYear:''},
+  {id:'15',name:'Nguyễn Văn Chu',generation:11,gender:'male',fatherId:'11',birthYear:''},
+  {id:'16',name:'Nguyễn Văn Châu',generation:11,gender:'male',fatherId:'11',birthYear:''},
+  {id:'17',name:'Nguyễn Thị Mô',generation:11,gender:'female',fatherId:'13',birthYear:''},
+  {id:'33',name:'Nguyễn Văn Tế',generation:11,gender:'male',fatherId:'13',birthYear:''},
+  {id:'34',name:'Nguyễn Văn Răng',generation:11,gender:'male',fatherId:'13',birthYear:''},
+  {id:'35',name:'Nguyễn Văn Tời',generation:11,gender:'male',fatherId:'13',birthYear:''},
+  {id:'36',name:'Nguyễn Văn Chít',generation:11,gender:'male',fatherId:'13',birthYear:''},
+  {id:'38',name:'Nguyễn Thị Tính Ất',generation:11,gender:'female',fatherId:'14',birthYear:''},
+  {id:'39',name:'Nguyễn Thị Thanh Thuật',generation:11,gender:'female',fatherId:'14',birthYear:''},
+  {id:'40',name:'Nguyễn Văn Tuất',generation:11,gender:'male',fatherId:'14',birthYear:''},
+  {id:'18',name:'Nguyễn Văn Chinh (tức Chính)',generation:12,gender:'male',fatherId:'15',birthYear:'1929'},
+  {id:'19',name:'Nguyễn Hồng Nhâm (Quyền trưởng)',generation:12,gender:'male',fatherId:'16',birthYear:''},
+  {id:'20',name:'Nguyễn Thúc Quýnh (tức Kiều)',generation:12,gender:'female',fatherId:'16',birthYear:''},
+  {id:'41',name:'Nguyễn Thị Chỉnh',generation:12,gender:'female',fatherId:'16',birthYear:''},
+  {id:'42',name:'Nguyễn Thị Chịnh',generation:12,gender:'female',fatherId:'16',birthYear:''},
+  {id:'43',name:'Nguyễn Thị Sinh',generation:12,gender:'female',fatherId:'16',birthYear:''},
+  {id:'21',name:'Nguyễn Kỳ Hùng (Trưởng)',generation:13,gender:'male',fatherId:'18',birthYear:'1949'},
+  {id:'22',name:'Nguyễn Phạm Tuyết Anh',generation:13,gender:'female',fatherId:'18',birthYear:''},
+  {id:'23',name:'Nguyễn Hồng Nhất',generation:13,gender:'male',fatherId:'19',birthYear:''},
+  {id:'24',name:'Nguyễn Hồng Nam',generation:13,gender:'male',fatherId:'19',birthYear:''},
+  {id:'25',name:'Nguyễn Hồng Cương',generation:13,gender:'male',fatherId:'19',birthYear:''},
+  {id:'44',name:'Nguyễn Hồng Hải',generation:13,gender:'male',fatherId:'18',birthYear:'1956'},
+  {id:'45',name:'Nguyễn Văn Việt',generation:13,gender:'male',fatherId:'18',birthYear:''},
+  {id:'26',name:'Cao Tuấn Nghĩa',generation:14,gender:'male',fatherId:'22',birthYear:''},
+  {id:'27',name:'Nguyễn Hùng Cường',generation:14,gender:'male',fatherId:'21',birthYear:'1984'},
+  {id:'28',name:'Nguyễn Thị Phương Dung',generation:14,gender:'female',fatherId:'23',birthYear:''},
+  {id:'29',name:'Nguyễn Hải Hà',generation:14,gender:'male',fatherId:'44',birthYear:'1984'},
+  {id:'30',name:'Nguyễn Minh Thắng',generation:14,gender:'male',fatherId:'45',birthYear:''},
+  {id:'46',name:'Nguyễn Thị Thương',generation:14,gender:'female',fatherId:'21',birthYear:'1982'},
+  {id:'47',name:'Nguyễn Thị Huyền Trang',generation:14,gender:'female',fatherId:'44',birthYear:'1987'},
+  {id:'48',name:'Nguyễn Hồng Phong',generation:14,gender:'male',fatherId:'23',birthYear:''},
+  {id:'49',name:'Nguyễn Thanh Thủy',generation:14,gender:'male',fatherId:'24',birthYear:''},
+  {id:'50',name:'Nguyễn Thị Phương Lan',generation:14,gender:'female',fatherId:'24',birthYear:''},
+  {id:'51',name:'Nguyễn Hồng Ngọc',generation:14,gender:'female',fatherId:'25',birthYear:''},
+  {id:'52',name:'Nguyễn Hồng Cường',generation:14,gender:'male',fatherId:'25',birthYear:''},
+  {id:'54',name:'Nguyễn Hải Minh',generation:15,gender:'male',fatherId:'29',birthYear:'2012'},
+  {id:'55',name:'Nguyễn Hải Phúc',generation:15,gender:'male',fatherId:'29',birthYear:'2017'},
+];
+
+let DB=[];
+const dbById={};
+(async function(){
+  try{
+    const r=await fetch('/api/members');
+    if(r.ok){
+      const j=await r.json();
+      const arr=j.members||[];
+      if(arr.length){
+        const first=arr[0]||{};
+        if('name' in first){
+          DB=arr; // đã là admin format
+        } else {
+          // tree format → admin format
+          DB=arr.map(m=>({
+            id:String(m.id||''),
+            name:m.n||'',
+            generation:Number(m.g)||1,
+            gender:m.sx==='f'?'female':'male',
+            fatherId:m.par?String(m.par):null,
+            birthYear:m.born||'',
+            deathYear:m.died||'',
+            note:m.note||'',
+            role:m.role||'',
+            origin:m.ori||'',
+            occupation:m.occ||''
+          }));
+        }
+      }
+    }
+  }catch(e){console.error('loadDB error:',e)}
+  if(!DB.length) DB=FALLBACK_DB;
+  DB.forEach(m=>dbById[m.id]=m);
+}());
+
+/* ── TABS ── */
+function switchTab(t){
+  document.getElementById('formAdd').style.display=t==='add'?'block':'none';
+  document.getElementById('formEdit').style.display=t==='edit'?'block':'none';
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',(i===0&&t==='add')||(i===1&&t==='edit')));
+}
+
+/* ── MEMBER SEARCH ── */
+function getParentName(m){
+  if(!m.fatherId)return'Thuỷ tổ';
+  const p=dbById[m.fatherId]||DB.find(x=>x.id===m.fatherId);
+  if(!p)return'';
+  const words=p.name.trim().split(' ');
+  return words.slice(-2).join(' ');
+}
+
+function renderDrop(drop,ms,q,onSelect,inp){
+  const hl=s=>q?s.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`,'gi'),'<mark>$1</mark>'):s;
+  drop.innerHTML=ms.map(m=>{
+    const par=getParentName(m);
+    const born=m.birthYear&&m.birthYear!=='xxxx'?` · Sinh ${m.birthYear}`:'';
+    return`<div class="ms-item" data-id="${m.id}">
+      <div class="ms-name">${hl(esc(m.name))}</div>
+      <div class="ms-meta">Đời ${m.generation} · ${m.gender==='male'?'♂ Nam':'♀ Nữ'}${born}${par?' · Con của: '+esc(par):''}</div>
+    </div>`;
+  }).join('')+
+  (ms.length>=20?`<div class="ms-more">Nhập thêm ký tự để thu hẹp kết quả…</div>`:'');
+  drop.classList.add('open');
+  drop.querySelectorAll('.ms-item').forEach(el=>el.addEventListener('click',()=>{
+    const m=DB.find(x=>x.id===el.dataset.id)||FALLBACK_DB.find(x=>x.id===el.dataset.id);
+    if(m){inp.value=m.name;drop.classList.remove('open');onSelect(m)}
+  }));
+}
+
+function buildSearch(inputId,dropId,onSelect){
+  const inp=document.getElementById(inputId);
+  const drop=document.getElementById(dropId);
+  // Đánh dấu wrapper để đóng dropdown khi click ra ngoài
+  const wrapper=inp.closest('.member-search');
+
+  function doSearch(){
+    const q=inp.value.trim().toLowerCase();
+    let ms;
+    if(!q){
+      ms=[...DB].sort((a,b)=>a.generation-b.generation||parseInt(a.id)-parseInt(b.id)).slice(0,20);
+    } else {
+      ms=DB.filter(m=>
+        m.name.toLowerCase().includes(q)||
+        (m.birthYear&&String(m.birthYear).includes(q))||
+        String(m.generation).includes(q)
+      ).sort((a,b)=>{
+        const aq=a.name.toLowerCase().startsWith(q)?0:1;
+        const bq=b.name.toLowerCase().startsWith(q)?0:1;
+        return aq-bq||a.generation-b.generation;
+      }).slice(0,20);
+    }
+    if(!ms.length){
+      drop.innerHTML='<div class="ms-empty">Không tìm thấy thành viên nào phù hợp.</div>';
+      drop.classList.add('open');
+      return;
+    }
+    renderDrop(drop,ms,q,onSelect,inp);
+  }
+
+  inp.addEventListener('input',doSearch);
+  inp.addEventListener('focus',doSearch);
+  inp.addEventListener('click',doSearch); // Bấm lại khi đã focus cũng mở dropdown
+
+  // Đóng dropdown khi click ra ngoài wrapper — không cần blur
+  document.addEventListener('click',e=>{
+    if(!wrapper.contains(e.target)) drop.classList.remove('open');
+  });
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){drop.classList.remove('open');inp.blur()}
+  });
+}
+
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+
+/* ── ADD PARENT SEARCH ── */
+let selectedParent=null;
+buildSearch('addParentSearch','addParentDrop',m=>{
+  selectedParent=m;
+  const parentGen=Number(m.generation)||1;
+  const childGen=parentGen+1;
+  document.getElementById('addParentId').value=m.id;
+  document.getElementById('addParentName').textContent=m.name;
+  document.getElementById('addParentMeta').textContent=`Đời ${parentGen} · ${m.gender==='male'?'Nam':'Nữ'}`;
+  document.getElementById('addParentSel').classList.add('show');
+  // Tự động tính đời con = đời cha + 1
+  document.getElementById('addGen').value=childGen;
+  const badge=document.getElementById('addGenBadge');
+  badge.textContent=`Đời thứ ${childGen}`;
+  badge.style.display='block';
+  const hint=document.getElementById('addGenHint');
+  hint.textContent=`Hệ thống tự xác định: đời thứ ${childGen} (con của thành viên đời ${parentGen})`;
+  hint.style.display='block';
+});
+function clearParent(){
+  selectedParent=null;
+  document.getElementById('addParentId').value='';
+  document.getElementById('addParentSearch').value='';
+  document.getElementById('addParentSel').classList.remove('show');
+  document.getElementById('addGen').value='';
+  document.getElementById('addGenBadge').style.display='none';
+  document.getElementById('addGenHint').style.display='none';
+}
+
+/* ── EDIT TARGET SEARCH ── */
+let selectedEdit=null;
+buildSearch('editSearch','editDrop',m=>{
+  selectedEdit=m;
+  // Ẩn bước 1, hiện bước 2
+  document.getElementById('editStep1').style.display='none';
+  document.getElementById('editStep2').style.display='block';
+  // Pre-fill các trường với giá trị hiện tại (để tham khảo, không bắt buộc giữ nguyên)
+  document.getElementById('editName').value=m.name||'';
+  document.getElementById('editBorn').value=(m.birthYear&&m.birthYear!=='xxxx')?m.birthYear:'';
+  document.getElementById('editDied').value=(m.deathYear&&m.deathYear!=='xxxx')?m.deathYear:'';
+  document.getElementById('editOri').value=m.origin||'';
+  document.getElementById('editOcc').value=m.occupation||'';
+  document.getElementById('editNote').value='';
+  document.getElementById('editSubmitter').value='';
+  // Chọn giới tính hiện tại
+  const gv=m.gender==='female'?'female':m.gender==='male'?'male':'';
+  document.querySelectorAll('input[name="editGender"]').forEach(r=>r.checked=(r.value===gv));
+  // Hiện thông tin hiện tại để tham khảo
+  const par=m.fatherId?(dbById[m.fatherId]||DB.find(x=>x.id===m.fatherId)):null;
+  const born=(m.birthYear&&m.birthYear!=='xxxx')?m.birthYear:'Chưa rõ';
+  const died=(m.deathYear&&m.deathYear!=='xxxx')?m.deathYear:'—';
+  document.getElementById('editCurrentInfo').innerHTML=`
+    <div class="ci-title">Thông tin hiện tại trong gia phả — ID ${m.id}</div>
+    <div class="ci-grid">
+      <div class="ci-row"><span>Họ tên</span>${esc(m.name)}</div>
+      <div class="ci-row"><span>Đời thứ</span>${m.generation}</div>
+      <div class="ci-row"><span>Giới tính</span>${m.gender==='male'?'♂ Nam':'♀ Nữ'}</div>
+      <div class="ci-row"><span>Năm sinh</span>${born}</div>
+      <div class="ci-row"><span>Năm mất</span>${died}</div>
+      <div class="ci-row"><span>Cha / Mẹ</span>${par?esc(par.name):'Thuỷ tổ'}</div>
+      ${m.origin?`<div class="ci-row"><span>Địa chỉ</span>${esc(m.origin)}</div>`:''}
+      ${m.occupation?`<div class="ci-row"><span>Nghề nghiệp</span>${esc(m.occupation)}</div>`:''}
+      ${m.role?`<div class="ci-row"><span>Chức vụ</span>${esc(m.role)}</div>`:''}
+    </div>
+    ${m.note?`<div class="ci-note"><strong>Ghi chú:</strong> ${esc(m.note)}</div>`:''}`;
+});
+function clearEdit(){
+  selectedEdit=null;
+  document.getElementById('editSearch').value='';
+  document.getElementById('editStep1').style.display='block';
+  document.getElementById('editStep2').style.display='none';
+  document.getElementById('editCurrentInfo').innerHTML='';
+  ['editName','editBorn','editDied','editOri','editOcc','editNote','editSubmitter']
+    .forEach(id=>{const el=document.getElementById(id);if(el)el.value=''});
+  document.querySelectorAll('input[name="editGender"]').forEach(r=>r.checked=(r.value===''));
+  document.getElementById('editSuccess').classList.remove('show');
+}
+
+/* ── SUBMIT ── */
+function nowStr(){return new Date().toLocaleString('vi-VN',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}
+
+async function submitAdd(){
+  const name=document.getElementById('addName').value.trim();
+  const gen=document.getElementById('addGen').value;
+  const gender=document.querySelector('input[name="addGender"]:checked').value;
+  const born=document.getElementById('addBorn').value.trim();
+  const died=document.getElementById('addDied').value.trim();
+  const fatherId=document.getElementById('addParentId').value;
+  const note=document.getElementById('addNote').value.trim();
+  const submitter=document.getElementById('addSubmitter').value.trim();
+  if(!name){alert('Vui lòng nhập họ và tên.');document.getElementById('addName').focus();return}
+  if(!gen&&!fatherId){alert('Vui lòng chọn cha/mẹ để hệ thống xác định đời thứ.');document.getElementById('addParentSearch').focus();return}
+  if(!submitter){alert('Vui lòng nhập tên người đăng ký.');document.getElementById('addSubmitter').focus();return}
+  const req={type:'add',name,generation:gen,gender,birthYear:born,deathYear:died,
+    fatherId:fatherId||null,note:note+(submitter?`\n[Người đăng ký: ${submitter}]`:'')};
+  try{
+    const r=await fetch('/api/requests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(req)});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+  }catch(e){alert('Lỗi gửi yêu cầu: '+e.message);return}
+  document.getElementById('formAdd').querySelector('.form-card').style.display='none';
+  document.getElementById('addSuccess').classList.add('show');
+}
+
+async function submitEdit(){
+  if(!selectedEdit){alert('Vui lòng chọn thành viên cần chỉnh sửa ở Bước 1.');return}
+  const m=selectedEdit;
+  const name=document.getElementById('editName').value.trim();
+  const born=document.getElementById('editBorn').value.trim();
+  const died=document.getElementById('editDied').value.trim();
+  const ori=document.getElementById('editOri').value.trim();
+  const occ=document.getElementById('editOcc').value.trim();
+  const gender=document.querySelector('input[name="editGender"]:checked')?.value||'';
+  const note=document.getElementById('editNote').value.trim();
+  const submitter=document.getElementById('editSubmitter').value.trim();
+
+  // Kiểm tra có ít nhất 1 trường thay đổi
+  const hasChange=
+    (name&&name!==m.name)||
+    (born&&born!==(m.birthYear||''))||
+    (died&&died!==(m.deathYear||''))||
+    (gender&&gender!==m.gender)||
+    (ori&&ori!==(m.origin||''))||
+    (occ&&occ!==(m.occupation||''));
+  if(!hasChange&&!note){
+    alert('Vui lòng điền ít nhất một trường cần thay đổi và mô tả lý do.');
+    return;
+  }
+  if(!note){alert('Vui lòng mô tả lý do / thông tin cần thay đổi.');document.getElementById('editNote').focus();return}
+  if(!submitter){alert('Vui lòng nhập tên người đề nghị.');document.getElementById('editSubmitter').focus();return}
+
+  // Tạo mô tả diff tự động
+  const changes=[];
+  if(name&&name!==m.name) changes.push(`Tên: "${m.name}" → "${name}"`);
+  if(born&&born!==(m.birthYear||'')) changes.push(`Năm sinh: "${m.birthYear||'chưa rõ'}" → "${born}"`);
+  if(died&&died!==(m.deathYear||'')) changes.push(`Năm mất: "${m.deathYear||'chưa rõ'}" → "${died}"`);
+  if(gender&&gender!==m.gender){
+    const gLabel=g=>g==='male'?'Nam':g==='female'?'Nữ':g;
+    changes.push(`Giới tính: "${gLabel(m.gender)}" → "${gLabel(gender)}"`);
+  }
+  if(ori&&ori!==(m.origin||'')) changes.push(`Địa chỉ: "${m.origin||'chưa có'}" → "${ori}"`);
+  if(occ&&occ!==(m.occupation||'')) changes.push(`Nghề nghiệp: "${m.occupation||'chưa có'}" → "${occ}"`);
+
+  const autoSummary=changes.length?'\n[Thay đổi đề nghị: '+changes.join('; ')+']':'';
+  const req={
+    type:'edit',
+    editTargetId:m.id,
+    name:name||m.name,
+    generation:m.generation,
+    gender:gender||m.gender,
+    birthYear:born||m.birthYear||'',
+    deathYear:died||m.deathYear||'',
+    origin:ori||m.origin||'',
+    occupation:occ||m.occupation||'',
+    note:note+autoSummary+`\n[Người đề nghị: ${submitter}]`
+  };
+  try{
+    const r=await fetch('/api/requests',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(req)});
+    if(!r.ok)throw new Error('HTTP '+r.status);
+  }catch(e){alert('Lỗi gửi yêu cầu: '+e.message);return}
+  document.getElementById('editStep2').style.display='none';
+  document.getElementById('editSuccess').classList.add('show');
+}
+
+function resetAdd(){
+  document.getElementById('addName').value='';
+  document.getElementById('addGen').value='';
+  document.getElementById('addBorn').value='';
+  document.getElementById('addDied').value='';
+  document.getElementById('addNote').value='';
+  document.getElementById('addSubmitter').value='';
+  clearParent();
+  document.getElementById('formAdd').querySelector('.form-card').style.display='block';
+  document.getElementById('addSuccess').classList.remove('show');
+}
+function resetEdit(){
+  clearEdit(); // Đặt lại toàn bộ trạng thái
+}
+</script>
+</body>
+</html>

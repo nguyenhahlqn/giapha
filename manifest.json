@@ -1,0 +1,26 @@
+{
+  "name": "Họ Nguyễn — Bảo Tàng Số Di Sản",
+  "short_name": "Họ Nguyễn",
+  "description": "Phả hệ dòng họ Nguyễn, Duy Tiên, Hà Nam — 84 thành viên, 15 thế hệ",
+  "start_url": "./ho-nguyen-hero.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a0804",
+  "theme_color": "#2D4A3E",
+  "orientation": "any",
+  "lang": "vi",
+  "icons": [
+    {
+      "src": "icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    { "name": "Phả Hệ",   "url": "./ho-nguyen-tree.html",     "description": "Xem cây gia phả" },
+    { "name": "Di Sản",   "url": "./ho-nguyen-heritage.html", "description": "Khám phá di sản" }
+  ],
+  "categories": ["lifestyle", "education"],
+  "prefer_related_applications": false
+}
