@@ -154,9 +154,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 
 /* ── LIST VIEW ── */
 #vList{
-  min-height:100vh;
+  position:fixed;
+  top:calc(var(--nav) + var(--tb));
+  left:0;right:0;bottom:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
   background:var(--bg);
-  padding:calc(var(--nav) + var(--tb) + 1.5rem) 1.5rem 6rem;
+  padding:1.5rem 1.5rem 6rem;
   transition:background .25s}
 .list-wrap{max-width:1000px;margin:0 auto}
 .lg-header{display:flex;align-items:center;gap:.75rem;padding-bottom:.5rem;
@@ -183,9 +188,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 
 /* ── TIMELINE VIEW ── */
 #vTimeline{
-  min-height:100vh;
+  position:fixed;
+  top:calc(var(--nav) + var(--tb));
+  left:0;right:0;bottom:0;
+  overflow-y:auto;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
   background:var(--bg);
-  padding:calc(var(--nav) + var(--tb) + 1.75rem) 2rem 6rem;
+  padding:1.75rem 2rem 6rem;
   transition:background .25s}
 .tl-wrap{max-width:720px;margin:0 auto;padding-bottom:4rem}
 .tl-intro{font-family:var(--serif);font-size:26px;font-weight:400;color:var(--e1);margin-bottom:.25rem}
@@ -1314,13 +1324,20 @@ function setView(v){
   document.getElementById('zcWrap').style.display=isT?'flex':'none';
   document.getElementById('mmWrap').style.display=isT?'block':'none';
   document.getElementById('tsTree').style.display=isT?'flex':'none';
-  // Tree: body locked (canvas handles scroll). List/timeline: body scrolls normally.
-  document.documentElement.style.overflow=isT?'hidden':'auto';
-  document.body.style.overflow=isT?'hidden':'auto';
-  if(!isT) window.scrollTo(0,0);
+  // body/html luôn overflow:hidden — mỗi view có container scroll riêng
+  document.documentElement.style.overflow='hidden';
+  document.body.style.overflow='hidden';
   if(v==='tree'){render(true);setTimeout(fitView,80)}
-  if(v==='list'){document.getElementById('listWrap').innerHTML='<div style="padding:3rem;text-align:center;color:var(--clay);font-family:var(--serif);font-style:italic">Đang tải…</div>';setTimeout(()=>{renderList();window.scrollTo(0,0);},30);}
-  if(v==='timeline'){document.getElementById('tlTrack').innerHTML='<div style="padding:3rem;text-align:center;color:var(--clay);font-family:var(--serif);font-style:italic">Đang tải…</div>';setTimeout(()=>{renderTimeline();window.scrollTo(0,0);},30);}
+  if(v==='list'){
+    const el=document.getElementById('vList');
+    document.getElementById('listWrap').innerHTML='<div style="padding:3rem;text-align:center;color:var(--clay);font-family:var(--serif);font-style:italic">Đang tải…</div>';
+    setTimeout(()=>{renderList();el.scrollTop=0;},30);
+  }
+  if(v==='timeline'){
+    const el=document.getElementById('vTimeline');
+    document.getElementById('tlTrack').innerHTML='<div style="padding:3rem;text-align:center;color:var(--clay);font-family:var(--serif);font-style:italic">Đang tải…</div>';
+    setTimeout(()=>{renderTimeline();el.scrollTop=0;},30);
+  }
 }
 
 /* ── LIST VIEW ── */
