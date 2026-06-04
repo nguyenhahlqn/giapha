@@ -535,10 +535,20 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
     <svg id="svg" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <marker id="dot" viewBox="0 0 6 6" refX="3" refY="3" markerWidth="4" markerHeight="4"><circle cx="3" cy="3" r="2" fill="rgba(139,97,72,.3)"/></marker>
-        <filter id="fs" x="-15%" y="-15%" width="130%" height="150%"><feDropShadow dx="0" dy="2" stdDeviation="3.5" flood-color="rgba(44,24,16,.1)"/></filter>
-        <filter id="fh" x="-22%" y="-22%" width="144%" height="164%"><feDropShadow dx="0" dy="5" stdDeviation="8" flood-color="rgba(184,145,58,.24)"/></filter>
-        <filter id="fr" x="-35%" y="-35%" width="170%" height="190%"><feDropShadow dx="0" dy="0" stdDeviation="8" flood-color="rgba(184,145,58,.28)"/></filter>
-        <filter id="fp" x="-18%" y="-18%" width="136%" height="156%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="rgba(45,74,62,.2)"/></filter>
+        <filter id="fs" x="-15%" y="-15%" width="130%" height="150%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(44,24,16,.12)"/></filter>
+        <filter id="fh" x="-22%" y="-22%" width="144%" height="164%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(184,145,58,.28)"/></filter>
+        <filter id="fr" x="-35%" y="-35%" width="170%" height="190%"><feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="rgba(184,145,58,.32)"/></filter>
+        <filter id="fp" x="-18%" y="-18%" width="136%" height="156%"><feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="rgba(45,74,62,.22)"/></filter>
+        <!-- Card backgrounds light mode -->
+        <linearGradient id="gm" x1="0%" y1="0%" x2="105%" y2="105%"><stop offset="0%" stop-color="#EDF5F0"/><stop offset="100%" stop-color="#F3F8F5"/></linearGradient>
+        <linearGradient id="gf" x1="0%" y1="0%" x2="105%" y2="105%"><stop offset="0%" stop-color="#FAF3EE"/><stop offset="100%" stop-color="#FDF7F4"/></linearGradient>
+        <linearGradient id="g1" x1="0%" y1="0%" x2="105%" y2="105%"><stop offset="0%" stop-color="#F9F5E8"/><stop offset="100%" stop-color="#FDF9F0"/></linearGradient>
+        <!-- Avatar radial gradients -->
+        <radialGradient id="am" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#C8DDD6"/><stop offset="100%" stop-color="#7EA898"/></radialGradient>
+        <radialGradient id="af" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#E8C8B8"/><stop offset="100%" stop-color="#B07868"/></radialGradient>
+        <radialGradient id="a1" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#EED898"/><stop offset="100%" stop-color="#B89038"/></radialGradient>
+        <!-- Top inner shade for depth -->
+        <linearGradient id="topShd" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#000" stop-opacity="0.04"/><stop offset="100%" stop-color="#000" stop-opacity="0"/></linearGradient>
       </defs>
       <g id="el"></g>
       <g id="nl"></g>
@@ -847,7 +857,7 @@ async function reloadData(showToast){
 window.addEventListener('focus',()=>{ reloadData(false); });
 
 /* ── LAYOUT ── */
-const NW=200, NH=88, HG=22, VG=92;
+const NW=230, NH=96, HG=26, VG=104;
 
 /* ── STATE ── */
 let col=new Set(), hl=null, gf='all', bf='all';
@@ -916,79 +926,221 @@ function edge(pid,cid){
   return`<path d="M${x1},${y1} C${x1},${ym} ${x2},${ym} ${x2},${y2}" fill="none" stroke="${stroke}" stroke-width="${sw2}" stroke-linecap="round" marker-end="url(#dot)"/>`;
 }
 
-/* ── RENDER NODE ── */
+/* ── RENDER NODE — Premium Card Design ── */
 function node(m){
   const p=pos[m.id];if(!p)return'';
-  const c=clr(m),isHL=hl===m.id,hasK=(ch[m.id]||[]).length>0,isCol=col.has(m.id);
+  const isHL=hl===m.id,hasK=(ch[m.id]||[]).length>0,isCol=col.has(m.id);
   const onP=ancPath.some(x=>x.id===m.id);
-  const ini2=ini(m.n);
-  const words=m.n.trim().split(' ');
-  let line1='',line2='';
-  if(m.n.length<=16){line1=m.n;line2='';}
-  else{
-    if(words.length===2){line1=words[0];line2=words[1];}
-    else if(words.length===3){line1=words[0]+' '+words[1];line2=words[2];}
-    else if(words.length===4){line1=words[0]+' '+words[1];line2=words[2]+' '+words[3];}
-    else{const mid=Math.ceil(words.length/2);line1=words.slice(0,mid).join(' ');line2=words.slice(mid).join(' ');}
-    if(line1.length>18)line1=line1.slice(0,17)+'…';
-    if(line2.length>18)line2=line2.slice(0,17)+'…';
-  }
-  const da=tr(m.al||'',24);
-  const hasBorn=(m.born&&m.born!=='xxxx'&&m.born!=='');
-  const hasDied=(m.died&&m.died!==''&&m.died!=='xxxx');
-  const bornStr=hasBorn?m.born+(hasDied?'–'+m.died.slice(0,12):''):'';
-  // Vertical layout: calculate positions
-  const MID=NH/2;
-  const textRows=[line1, line2||null, da||null, bornStr||null].filter(Boolean).length;
-  const rowH=13;
-  const totalH=textRows*rowH;
-  const startY=MID-totalH/2+rowH*.7;
-  let rows=[line1];
-  if(line2)rows.push(line2);
-  if(da)rows.push(da);
-  if(bornStr)rows.push(bornStr);
+  const dk=isDk();
+  const isAnc=m.g===1,isFem=m.sx==='f';
 
-  let filt=m.g===1?'url(#fr)':isHL?'url(#fh)':onP?'url(#fp)':'url(#fs)';
-  let sc2=isHL?'#D4A84A':onP?'#5A9C75':c.bd,sw2=isHL?2.5:onP?2.1:1.7;
-  const badge=isCol&&hasK?`<circle cx="${NW-10}" cy="9" r="8" fill="${c.bd}" opacity=".9"/><text x="${NW-10}" y="13.5" text-anchor="middle" font-size="8.5" fill="${c.bg}" font-family="Be Vietnam Pro,sans-serif" font-weight="600">${(ch[m.id]||[]).length}</text>`:'';
-  const toggle=hasK?`<g class="tog" data-id="${m.id}" transform="translate(${NW/2-11},${NH})"><rect width="22" height="12" rx="6" fill="${c.bd}" opacity=".78"/><text x="11" y="9.5" text-anchor="middle" font-size="9" fill="${c.bg}" font-family="Be Vietnam Pro,sans-serif">${isCol?'▾':'▴'}</text></g>`:'';
-  const alive=(!hasDied&&hasBorn)?`<circle cx="${NW-9}" cy="${NH-9}" r="3.5" fill="#5A9C75" opacity=".8"/>`:'';
-  const roleBadge=m.role&&['Liệt sỹ','Quyền trưởng','Trưởng nhánh','Tổng Chánh','Lý trưởng','Xã trưởng','Khán thủ','Vệ binh'].includes(m.role)?
-    `<rect x="0" y="${NH-14}" width="${NW}" height="14" rx="0" fill="${c.bd}" opacity=".2"/>
-     <text x="${NW/2}" y="${NH-4}" text-anchor="middle" font-size="8" fill="${c.sub}" font-family="Be Vietnam Pro,sans-serif" font-weight="600">${m.role}</text>`:'';
-  const pathMark=onP&&!isHL?`<rect x="0" y="0" width="${NW}" height="2.5" rx="1.25" fill="${c.bd}" opacity=".5"/>`:'';
-  const hasRole=m.role&&['Liệt sỹ','Quyền trưởng','Trưởng nhánh','Tổng Chánh','Lý trưởng','Xã trưởng','Khán thủ','Vệ binh'].includes(m.role);
-  const contentH=hasRole?NH-14:NH;
+  /* ── Màu theo loại ── */
+  const bdBg  = isAnc?'#3C2C06':isFem?'#3C1A0C':'#162A1C';
+  const accent= isAnc?'#C8A040':isFem?'#A05030':'#267040';
+  const avGrad= isAnc?'url(#a1)':isFem?'url(#af)':'url(#am)';
+  const avTxt = isAnc?'#2A1800':isFem?'#280C04':'#041808';
+  const nameTx= dk?'#EEE0C0':'#16100A';
+  const subTx = dk?'rgba(200,165,100,.65)':'rgba(50,34,12,.48)';
+  const goldC = dk?'rgba(210,170,60,':'rgba(176,140,50,';
+  const borderC=isHL?`${accent}`:onP?'#267040':`${goldC}.28)`;
+  const borderW=isHL?2:onP?1.5:0.8;
+  const filt  =isAnc?'url(#fr)':isHL?'url(#fh)':onP?'url(#fp)':'url(#fs)';
 
-  // Build text elements dynamically with proper vertical centering
-  const textStartY=contentH/2 - (rows.length*13)/2 + 10;
-  let textEls='';
-  rows.forEach((r,i)=>{
-    const y=textStartY+i*13;
-    const isName=i<(line2?2:1);
-    const isAlias=da&&(i===(line2?2:1));
-    const isBorn=bornStr&&i===rows.length-1;
-    const fs=isName?11:isAlias?9:8.5;
-    const fw=isName?'600':'400';
-    const fill=isBorn?c.sub:isAlias?c.sub:c.tx;
-    const opacity=isBorn?'.7':'1';
-    const ff=isAlias?'EB Garamond,serif':'Be Vietnam Pro,sans-serif';
-    const fstyle=isAlias?'italic':'normal';
-    textEls+=`<text x="42" y="${y}" font-size="${fs}" fill="${fill}" opacity="${opacity}" font-family="${ff}" font-weight="${fw}" font-style="${fstyle}">${esc(r)}</text>`;
+  /* ── Tên (tách alias trong ngoặc ra khỏi tên chính) ── */
+  // Một số m.n chứa alias dạng "Tên (Bí danh)" → tách riêng
+  const aliasMatch=m.n.match(/^(.*?)\s*\(([^)]+)\)\s*$/);
+  const cleanName=aliasMatch?aliasMatch[1].trim():m.n.trim();
+  const inlineAlias=aliasMatch?aliasMatch[2].trim():'';
+
+  // Bẻ dòng tên chính
+  const words=cleanName.split(' ');
+  let L1='',L2='';
+  if(cleanName.length<=16)L1=cleanName;
+  else if(words.length===2){L1=words[0];L2=words[1];}
+  else if(words.length===3){L1=words.slice(0,2).join(' ');L2=words[2];}
+  else{const h=Math.ceil(words.length/2);L1=words.slice(0,h).join(' ');L2=words.slice(h).join(' ');}
+  if(L1.length>18)L1=L1.slice(0,17)+'…';
+  if(L2&&L2.length>18)L2=L2.slice(0,17)+'…';
+  const nLines=[L1,L2].filter(Boolean);
+
+  const hBorn=(m.born&&m.born!=='xxxx'&&m.born!=='');
+  const hDied=(m.died&&m.died!=='xxxx'&&m.died!=='');
+  // Ưu tiên: alias trong ngoặc → m.al → năm sinh
+  const alias=inlineAlias||(m.al?tr(m.al,22):'');
+  const subText=alias||(hBorn?m.born+(hDied?'–'+m.died.slice(-4):''):'');
+
+  // Initials từ tên sạch (không có alias)
+  const ini2=ini(cleanName);
+
+  /* ═══ LAYOUT ═══════════════════════════════════════
+     Căn theo ảnh mẫu:
+     - Ribbon: dải dọc từ đỉnh, centered trên avatar
+     - Avatar: 20% từ trái, 50% từ trên, bán kính lớn
+     - Separator: đường vàng dọc tại 38% width
+     - Text: centered trong vùng phải
+  ═══════════════════════════════════════════════════ */
+  const AX=Math.round(NW*0.215); // 49 — dịch phải thêm 1 chút
+  const AY=Math.round(NH*0.510); // 49
+  const AR=Math.round(NH*0.250); // 24 — avatar lớn hơn
+  const SEP=Math.round(NW*0.375);// 86
+  const TX =Math.round((SEP+NW)/2);// 158
+  const RW =16;                   // ribbon width
+  const RX =AX-RW/2;             // ribbon left edge
+
+  /* ── Role ── */
+  const ROLES=['Tổng Chánh','Lý trưởng','Xã trưởng','Khán thủ','Vệ binh','Quyền trưởng','Liệt sỹ'];
+  const hasRole=ROLES.includes(m.role);
+  const cH=hasRole?NH-14:NH;
+  const mY=cH/2;
+  const roleBadge=hasRole?`
+    <rect x="${SEP+6}" y="${NH-13}" width="${NW-SEP-10}" height="10" rx="2" fill="${bdBg}" opacity=".14"/>
+    <text x="${TX}" y="${NH-5}" text-anchor="middle" font-size="6.5" fill="${accent}"
+      font-family="Inter,sans-serif" font-weight="700" letter-spacing=".1em">${m.role.toUpperCase()}</text>`:'';
+
+  /* ── Text block ── */
+  const lH=15;
+  const hSub=!!subText;
+  const bH=nLines.length*lH+(hSub?13:0)+9;
+  let cy=mY-bH/2+lH*0.82;
+  let nameEls='';
+  nLines.forEach((l,i)=>{
+    nameEls+=`<text x="${TX}" y="${cy+i*lH}" text-anchor="middle"
+      font-size="${nLines.length>1?11.5:13}" fill="${nameTx}"
+      font-family="Playfair Display,Georgia,serif"
+      font-weight="${isAnc?'600':'400'}" letter-spacing=".03em">${esc(l)}</text>`;
   });
+  cy+=nLines.length*lH+1;
 
-  return`<g class="nd" data-id="${m.id}" transform="translate(${p.x},${p.y})" style="cursor:pointer">
-  <rect width="${NW}" height="${NH}" rx="7" fill="${c.bg}" stroke="${sc2}" stroke-width="${sw2}" filter="${filt}"/>
-  ${pathMark}
-  <path d="M0,7 Q0,0 7,0 L27,0 L27,18 L0,18 Z" fill="${c.bd}" opacity=".75"/>
-  <text x="13.5" y="12.5" text-anchor="middle" font-size="8" fill="${c.bg}" font-family="Be Vietnam Pro,sans-serif" font-weight="700">Đ${m.g}</text>
-  <circle cx="22" cy="${NH/2}" r="13" fill="${c.av}"/>
-  <text x="22" y="${NH/2+5}" text-anchor="middle" font-size="13" fill="${c.avt}" font-family="EB Garamond,serif" font-weight="500">${ini2}</text>
-  ${textEls}
-  ${roleBadge}${alive}${badge}
-  <rect width="${NW}" height="${NH}" fill="transparent"/>
+  /* ── Lotus divider (5 cánh sen vàng) ── */
+  const dY=cy+2;
+  const lc=`${goldC}.42)`;
+  const ac=accent;
+  // 5 cánh: giữa + 2 bên trong + 2 bên ngoài
+  const lotusSvg=`
+    <ellipse cx="${TX}"   cy="${dY-3.5}" rx="2.2" ry="4.2" fill="${ac}" opacity=".88"/>
+    <ellipse cx="${TX-3.8}" cy="${dY-1.5}" rx="1.8" ry="3.4" fill="${ac}" opacity=".72"
+      transform="rotate(-28,${TX-3.8},${dY-1.5})"/>
+    <ellipse cx="${TX+3.8}" cy="${dY-1.5}" rx="1.8" ry="3.4" fill="${ac}" opacity=".72"
+      transform="rotate(28,${TX+3.8},${dY-1.5})"/>
+    <ellipse cx="${TX-7}"   cy="${dY+0.5}" rx="1.5" ry="2.8" fill="${ac}" opacity=".5"
+      transform="rotate(-52,${TX-7},${dY+0.5})"/>
+    <ellipse cx="${TX+7}"   cy="${dY+0.5}" rx="1.5" ry="2.8" fill="${ac}" opacity=".5"
+      transform="rotate(52,${TX+7},${dY+0.5})"/>
+    <ellipse cx="${TX}" cy="${dY+2.5}" rx="3.8" ry="1.2" fill="${ac}" opacity=".4"/>`;
+  const divider=`
+    <line x1="${SEP+10}" y1="${dY}" x2="${TX-13}" y2="${dY}" stroke="${lc}" stroke-width=".8"/>
+    ${lotusSvg}
+    <line x1="${TX+13}" y1="${dY}" x2="${NW-8}" y2="${dY}" stroke="${lc}" stroke-width=".8"/>`;
+  cy+=12;
+  const subEl=hSub?`<text x="${TX}" y="${cy+5}" text-anchor="middle"
+    font-size="8.5" fill="${subTx}" font-family="Inter,sans-serif"
+    font-style="italic">${esc(tr(subText,26))}</text>`:'';
+
+  /* ── Jade ring — solid base, không để ảnh xuyên qua ── */
+  const jC  = isAnc?'#6A5018':isFem?'#5A2818':'#164020';
+  const jC2 = isAnc?'#9A7828':isFem?'#8A3828':'#2A6038';
+  const baseBg = dk?(isAnc?'#1C1606':isFem?'#180A06':'#0A1410'):'#F5F1E6';
+  const jade=`
+    <!-- Nền đục chặn ảnh xuyên qua -->
+    <circle cx="${AX}" cy="${AY}" r="${AR+6}" fill="${baseBg}"/>
+    <!-- Vòng ngoài jade (solid) -->
+    <circle cx="${AX}" cy="${AY}" r="${AR+5}" fill="${jC}" opacity=".85"/>
+    <circle cx="${AX}" cy="${AY}" r="${AR+3}" fill="${jC2}" opacity=".65"/>
+    <!-- Viền vàng -->
+    <circle cx="${AX}" cy="${AY}" r="${AR+2}" fill="none" stroke="${goldC}.75)" stroke-width="1.8"/>
+    <circle cx="${AX}" cy="${AY}" r="${AR+5}" fill="none" stroke="${goldC}.3)" stroke-width=".8"/>
+    <!-- Avatar fill (gradient) -->
+    <circle cx="${AX}" cy="${AY}" r="${AR}"   fill="${avGrad}"/>
+    <!-- Highlight -->
+    <ellipse cx="${AX-AR*.32}" cy="${AY-AR*.32}" rx="${AR*.28}" ry="${AR*.18}"
+      fill="rgba(255,255,255,.28)" transform="rotate(-30,${AX},${AY})"/>
+    <!-- Điểm sáng nhỏ -->
+    <circle cx="${AX-AR*.45}" cy="${AY-AR*.45}" r="${AR*.1}" fill="rgba(255,255,255,.45)"/>`;
+
+  /* ── Bookmark ribbon (hình dải ruy băng có đầu nhọn) ── */
+  const rH=AY+AR+4; // chiều cao ribbon = tới bụng dưới avatar
+  const ribbon=`<path d="M${RX},0 L${RX+RW},0 L${RX+RW},${rH-8}
+    L${AX},${rH} L${RX},${rH-8} Z"
+    fill="${bdBg}" opacity="${dk?.75:.88}" clip-path="url(#cp${m.id})"/>`;
+
+  /* ── Hoa sen vàng nhỏ ở đầu separator ── */
+  const sY=10;
+  const sepFlower=`<g opacity=".7">
+    <ellipse cx="${SEP}" cy="${sY+3}" rx="1.5" ry="3" fill="${goldC}.8)"/>
+    <ellipse cx="${SEP}" cy="${sY+3}" rx="3" ry="1.5" fill="${goldC}.8)"/>
+    <ellipse cx="${SEP}" cy="${sY+3}" rx="1.5" ry="3" fill="${goldC}.6)"
+      transform="rotate(45,${SEP},${sY+3})"/>
+    <circle cx="${SEP}" cy="${sY+3}" r="1.5" fill="${goldC}.9)"/>
+  </g>`;
+
+  /* ── Hoa tứ quý góc phải (khi không có badge) ── */
+  const fx=NW-14,fy=13;
+  const flowerDeco=`<g opacity="${dk?.3:.26}">
+    <ellipse cx="${fx}" cy="${fy}" rx="1.6" ry="5" fill="${accent}"/>
+    <ellipse cx="${fx}" cy="${fy}" rx="5" ry="1.6" fill="${accent}"/>
+    <ellipse cx="${fx}" cy="${fy}" rx="1.6" ry="5" fill="${accent}" opacity=".7"
+      transform="rotate(45,${fx},${fy})"/>
+    <circle cx="${fx}" cy="${fy}" r="2.2" fill="${accent}"/>
+    <circle cx="${fx}" cy="${fy}" r="1" fill="rgba(255,255,255,.55)"/>
+  </g>`;
+
+  /* ── Badge & toggle & alive ── */
+  const badge=isCol&&hasK?`
+    <circle cx="${NW-13}" cy="13" r="10" fill="${bdBg}" opacity=".94"/>
+    <circle cx="${NW-13}" cy="13" r="10" fill="none"
+      stroke="rgba(255,255,255,.15)" stroke-width=".8"/>
+    <text x="${NW-13}" y="17.5" text-anchor="middle" font-size="9.5" fill="white"
+      font-family="Inter,sans-serif" font-weight="700">${(ch[m.id]||[]).length}</text>`:'';
+  const toggle=hasK?`<g class="tog" data-id="${m.id}"
+    transform="translate(${NW/2-14},${NH})">
+    <rect width="28" height="14" rx="7" fill="${bdBg}" opacity=".8"/>
+    <text x="14" y="10.5" text-anchor="middle" font-size="9" fill="white"
+      font-family="Inter,sans-serif">${isCol?'▾':'▴'}</text>
+  </g>`:'';
+  const alive=(!hDied&&hBorn&&m.g>=10)?`
+    <circle cx="${AX+AR-2}" cy="${AY+AR-2}" r="3.8"
+      fill="#229950" stroke="white" stroke-width="1.1" opacity=".9"/>`:'';
+
+  /* ══ RENDER ══════════════════════════════════════════ */
+  return`<g class="nd" data-id="${m.id}"
+  transform="translate(${p.x},${p.y})" style="cursor:pointer">
+  <clipPath id="cp${m.id}"><rect width="${NW}" height="${NH}" rx="11"/></clipPath>
+  <!-- ① Nền màu (fallback) -->
+  <rect width="${NW}" height="${NH}" rx="11"
+    fill="${dk?(isAnc?'#1C1606':isFem?'#180A06':'#0A1410'):'#F5F1E6'}"
+    stroke="${borderC}" stroke-width="${borderW}" filter="${filt}"/>
+  <!-- ② Ảnh watercolor (overlay) -->
+  <image href="/card-bg-sm.png" x="0" y="0" width="${NW}" height="${NH}"
+    preserveAspectRatio="xMidYMid slice"
+    opacity="${dk?.12:.22}" clip-path="url(#cp${m.id})"/>
+  <!-- ③ Viền vàng mỏng bên trong -->
+  <rect x="2.5" y="2.5" width="${NW-5}" height="${NH-5}" rx="9.5"
+    fill="none" stroke="${goldC}.28)" stroke-width=".7"
+    clip-path="url(#cp${m.id})"/>
+  <!-- ④ Ribbon bookmark -->
+  ${ribbon}
+  <!-- ⑤ Số đời trong ribbon (nằm TRÊN avatar) -->
+  <text x="${AX}" y="15" text-anchor="middle" font-size="8.5"
+    fill="rgba(255,255,255,.9)" font-family="Inter,sans-serif"
+    font-weight="700" letter-spacing=".06em">Đ${m.g}</text>
+  <!-- ⑥ Separator vàng dọc + hoa đầu -->
+  <line x1="${SEP}" y1="8" x2="${SEP}" y2="${cH-8}"
+    stroke="${goldC}.45)" stroke-width=".8"/>
+  ${sepFlower}
+  <!-- ⑦ Avatar jade ring (nằm TRÊN ribbon) -->
+  ${jade}
+  <text x="${AX}" y="${AY+5.5}" text-anchor="middle" font-size="14"
+    fill="${avTxt}" font-family="Playfair Display,serif"
+    font-weight="700" letter-spacing=".04em" font-family="Inter,sans-serif">${ini2}</text>
+  <!-- ⑧ Text bên phải -->
+  ${nameEls}${divider}${subEl}${roleBadge}
+  <!-- ⑨ Góc phải + alive -->
+  ${isCol&&hasK?badge:flowerDeco}
+  ${alive}
+  <rect width="${NW}" height="${NH}" fill="transparent" rx="11"/>
   ${toggle}</g>`;
 }
+
 
 /* ── RENDER ── */
 function render(anim){
