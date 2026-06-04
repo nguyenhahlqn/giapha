@@ -249,8 +249,43 @@ footer{background:var(--ink0);border-top:1px solid var(--bd-gold);padding:3rem 2
 .reveal.visible{opacity:1;transform:none}
 
 /* RESPONSIVE */
+/* ── HAMBURGER MENU ── */
+.ham-btn{display:none;flex-direction:column;justify-content:center;gap:5px;
+  width:40px;height:40px;background:none;border:none;cursor:pointer;padding:6px;
+  border-radius:6px;transition:background .2s}
+.ham-btn:hover{background:rgba(212,174,58,.12)}
+.ham-btn span{display:block;width:22px;height:1.5px;background:rgba(240,228,192,.9);
+  border-radius:2px;transition:transform .3s,opacity .3s}
+.ham-btn.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.ham-btn.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.ham-btn.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+
+/* Mobile menu overlay */
+#mobileMenu{
+  position:fixed;top:64px;left:0;right:0;
+  background:rgba(6,4,2,.97);
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
+  border-bottom:1px solid rgba(212,174,58,.2);
+  z-index:690;
+  transform:translateY(-100%);opacity:0;
+  transition:transform .3s ease,opacity .3s ease;
+  pointer-events:none}
+#mobileMenu.open{transform:translateY(0);opacity:1;pointer-events:auto}
+.mm-links{list-style:none;padding:1rem 0}
+.mm-links li{border-bottom:1px solid rgba(212,174,58,.08)}
+.mm-links a{display:block;padding:1rem 2rem;
+  font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+  color:rgba(240,228,192,.8);text-decoration:none;font-weight:400;
+  transition:color .2s,background .2s}
+.mm-links a:hover,.mm-links a.active{color:var(--g5);background:rgba(212,174,58,.06)}
+.mm-cta{display:block;margin:1rem 2rem 1.5rem;padding:14px;text-align:center;
+  background:var(--gold-grad);border-radius:2px;
+  font-size:11px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink0);text-decoration:none}
+
 @media(max-width:860px){
   .nav-links,.nav-cta{display:none}
+  .ham-btn{display:flex}
   .stats-grid{grid-template-columns:1fr 1fr}
   .stat-item:nth-child(2){border-right:none}
   .story-inner{grid-template-columns:1fr;text-align:left}
@@ -289,8 +324,23 @@ footer{background:var(--ink0);border-top:1px solid var(--bd-gold);padding:3rem 2
       <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="4" r="2"/><path d="M7 6v3M4.5 12h5M4.5 9l2.5 3 2.5-3"/></svg>
       Xem gia phả
     </a>
+    <button class="ham-btn" id="hamBtn" aria-label="Menu" onclick="toggleMobileMenu()">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
+
+<!-- MOBILE MENU -->
+<div id="mobileMenu">
+  <ul class="mm-links">
+    <li><a href="ho-nguyen-hero.html" class="active">Trang chủ</a></li>
+    <li><a href="ho-nguyen-tree.html">🌿 Cây gia phả</a></li>
+    <li><a href="ho-nguyen-heritage.html">📜 Di sản</a></li>
+    <li><a href="ho-nguyen-request.html">✍️ Đăng ký thành viên</a></li>
+    <li><a href="ho-nguyen-admin.html">⚙️ Quản trị</a></li>
+  </ul>
+  <a href="ho-nguyen-tree.html" class="mm-cta">🌳 Mở cây gia phả</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -585,6 +635,29 @@ window.addEventListener('scroll',()=>{
 
 // Service Worker
 if('serviceWorker' in navigator){navigator.serviceWorker.register('./sw.js').catch(()=>{})}
+
+/* ── Mobile menu toggle ── */
+function toggleMobileMenu(){
+  const btn=document.getElementById('hamBtn');
+  const menu=document.getElementById('mobileMenu');
+  const open=menu.classList.toggle('open');
+  btn.classList.toggle('open',open);
+  btn.setAttribute('aria-expanded',open);
+}
+// Đóng menu khi click ra ngoài
+document.addEventListener('click',e=>{
+  const menu=document.getElementById('mobileMenu');
+  const btn=document.getElementById('hamBtn');
+  if(menu.classList.contains('open')&&!menu.contains(e.target)&&!btn.contains(e.target)){
+    menu.classList.remove('open');
+    btn.classList.remove('open');
+  }
+});
+// Đóng menu khi scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('mobileMenu').classList.remove('open');
+  document.getElementById('hamBtn').classList.remove('open');
+},{passive:true});
 </script>
 </body>
 </html>
