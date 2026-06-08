@@ -3,33 +3,123 @@
 Server gia phả họ Nguyễn — Duy Tiên · Hà Nam
 Chạy: python3 server.py
 Truy cập: http://localhost:8000
+
+Lưu trữ dữ liệu: GitHub API (persistent) + bộ nhớ cache (nhanh)
 """
-import json, os, sys
+import json, os, base64, threading
 from http.server import HTTPServer, BaseHTTPRequestHandler
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse
+from urllib.request import urlopen, Request
+from urllib.error import HTTPError
 
-BASE   = os.path.dirname(os.path.abspath(__file__))
-DATA   = os.path.join(BASE, 'data.json')
-PORT   = int(os.environ.get('PORT', 8000))
+BASE = os.path.dirname(os.path.abspath(__file__))
+DATA = os.path.join(BASE, 'data.json')
+PORT = int(os.environ.get('PORT', 8000))
 
-# ── Khởi tạo data.json nếu chưa có ──────────────────────────────────────────
+# ── GitHub config (đặt biến môi trường trên Render) ──────────────────────────
+GH_TOKEN = os.environ.get('GH_TOKEN', '')          # Personal Access Token
+GH_REPO  = os.environ.get('GH_REPO',  'nguyenhahlqn/giapha')
+GH_FILE  = os.environ.get('GH_FILE',  'data.json')
+GH_API   = f'https://api.github.com/repos/{GH_REPO}/contents/{GH_FILE}'
+
+# ── Bộ nhớ cache (tránh đọc GitHub liên tục) ─────────────────────────────────
+_cache      = None
+_cache_lock = threading.Lock()
+
+def _gh_headers():
+    h = {'Accept': 'application/vnd.github.v3+json',
+         'Content-Type': 'application/json'}
+    if GH_TOKEN:
+        h['Authorization'] = f'token {GH_TOKEN}'
+    return h
+
+def _fetch_from_github():
+    """Đọc data.json từ GitHub API, trả về (data_dict, file_sha)."""
+    try:
+        req = Request(GH_API, headers=_gh_headers())
+        with urlopen(req, timeout=10) as r:
+            meta = json.loads(r.read())
+        content = base64.b64decode(meta['content']).decode('utf-8')
+        return json.loads(content), meta['sha']
+    except Exception as e:
+        print(f'[GitHub] Không đọc được: {e}')
+        return None, None
+
+def _push_to_github(data, sha):
+    """Ghi data.json lên GitHub API."""
+    if not GH_TOKEN:
+        print('[GitHub] Không có GH_TOKEN — bỏ qua sync')
+        return False
+    try:
+        content_b64 = base64.b64encode(
+            json.dumps(data, ensure_ascii=False, indent=2).encode('utf-8')
+        ).decode('ascii')
+        body = json.dumps({
+            'message': f'[auto] Cập nhật data.json (v{data.get("version",1)})',
+            'content': content_b64,
+            'sha': sha
+        }).encode('utf-8')
+        req = Request(GH_API, data=body, headers=_gh_headers(), method='PUT')
+        with urlopen(req, timeout=15) as r:
+            resp = json.loads(r.read())
+        new_sha = resp['content']['sha']
+        print(f'[GitHub] ✓ Đã sync — SHA: {new_sha[:8]}')
+        return new_sha
+    except HTTPError as e:
+        print(f'[GitHub] Lỗi {e.code}: {e.read().decode()}')
+        return False
+    except Exception as e:
+        print(f'[GitHub] Lỗi push: {e}')
+        return False
+
 def init_data():
-    if not os.path.exists(DATA):
-        # Tạo data.json từ dữ liệu gốc (hardcoded 84 thành viên)
-        default = {"members": [], "requests": [], "version": 1}
-        with open(DATA, 'w', encoding='utf-8') as f:
-            json.dump(default, f, ensure_ascii=False, indent=2)
-        print(f"[OK] Tạo {DATA}")
-    else:
-        print(f"[OK] Dữ liệu: {DATA}")
+    """Khởi động: ưu tiên đọc từ GitHub, fallback về file local."""
+    global _cache
+    with _cache_lock:
+        if GH_TOKEN:
+            print('[GitHub] Đang tải dữ liệu từ GitHub...')
+            data, sha = _fetch_from_github()
+            if data:
+                _cache = {'data': data, 'sha': sha}
+                # Cập nhật file local để đồng bộ
+                with open(DATA, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, ensure_ascii=False, indent=2)
+                print(f'[GitHub] ✓ {len(data.get("members",[]))} thành viên, SHA: {sha[:8]}')
+                return
+        # Fallback: đọc từ file local
+        if os.path.exists(DATA):
+            with open(DATA, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            _cache = {'data': data, 'sha': None}
+            print(f'[Local] ✓ {len(data.get("members",[]))} thành viên')
+        else:
+            data = {"members": [], "requests": [], "version": 1}
+            _cache = {'data': data, 'sha': None}
+            print('[Local] Tạo data.json mới')
 
 def read_data():
-    with open(DATA, 'r', encoding='utf-8') as f:
-        return json.load(f)
+    """Đọc từ cache (nhanh)."""
+    with _cache_lock:
+        return json.loads(json.dumps(_cache['data']))  # deep copy
 
 def write_data(data):
+    """Ghi vào cache + file local + GitHub (async)."""
+    global _cache
+    with _cache_lock:
+        old_sha = _cache.get('sha')
+        _cache = {'data': data, 'sha': old_sha}
+    # Ghi file local ngay lập tức
     with open(DATA, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+    # Đẩy lên GitHub ở background thread
+    def _sync():
+        with _cache_lock:
+            sha = _cache.get('sha')
+        new_sha = _push_to_github(data, sha)
+        if new_sha:
+            with _cache_lock:
+                _cache['sha'] = new_sha
+    threading.Thread(target=_sync, daemon=True).start()
 
 # ── HTTP Handler ─────────────────────────────────────────────────────────────
 class Handler(BaseHTTPRequestHandler):
