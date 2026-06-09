@@ -311,6 +311,7 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json(404, {'error': f'Not found: {p}'})
 
     def do_POST(self):
+        global ADMIN_HASH
         p = urlparse(self.path).path.rstrip('/')
         length = int(self.headers.get('Content-Length', 0))
         body = json.loads(self.rfile.read(length)) if length else {}
@@ -356,7 +357,6 @@ class Handler(BaseHTTPRequestHandler):
             d2.setdefault('config', {})['admin_hash'] = new_hash
             write_data(d2)
             # Cập nhật biến runtime
-            global ADMIN_HASH
             ADMIN_HASH = new_hash
             # Thu hồi tất cả token cũ (bắt buộc đăng nhập lại)
             with _tokens_lock:
