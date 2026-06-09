@@ -1226,7 +1226,7 @@
       "role": "",
       "born": "2012",
       "died": "",
-      "note": "Hiện đang là học sinh.",
+      "note": "Hiện đang là học sinh, sinh sống cùng bố mẹ tại phường Hạ Long, Quảng Ninh\nMẹ là Nguyễn Thị Thanh Tú (sinh năm 1985).",
       "par": "29",
       "br": "Nhánh Hữu Đễ",
       "ori": "",
@@ -1278,5 +1278,5 @@
       "ts": "14:49, 03/06/2026"
     }
   ],
-  "version": 21
+  "version": 22
 }
