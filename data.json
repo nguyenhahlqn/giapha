@@ -1279,5 +1279,16 @@
       "ts": "14:49, 03/06/2026"
     }
   ],
-  "version": 23
+  "version": 24,
+  "gallery": [
+    {
+      "id": "1",
+      "title": "Đất lành chim đậu — Duy Tiên · Hà Nam",
+      "cat": "phong-canh",
+      "year": "",
+      "desc": "Đồng lúa phù sa sông Đáy — vùng đất đã nuôi dưỡng mười lăm đời họ Nguyễn từ thuở Hoàng Quí Công khai cơ lập nghiệp.",
+      "photo": "/gallery-dat-lanh-chim-dau.jpg",
+      "order": 1
+    }
+  ]
 }
