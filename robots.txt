@@ -1,3 +1,36 @@
+# Social media crawlers — must be allowed for link preview to work
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: Facebot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: WhatsApp
+Allow: /
+
+User-agent: Slackbot
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: Zalo
+Allow: /
+
+# Search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Default
 User-agent: *
 Allow: /
 Disallow: /ho-nguyen-admin.html

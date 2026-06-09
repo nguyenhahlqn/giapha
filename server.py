@@ -223,6 +223,12 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _is_social_crawler(self):
+        ua = self.headers.get('User-Agent', '')
+        crawlers = ['facebookexternalhit', 'Facebot', 'Twitterbot', 'LinkedInBot',
+                    'WhatsApp', 'Slackbot', 'TelegramBot', 'Zalo', 'Googlebot', 'Bingbot']
+        return any(c.lower() in ua.lower() for c in crawlers)
+
     def send_file(self, path):
         ext = os.path.splitext(path)[1].lower()
         mime = {
@@ -242,13 +248,14 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-Type', mime)
         self.send_header('Content-Length', len(body))
-        # Ảnh OG cache 1 ngày; HTML không cache để OG tags luôn mới
         if ext in ('.jpg', '.jpeg', '.png', '.webp', '.svg', '.ico'):
             self.send_header('Cache-Control', 'public, max-age=86400')
         else:
             self.send_header('Cache-Control', 'no-cache')
-        # Cho phép social crawlers (Facebook, Zalo, Twitter) đọc ảnh và HTML
         self.send_header('X-Robots-Tag', 'index, follow')
+        # Cho phép social crawlers đọc nội dung (bypass CORS cho crawler)
+        if self._is_social_crawler():
+            self.send_header('Access-Control-Allow-Origin', '*')
         self.end_headers()
         self.wfile.write(body)
 
@@ -291,6 +298,10 @@ class Handler(BaseHTTPRequestHandler):
             if p == '' or p == '/':
                 p = '/ho-nguyen-hero.html'
             filepath = os.path.join(BASE, p.lstrip('/'))
+            # Log social crawler access để debug
+            if self._is_social_crawler():
+                ua = self.headers.get('User-Agent', '')[:60]
+                print(f'[Crawler] {ua} → {p}')
             if os.path.isfile(filepath):
                 try:
                     self.send_file(filepath)
