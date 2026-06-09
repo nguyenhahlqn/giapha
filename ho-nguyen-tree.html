@@ -400,6 +400,115 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
   .anc-trail{display:none!important}
   #vList,#vTimeline{padding:1rem 0.5rem}
 }
+
+/* ── RELATIONSHIP ANALYSIS MODAL ── */
+.rel-overlay{position:fixed;inset:0;background:rgba(26,18,12,.62);z-index:720;
+  display:none;align-items:flex-start;justify-content:center;
+  backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
+  overflow-y:auto;padding:24px 16px 40px}
+.rel-overlay.open{display:flex}
+.rel-box{background:var(--bg2);border:1px solid var(--bd2);border-radius:12px;
+  width:100%;max-width:560px;box-shadow:0 28px 72px var(--sh);
+  margin:auto;overflow:hidden}
+[data-theme="dark"] .rel-box{background:var(--bg3)}
+.rel-head{padding:1.2rem 1.4rem .9rem;border-bottom:1px solid var(--bd);
+  display:flex;align-items:center;justify-content:space-between}
+.rel-title{font-family:var(--serif);font-size:18px;font-weight:500;color:var(--e1)}
+[data-theme="dark"] .rel-title{color:var(--parch)}
+.rel-close{width:30px;height:30px;background:none;border:none;cursor:pointer;
+  border-radius:50%;color:var(--clay);font-size:16px;display:flex;align-items:center;
+  justify-content:center;transition:background .15s}
+.rel-close:hover{background:var(--bd);color:var(--e1)}
+.rel-body{padding:1.2rem 1.4rem}
+/* Member selectors */
+.rel-sel-row{display:grid;grid-template-columns:1fr auto 1fr;gap:.5rem;align-items:start;margin-bottom:1rem}
+.rel-sel-col{display:flex;flex-direction:column;gap:.35rem}
+.rel-sel-label{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);font-weight:500}
+.rel-sel-wrap{position:relative}
+.rel-sel-input{width:100%;padding:8px 10px;background:var(--bg);border:1px solid var(--bd2);
+  border-radius:6px;font-size:12px;color:var(--e1);font-family:var(--sans);outline:none;
+  transition:border-color .15s}
+.rel-sel-input:focus{border-color:var(--gold)}
+[data-theme="dark"] .rel-sel-input{background:var(--bg2);color:var(--parch)}
+.rel-sel-chosen{margin-top:4px;padding:6px 10px;background:rgba(45,74,62,.12);
+  border-radius:5px;font-size:11px;color:var(--moss3);font-family:var(--serif);
+  min-height:28px;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+[data-theme="dark"] .rel-sel-chosen{background:rgba(45,74,62,.25);color:var(--moss4)}
+.rel-sel-name{font-weight:500}
+.rel-sel-gen{font-size:10px;opacity:.7}
+.rel-swap{width:32px;height:32px;background:none;border:1px solid var(--bd);cursor:pointer;
+  border-radius:50%;color:var(--clay);font-size:13px;display:flex;align-items:center;
+  justify-content:center;align-self:center;margin-top:16px;transition:all .15s;flex-shrink:0}
+.rel-swap:hover{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.rel-sdrop{position:absolute;top:100%;left:0;right:0;background:var(--bg2);border:1px solid var(--bd2);
+  border-radius:6px;box-shadow:0 8px 24px var(--sh);z-index:50;max-height:180px;overflow-y:auto;
+  margin-top:2px;display:none}
+[data-theme="dark"] .rel-sdrop{background:var(--bg3)}
+.rel-sdrop.open{display:block}
+.rel-sdrop-item{padding:7px 10px;font-size:12px;cursor:pointer;color:var(--e1);
+  font-family:var(--serif);border-bottom:1px solid var(--bd);transition:background .12s}
+[data-theme="dark"] .rel-sdrop-item{color:var(--parch)}
+.rel-sdrop-item:last-child{border-bottom:none}
+.rel-sdrop-item:hover{background:var(--bg3)}
+[data-theme="dark"] .rel-sdrop-item:hover{background:var(--bg4)}
+.rel-sdrop-gen{font-size:10px;color:var(--straw);margin-left:4px}
+.rel-btn{width:100%;padding:10px;background:var(--gold-grad);border:none;border-radius:6px;
+  color:var(--ink0,#1A1008);font-size:12px;font-weight:600;letter-spacing:.08em;
+  text-transform:uppercase;cursor:pointer;transition:opacity .15s;margin-bottom:1.2rem}
+.rel-btn:hover{opacity:.88}
+.rel-btn:disabled{opacity:.45;cursor:not-allowed}
+/* Result area */
+.rel-result{display:none}
+.rel-result.show{display:block}
+.rel-divider{height:1px;background:var(--bd);margin:.9rem 0}
+.rel-term-badge{text-align:center;padding:1rem;background:rgba(154,112,16,.07);
+  border-radius:8px;margin-bottom:1rem;border:1px solid rgba(154,112,16,.15)}
+[data-theme="dark"] .rel-term-badge{background:rgba(212,174,58,.07);border-color:rgba(212,174,58,.15)}
+.rel-term-label{font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--straw);margin-bottom:.3rem}
+.rel-term-text{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--e1)}
+[data-theme="dark"] .rel-term-text{color:var(--parch)}
+.rel-term-sub{font-size:11px;color:var(--clay);margin-top:.3rem;font-family:var(--serif);font-style:italic}
+/* Call cards */
+.rel-call-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1rem}
+.rel-call-card{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:.8rem}
+[data-theme="dark"] .rel-call-card{background:var(--bg2)}
+.rel-call-from{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--straw);margin-bottom:3px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rel-call-to{font-size:9px;color:var(--clay);margin-bottom:4px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rel-call-word{font-family:var(--serif);font-size:20px;font-weight:500;color:var(--gold)}
+[data-theme="dark"] .rel-call-word{color:var(--gold2)}
+.rel-call-self{font-size:10px;color:var(--clay);margin-top:2px;font-style:italic}
+/* Info rows */
+.rel-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem}
+.rel-info-item{background:var(--bg);border-radius:6px;padding:.6rem .8rem;border:1px solid var(--bd)}
+[data-theme="dark"] .rel-info-item{background:var(--bg2)}
+.rel-info-key{font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--straw);margin-bottom:3px}
+.rel-info-val{font-size:12px;color:var(--e1);font-family:var(--serif)}
+[data-theme="dark"] .rel-info-val{color:var(--parch)}
+/* Path */
+.rel-path-label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem}
+.rel-path{display:flex;flex-wrap:wrap;align-items:center;gap:3px;
+  background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:.7rem .9rem}
+[data-theme="dark"] .rel-path{background:var(--bg2)}
+.rel-path-node{font-family:var(--serif);font-size:11px;color:var(--e2);cursor:pointer;
+  padding:2px 5px;border-radius:3px;transition:background .12s;white-space:nowrap}
+[data-theme="dark"] .rel-path-node{color:var(--clay)}
+.rel-path-node:hover{background:var(--bd);color:var(--e1)}
+[data-theme="dark"] .rel-path-node:hover{color:var(--parch)}
+.rel-path-node.lca{color:var(--gold);font-weight:600}
+[data-theme="dark"] .rel-path-node.lca{color:var(--gold2)}
+.rel-path-node.sel-a{color:var(--moss3);font-weight:600}
+.rel-path-node.sel-b{color:#C4956A;font-weight:600}
+.rel-path-arrow{color:var(--bd2);font-size:10px}
+@media(max-width:560px){
+  .rel-sel-row{grid-template-columns:1fr;gap:.5rem}
+  .rel-swap{display:none}
+  .rel-call-grid{grid-template-columns:1fr}
+  .rel-info-grid{grid-template-columns:1fr}
+  .rel-box{border-radius:0;margin:0}
+  .rel-overlay{padding:0}
+}
 </style>
 </head>
 <body>
@@ -511,6 +620,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 
   <!-- Actions -->
   <div class="ts end">
+    <button class="tbtn" onclick="openRelModal()" title="Phân tích quan hệ & cách xưng hô giữa 2 thành viên">
+      <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="3.5" cy="4" r="2"/><circle cx="10.5" cy="4" r="2"/><path d="M1 12c0-2 1.1-3.5 2.5-3.5S6 10 6 12"/><path d="M8 12c0-2 1.1-3.5 2.5-3.5S13 10 13 12"/><path d="M6 5.5h2"/></svg>So sánh
+    </button>
     <button class="tbtn" onclick="reloadData(true)" title="Tải lại dữ liệu mới nhất từ quản trị">
       <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7a5 5 0 1 0 1-3.5"/><path d="M2 2v3h3"/></svg>Làm mới
     </button>
@@ -632,6 +744,83 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
       <div class="sc-row"><div class="sc-keys"><span class="kbd">Ctrl</span><span class="kbd">P</span></div><span class="sc-desc">In gia phả</span></div>
     </div>
     <div class="sc-close-row"><button class="sc-close-btn" onclick="closeShortcuts()">Đóng</button></div>
+  </div>
+</div>
+
+<!-- RELATIONSHIP ANALYSIS MODAL -->
+<div class="rel-overlay" id="relOverlay" onclick="if(event.target===this)closeRelModal()">
+  <div class="rel-box">
+    <div class="rel-head">
+      <span class="rel-title">🔍 Phân tích quan hệ & xưng hô</span>
+      <button class="rel-close" onclick="closeRelModal()">✕</button>
+    </div>
+    <div class="rel-body">
+      <!-- Selector row -->
+      <div class="rel-sel-row">
+        <div class="rel-sel-col">
+          <div class="rel-sel-label">Thành viên A</div>
+          <div class="rel-sel-wrap">
+            <input class="rel-sel-input" id="relInputA" placeholder="Tìm tên…" autocomplete="off" spellcheck="false"
+              oninput="relSearch(this,'A')" onfocus="relSearch(this,'A')">
+            <div class="rel-sdrop" id="relDropA"></div>
+          </div>
+          <div class="rel-sel-chosen" id="relChosenA"><span style="opacity:.45;font-size:10px">Chưa chọn</span></div>
+        </div>
+        <button class="rel-swap" onclick="relSwap()" title="Đổi chỗ A ↔ B">⇄</button>
+        <div class="rel-sel-col">
+          <div class="rel-sel-label">Thành viên B</div>
+          <div class="rel-sel-wrap">
+            <input class="rel-sel-input" id="relInputB" placeholder="Tìm tên…" autocomplete="off" spellcheck="false"
+              oninput="relSearch(this,'B')" onfocus="relSearch(this,'B')">
+            <div class="rel-sdrop" id="relDropB"></div>
+          </div>
+          <div class="rel-sel-chosen" id="relChosenB"><span style="opacity:.45;font-size:10px">Chưa chọn</span></div>
+        </div>
+      </div>
+      <button class="rel-btn" id="relAnalyzeBtn" onclick="runRelAnalysis()" disabled>Phân tích quan hệ</button>
+      <!-- Result -->
+      <div class="rel-result" id="relResult">
+        <div class="rel-term-badge">
+          <div class="rel-term-label">Quan hệ</div>
+          <div class="rel-term-text" id="relTermText"></div>
+          <div class="rel-term-sub" id="relTermSub"></div>
+        </div>
+        <div class="rel-call-grid">
+          <div class="rel-call-card">
+            <div class="rel-call-from" id="relCallAFrom"></div>
+            <div class="rel-call-to" id="relCallATo"></div>
+            <div class="rel-call-word" id="relCallAWord"></div>
+            <div class="rel-call-self" id="relCallASelf"></div>
+          </div>
+          <div class="rel-call-card">
+            <div class="rel-call-from" id="relCallBFrom"></div>
+            <div class="rel-call-to" id="relCallBTo"></div>
+            <div class="rel-call-word" id="relCallBWord"></div>
+            <div class="rel-call-self" id="relCallBSelf"></div>
+          </div>
+        </div>
+        <div class="rel-info-grid">
+          <div class="rel-info-item">
+            <div class="rel-info-key">Tổ chung</div>
+            <div class="rel-info-val" id="relLcaVal"></div>
+          </div>
+          <div class="rel-info-item">
+            <div class="rel-info-key">Chênh lệch thế hệ</div>
+            <div class="rel-info-val" id="relGenDiff"></div>
+          </div>
+          <div class="rel-info-item">
+            <div class="rel-info-key">Khoảng cách từ A → Tổ</div>
+            <div class="rel-info-val" id="relDistA"></div>
+          </div>
+          <div class="rel-info-item">
+            <div class="rel-info-key">Khoảng cách từ B → Tổ</div>
+            <div class="rel-info-val" id="relDistB"></div>
+          </div>
+        </div>
+        <div class="rel-path-label">Đường huyết thống</div>
+        <div class="rel-path" id="relPath"></div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1239,6 +1428,22 @@ function openDetail(id){
   if(daughters.length)bh+=`<div class="dp-sec">Con gái (${daughters.length})</div><div class="rcs">${daughters.map(k=>`<span class="rc" onclick="sg('${k.id}')">♀ ${esc(tr(k.n,15))}</span>`).join('')}</div>`;
   if(sib.length)bh+=`<div class="dp-sec">Anh chị em (${sib.length})</div><div class="rcs">${sib.map(s=>`<span class="rc" onclick="sg('${s.id}')">↔ ${esc(tr(s.n,13))}</span>`).join('')}</div>`;
   if(m.note)bh+=`<div class="dp-div"></div><div class="dp-sec">Ghi chú gia phả</div><div class="nb">${esc(m.note)}</div>`;
+  // Nút phân tích quan hệ
+  bh+=`<div class="dp-div"></div>
+    <button onclick="openRelFromDetail('${m.id}')" style="
+      width:100%;padding:9px;margin-top:.25rem;
+      background:rgba(154,112,16,.1);border:1px solid rgba(154,112,16,.3);
+      border-radius:6px;color:var(--gold);font-size:11px;font-weight:500;
+      letter-spacing:.06em;cursor:pointer;font-family:var(--sans);
+      display:flex;align-items:center;justify-content:center;gap:6px;
+      transition:background .15s">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="3.5" cy="4" r="2"/><circle cx="10.5" cy="4" r="2"/>
+        <path d="M1 12c0-2 1.1-3.5 2.5-3.5S6 10 6 12"/><path d="M8 12c0-2 1.1-3.5 2.5-3.5S13 10 13 12"/>
+        <path d="M6 5.5h2"/>
+      </svg>
+      So sánh quan hệ với thành viên khác
+    </button>`;
   document.getElementById('dpb').innerHTML=bh;
   const dpEl=document.getElementById('dp');
   dpEl.classList.add('open');
@@ -1558,6 +1763,408 @@ document.addEventListener('keydown',e=>{
       if(next){sg(next);gotoNode(next)}
     }
   }
+});
+
+/* ══════════════════════════════════════════
+   RELATIONSHIP ANALYSIS — Phân tích quan hệ
+══════════════════════════════════════════ */
+let _relA = null, _relB = null;
+
+function openRelModal(preIdA, preIdB) {
+  document.getElementById('relOverlay').classList.add('open');
+  if (preIdA) relSelectMember('A', preIdA);
+  if (preIdB) relSelectMember('B', preIdB);
+}
+function closeRelModal() {
+  document.getElementById('relOverlay').classList.remove('open');
+  // close dropdowns
+  document.getElementById('relDropA').classList.remove('open');
+  document.getElementById('relDropB').classList.remove('open');
+}
+
+/* ── Tìm kiếm trong modal ── */
+function relSearch(inp, side) {
+  const q = inp.value.trim().toLowerCase();
+  const dropId = 'relDrop' + side;
+  const drop = document.getElementById(dropId);
+  const results = q.length < 1
+    ? D.slice(0, 20)
+    : D.filter(m => {
+        const name = m.n.toLowerCase();
+        const al = (m.al || '').toLowerCase();
+        return name.includes(q) || al.includes(q);
+      }).slice(0, 20);
+
+  drop.innerHTML = results.map(m => {
+    const cleanName = m.n.replace(/\s*\([^)]*\)\s*/g, '').trim();
+    const alias = m.al ? ` <span style="color:var(--straw);font-size:10px">(${m.al})</span>` : '';
+    return `<div class="rel-sdrop-item" onclick="relSelectMember('${side}','${m.id}');this.closest('.rel-sdrop').classList.remove('open')" >
+      ${cleanName}${alias}<span class="rel-sdrop-gen">Đời ${m.g} · ${m.sx==='f'?'Nữ':'Nam'}</span>
+    </div>`;
+  }).join('');
+  drop.classList.toggle('open', results.length > 0);
+}
+
+function relSelectMember(side, id) {
+  const m = byId[id];
+  if (!m) return;
+  if (side === 'A') _relA = id; else _relB = id;
+  const cleanName = m.n.replace(/\s*\([^)]*\)\s*/g, '').trim();
+  const alias = m.al ? ` · <em>${m.al}</em>` : '';
+  const chosen = document.getElementById('relChosen' + side);
+  chosen.innerHTML = `<span class="rel-sel-name">${cleanName}</span><span class="rel-sel-gen">Đời ${m.g} · ${m.sx==='f'?'♀ Nữ':'♂ Nam'}${alias}</span>`;
+  document.getElementById('relInput' + side).value = '';
+  document.getElementById('relDrop' + side).classList.remove('open');
+  document.getElementById('relAnalyzeBtn').disabled = !(_relA && _relB);
+  // reset result
+  document.getElementById('relResult').classList.remove('show');
+}
+
+function relSwap() {
+  if (!_relA && !_relB) return;
+  const tmp = _relA; _relA = _relB; _relB = tmp;
+  if (_relA) relSelectMember('A', _relA);
+  else {
+    document.getElementById('relChosenA').innerHTML = '<span style="opacity:.45;font-size:10px">Chưa chọn</span>';
+    _relA = null;
+  }
+  if (_relB) relSelectMember('B', _relB);
+  else {
+    document.getElementById('relChosenB').innerHTML = '<span style="opacity:.45;font-size:10px">Chưa chọn</span>';
+    _relB = null;
+  }
+  document.getElementById('relAnalyzeBtn').disabled = !(_relA && _relB);
+  document.getElementById('relResult').classList.remove('show');
+}
+
+/* ── Thuật toán tìm Tổ tiên chung thấp nhất (LCA) ── */
+function relGetAncPath(id) {
+  const path = [];
+  let cur = id;
+  while (cur) {
+    path.push(cur);
+    const m = byId[cur];
+    if (!m || !m.par) break;
+    cur = m.par;
+  }
+  return path;
+}
+
+function relFindLCA(idA, idB) {
+  const pathA = relGetAncPath(idA);
+  const mapA = new Map(pathA.map((id, i) => [id, i]));
+  const pathB = relGetAncPath(idB);
+  for (let i = 0; i < pathB.length; i++) {
+    if (mapA.has(pathB[i])) {
+      return { lca: pathB[i], distA: mapA.get(pathB[i]), distB: i };
+    }
+  }
+  return null;
+}
+
+function relSibOrder(id) {
+  const m = byId[id];
+  if (!m || !m.par) return 0;
+  return (ch[m.par] || []).indexOf(id);
+}
+
+/* ── Xác định quan hệ + xưng hô ── */
+function analyzeRelationship(idA, idB) {
+  const mA = byId[idA], mB = byId[idB];
+  if (!mA || !mB) return null;
+  if (idA === idB) return {
+    term:'Cùng một người', summary:'—',
+    AcallsB:'—', BcallsA:'—',
+    selfA:'—', selfB:'—',
+    lcaId:idA, lcaName:mA.n, genDiff:0, distA:0, distB:0,
+    pathA:[idA], pathB:[idA]
+  };
+
+  const lca = relFindLCA(idA, idB);
+  const gA = mA.sx === 'f' ? 'f' : 'm';
+  const gB = mB.sx === 'f' ? 'f' : 'm';
+
+  if (!lca) {
+    return {
+      term:'Không có quan hệ huyết thống trực tiếp',
+      summary:`${mA.n} và ${mB.n} không tìm thấy tổ tiên chung`,
+      AcallsB:'—', BcallsA:'—', selfA:'—', selfB:'—',
+      lcaId:null, lcaName:'Không tìm thấy',
+      genDiff: mB.g - mA.g, distA:null, distB:null,
+      pathA: relGetAncPath(idA), pathB: relGetAncPath(idB)
+    };
+  }
+
+  const { distA, distB, lca: lcaId } = lca;
+  const lcaM = byId[lcaId];
+  const pA = relGetAncPath(idA).slice(0, distA + 1);
+  const pB = relGetAncPath(idB).slice(0, distB + 1);
+
+  let term, summary, AcallsB, BcallsA, selfA, selfB;
+
+  // ── Hàm phụ ──
+  const aOlderThanB = () => {
+    if (mA.g !== mB.g) return mA.g < mB.g;
+    return relSibOrder(idA) < relSibOrder(idB);
+  };
+
+  // ── Trực hệ: A là tổ tiên của B ──
+  if (distA === 0) {
+    const d = distB;
+    if (d === 1) {
+      term = gA==='m' ? 'Cha — Con' : 'Mẹ — Con';
+      summary = `${cleanN(mA.n)} là ${gA==='m'?'cha':'mẹ'} của ${cleanN(mB.n)}`;
+      AcallsB = gB==='m' ? 'con trai' : 'con gái';
+      BcallsA = gA==='m' ? 'cha / bố' : 'mẹ';
+      selfA = 'cha/mẹ'; selfB = 'con';
+    } else if (d === 2) {
+      term = gA==='m' ? 'Ông — Cháu' : 'Bà — Cháu';
+      summary = `${cleanN(mA.n)} là ${gA==='m'?'ông':'bà'} của ${cleanN(mB.n)}`;
+      AcallsB = 'cháu'; BcallsA = gA==='m' ? 'ông' : 'bà';
+      selfA = gA==='m'?'ông':'bà'; selfB = 'cháu';
+    } else if (d === 3) {
+      term = gA==='m' ? 'Cụ ông — Chắt' : 'Cụ bà — Chắt';
+      summary = `${cleanN(mA.n)} là ${gA==='m'?'cụ ông':'cụ bà'} của ${cleanN(mB.n)}`;
+      AcallsB = 'chắt'; BcallsA = gA==='m' ? 'cụ ông' : 'cụ bà';
+      selfA = 'cụ'; selfB = 'chắt';
+    } else if (d === 4) {
+      term = 'Kỵ — Chút';
+      summary = `${cleanN(mA.n)} là kỵ của ${cleanN(mB.n)}`;
+      AcallsB = 'chút'; BcallsA = 'cụ kỵ';
+      selfA = 'kỵ'; selfB = 'chút';
+    } else {
+      term = `Tiền tổ (${d} đời trước)`;
+      summary = `${cleanN(mA.n)} là tổ tiên ${d} đời của ${cleanN(mB.n)}`;
+      AcallsB = 'con cháu'; BcallsA = 'tiền nhân / tổ tiên';
+      selfA = 'tiền tổ'; selfB = 'con cháu';
+    }
+  // ── Trực hệ: B là tổ tiên của A ──
+  } else if (distB === 0) {
+    const d = distA;
+    if (d === 1) {
+      term = gB==='m' ? 'Con — Cha' : 'Con — Mẹ';
+      summary = `${cleanN(mB.n)} là ${gB==='m'?'cha':'mẹ'} của ${cleanN(mA.n)}`;
+      AcallsB = gB==='m' ? 'cha / bố' : 'mẹ';
+      BcallsA = gA==='m' ? 'con trai' : 'con gái';
+      selfA = 'con'; selfB = 'cha/mẹ';
+    } else if (d === 2) {
+      term = gB==='m' ? 'Cháu — Ông' : 'Cháu — Bà';
+      summary = `${cleanN(mB.n)} là ${gB==='m'?'ông':'bà'} của ${cleanN(mA.n)}`;
+      AcallsB = gB==='m' ? 'ông' : 'bà';
+      BcallsA = 'cháu';
+      selfA = 'cháu'; selfB = gB==='m'?'ông':'bà';
+    } else if (d === 3) {
+      term = gB==='m' ? 'Chắt — Cụ ông' : 'Chắt — Cụ bà';
+      summary = `${cleanN(mB.n)} là ${gB==='m'?'cụ ông':'cụ bà'} của ${cleanN(mA.n)}`;
+      AcallsB = gB==='m' ? 'cụ ông' : 'cụ bà';
+      BcallsA = 'chắt';
+      selfA = 'chắt'; selfB = 'cụ';
+    } else if (d === 4) {
+      term = 'Chút — Kỵ';
+      summary = `${cleanN(mB.n)} là kỵ của ${cleanN(mA.n)}`;
+      AcallsB = 'cụ kỵ'; BcallsA = 'chút';
+      selfA = 'chút'; selfB = 'kỵ';
+    } else {
+      term = `Hậu duệ — Tiền tổ (${d} đời)`;
+      summary = `${cleanN(mB.n)} là tổ tiên ${d} đời của ${cleanN(mA.n)}`;
+      AcallsB = 'tiền nhân / tổ tiên'; BcallsA = 'con cháu';
+      selfA = 'con cháu'; selfB = 'tiền tổ';
+    }
+  // ── Anh chị em ruột ──
+  } else if (distA === 1 && distB === 1) {
+    const aOld = aOlderThanB();
+    if (aOld) {
+      term = gA==='m' ? 'Anh — Em' : 'Chị — Em';
+      summary = `${cleanN(mA.n)} là ${gA==='m'?'anh':'chị'} của ${cleanN(mB.n)}`;
+      AcallsB = 'em'; BcallsA = gA==='m' ? 'anh' : 'chị';
+      selfA = gA==='m'?'anh':'chị'; selfB = 'em';
+    } else {
+      term = gB==='m' ? 'Em — Anh' : 'Em — Chị';
+      summary = `${cleanN(mB.n)} là ${gB==='m'?'anh':'chị'} của ${cleanN(mA.n)}`;
+      AcallsB = gB==='m' ? 'anh' : 'chị'; BcallsA = 'em';
+      selfA = 'em'; selfB = gB==='m'?'anh':'chị';
+    }
+  // ── Chú/Bác/Cô — Cháu (A là bác/chú/cô của B) ──
+  } else if (distA === 1 && distB === 2) {
+    const bParId = pB[1];
+    const aOlderThanBPar = relSibOrder(idA) < relSibOrder(bParId);
+    let relWord;
+    if (gA === 'm') {
+      relWord = aOlderThanBPar ? 'bác' : 'chú';
+    } else {
+      relWord = aOlderThanBPar ? 'bác gái' : 'cô';
+    }
+    term = `${relWord.charAt(0).toUpperCase()+relWord.slice(1)} — Cháu`;
+    summary = `${cleanN(mA.n)} là ${relWord} của ${cleanN(mB.n)}`;
+    AcallsB = 'cháu'; BcallsA = relWord;
+    selfA = relWord; selfB = 'cháu';
+  // ── Cháu — Chú/Bác/Cô (B là bác/chú/cô của A) ──
+  } else if (distA === 2 && distB === 1) {
+    const aParId = pA[1];
+    const bOlderThanAPar = relSibOrder(idB) < relSibOrder(aParId);
+    let relWord;
+    if (gB === 'm') {
+      relWord = bOlderThanAPar ? 'bác' : 'chú';
+    } else {
+      relWord = bOlderThanAPar ? 'bác gái' : 'cô';
+    }
+    term = `Cháu — ${relWord.charAt(0).toUpperCase()+relWord.slice(1)}`;
+    summary = `${cleanN(mB.n)} là ${relWord} của ${cleanN(mA.n)}`;
+    AcallsB = relWord; BcallsA = 'cháu';
+    selfA = 'cháu'; selfB = relWord;
+  // ── Anh/Chị em họ (con chú bác — first cousins) ──
+  } else if (distA === 2 && distB === 2) {
+    const aOld = aOlderThanB();
+    if (aOld) {
+      const lbl = gA==='m' ? 'anh họ' : 'chị họ';
+      term = 'Anh/Chị em họ'; summary = `${cleanN(mA.n)} là ${lbl} của ${cleanN(mB.n)}`;
+      AcallsB = 'em họ'; BcallsA = lbl;
+      selfA = lbl; selfB = 'em họ';
+    } else {
+      const lbl = gB==='m' ? 'anh họ' : 'chị họ';
+      term = 'Anh/Chị em họ'; summary = `${cleanN(mB.n)} là ${lbl} của ${cleanN(mA.n)}`;
+      AcallsB = lbl; BcallsA = 'em họ';
+      selfA = 'em họ'; selfB = lbl;
+    }
+  // ── Ông chú/bác — Cháu họ (distA=1, distB=3) ──
+  } else if (distA === 1 && distB === 3) {
+    term = gA==='m' ? 'Ông chú/bác — Cháu họ' : 'Bà cô — Cháu họ';
+    summary = `${cleanN(mA.n)} là ${gA==='m'?'ông chú/bác':'bà cô'} của ${cleanN(mB.n)}`;
+    AcallsB = 'cháu'; BcallsA = gA==='m' ? 'ông chú / bác' : 'bà cô / bác';
+    selfA = gA==='m'?'ông chú':'bà cô'; selfB = 'cháu họ';
+  } else if (distA === 3 && distB === 1) {
+    term = gB==='m' ? 'Cháu họ — Ông chú/bác' : 'Cháu họ — Bà cô';
+    summary = `${cleanN(mB.n)} là ${gB==='m'?'ông chú/bác':'bà cô'} của ${cleanN(mA.n)}`;
+    AcallsB = gB==='m' ? 'ông chú / bác' : 'bà cô / bác'; BcallsA = 'cháu';
+    selfA = 'cháu họ'; selfB = gB==='m'?'ông chú':'bà cô';
+  // ── Anh/Chị em họ xa (distA=distB=3 — second cousins) ──
+  } else if (distA === 3 && distB === 3) {
+    const aOld = aOlderThanB();
+    if (aOld) {
+      const lbl = gA==='m' ? 'anh họ xa' : 'chị họ xa';
+      term = 'Anh/Chị em họ xa (chắt ông chú bác)';
+      summary = `${cleanN(mA.n)} là ${lbl} của ${cleanN(mB.n)}`;
+      AcallsB = 'em họ xa'; BcallsA = lbl;
+      selfA = lbl; selfB = 'em họ xa';
+    } else {
+      const lbl = gB==='m' ? 'anh họ xa' : 'chị họ xa';
+      term = 'Anh/Chị em họ xa';
+      summary = `${cleanN(mB.n)} là ${lbl} của ${cleanN(mA.n)}`;
+      AcallsB = lbl; BcallsA = 'em họ xa';
+      selfA = 'em họ xa'; selfB = lbl;
+    }
+  // ── Chú/Bác họ (distA=2, distB=3) ──
+  } else if (distA === 2 && distB === 3) {
+    const relW = gA==='m' ? 'chú/bác họ' : 'cô/bác họ';
+    term = `${relW.charAt(0).toUpperCase()+relW.slice(1)} — Cháu họ`;
+    summary = `${cleanN(mA.n)} là ${relW} của ${cleanN(mB.n)}`;
+    AcallsB = 'cháu họ'; BcallsA = relW;
+    selfA = relW; selfB = 'cháu họ';
+  } else if (distA === 3 && distB === 2) {
+    const relW = gB==='m' ? 'chú/bác họ' : 'cô/bác họ';
+    term = `Cháu họ — ${relW.charAt(0).toUpperCase()+relW.slice(1)}`;
+    summary = `${cleanN(mB.n)} là ${relW} của ${cleanN(mA.n)}`;
+    AcallsB = relW; BcallsA = 'cháu họ';
+    selfA = 'cháu họ'; selfB = relW;
+  // ── Họ hàng xa ──
+  } else {
+    const totalDist = distA + distB;
+    term = `Họ hàng xa (${totalDist} bậc)`;
+    summary = `Quan hệ qua tổ chung ${lcaM?.n||''}, cách ${totalDist} bậc`;
+    AcallsB = mA.g < mB.g ? 'cháu họ' : (mA.g > mB.g ? 'bậc trên' : 'anh/chị/em họ xa');
+    BcallsA = mB.g < mA.g ? 'cháu họ' : (mB.g > mA.g ? 'bậc trên' : 'anh/chị/em họ xa');
+    selfA = 'họ xa'; selfB = 'họ xa';
+  }
+
+  return {
+    term, summary, AcallsB, BcallsA, selfA, selfB,
+    lcaId, lcaName: lcaM?.n || 'Không rõ',
+    genDiff: mB.g - mA.g,
+    distA, distB,
+    pathA: pA, pathB: pB
+  };
+}
+
+function cleanN(name) { return name.replace(/\s*\([^)]*\)\s*/g, '').trim(); }
+
+/* ── Chạy phân tích và hiển thị kết quả ── */
+function runRelAnalysis() {
+  if (!_relA || !_relB) return;
+  const res = analyzeRelationship(_relA, _relB);
+  if (!res) return;
+
+  const mA = byId[_relA], mB = byId[_relB];
+  const nameA = cleanN(mA.n), nameB = cleanN(mB.n);
+
+  // Term
+  document.getElementById('relTermText').textContent = res.term;
+  document.getElementById('relTermSub').textContent = res.summary;
+
+  // Call cards
+  document.getElementById('relCallAFrom').textContent = nameA + ' gọi ' + nameB + ' là:';
+  document.getElementById('relCallATo').textContent = '(xưng mình là "' + (res.selfA || '—') + '")';
+  document.getElementById('relCallAWord').textContent = res.AcallsB || '—';
+  document.getElementById('relCallASelf').textContent = mA.sx==='f'?'♀ '+nameA:'♂ '+nameA;
+
+  document.getElementById('relCallBFrom').textContent = nameB + ' gọi ' + nameA + ' là:';
+  document.getElementById('relCallBTo').textContent = '(xưng mình là "' + (res.selfB || '—') + '")';
+  document.getElementById('relCallBWord').textContent = res.BcallsA || '—';
+  document.getElementById('relCallBSelf').textContent = mB.sx==='f'?'♀ '+nameB:'♂ '+nameB;
+
+  // Info
+  document.getElementById('relLcaVal').textContent = res.lcaName || '—';
+  const diff = res.genDiff;
+  document.getElementById('relGenDiff').textContent = diff === 0 ? 'Cùng đời' : (Math.abs(diff) + ' đời ' + (diff > 0 ? '(B trẻ hơn)' : '(A trẻ hơn)'));
+  document.getElementById('relDistA').textContent = res.distA != null ? res.distA + ' bậc' : '—';
+  document.getElementById('relDistB').textContent = res.distB != null ? res.distB + ' bậc' : '—';
+
+  // Path
+  const pathA = res.pathA || [];
+  const pathB = res.pathB || [];
+  // pathA: [A, ..., LCA], pathB: [B, ..., LCA] → reverse pathB to get [LCA, ..., B]
+  const pathBRev = [...pathB].reverse();
+  // Full path: A → ... → LCA → ... → B (LCA not duplicated)
+  const fullPath = [...pathA, ...pathBRev.slice(1)];
+  const lcaId = res.lcaId;
+
+  const pathHtml = fullPath.map((id, i) => {
+    const m = byId[id];
+    if (!m) return '';
+    const nm = cleanN(m.n);
+    const cls = id === lcaId ? 'lca' : (id === _relA ? 'sel-a' : (id === _relB ? 'sel-b' : ''));
+    const arrow = i < fullPath.length-1 ? '<span class="rel-path-arrow">→</span>' : '';
+    return `<span class="rel-path-node ${cls}" onclick="closeRelModal();sg('${id}');gotoNode('${id}')" title="Đời ${m.g}">${nm}</span>${arrow}`;
+  }).join('');
+  document.getElementById('relPath').innerHTML = pathHtml || '<span style="font-size:11px;color:var(--clay)">—</span>';
+
+  document.getElementById('relResult').classList.add('show');
+  // Scroll result into view
+  document.getElementById('relResult').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/* ── Mở modal từ detail panel ── */
+function openRelFromDetail(idA) {
+  _relA = idA; _relB = null;
+  const m = byId[idA];
+  if (m) {
+    const nm = cleanN(m.n);
+    document.getElementById('relChosenA').innerHTML =
+      `<span class="rel-sel-name">${nm}</span><span class="rel-sel-gen">Đời ${m.g} · ${m.sx==='f'?'♀ Nữ':'♂ Nam'}</span>`;
+  }
+  document.getElementById('relChosenB').innerHTML = '<span style="opacity:.45;font-size:10px">Chưa chọn</span>';
+  document.getElementById('relAnalyzeBtn').disabled = true;
+  document.getElementById('relResult').classList.remove('show');
+  openRelModal();
+}
+
+/* ── Close dropdown khi click ngoài ── */
+document.addEventListener('click', e => {
+  ['relDropA','relDropB'].forEach(id => {
+    const drop = document.getElementById(id);
+    if (!drop) return;
+    const inp = document.getElementById(id.replace('Drop','Input'));
+    if (!e.target.closest('.rel-sel-wrap')) drop.classList.remove('open');
+  });
 });
 
 /* ── PRINT ── */
