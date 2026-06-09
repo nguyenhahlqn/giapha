@@ -137,7 +137,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 .cf-btn svg{width:9px;height:9px;flex-shrink:0;opacity:.6;transition:transform .2s}
 .cf-btn.open svg{transform:rotate(180deg)}
 .cf-val{max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.cf-drop{position:absolute;top:calc(100% + 4px);left:0;min-width:130px;
+.cf-drop{position:fixed;top:0;left:0;min-width:130px;
   background:var(--bg2);border:1px solid var(--bd2);border-radius:7px;
   box-shadow:0 8px 24px var(--sh);z-index:800;overflow:hidden;
   display:none;flex-direction:column}
@@ -623,25 +623,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
         <span>Đời: </span><span class="cf-val" id="cfGenVal">Tất cả</span>
         <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
       </button>
-      <div class="cf-drop" id="cfGenDrop">
-        <div class="cf-item on" data-g="all" onclick="setCfGen('all','Tất cả')">Tất cả đời</div>
-        <div class="cf-sep"></div>
-        <div class="cf-item" data-g="1"  onclick="setCfGen('1','Đời 1')">Đời 1</div>
-        <div class="cf-item" data-g="2"  onclick="setCfGen('2','Đời 2')">Đời 2</div>
-        <div class="cf-item" data-g="3"  onclick="setCfGen('3','Đời 3')">Đời 3</div>
-        <div class="cf-item" data-g="4"  onclick="setCfGen('4','Đời 4')">Đời 4</div>
-        <div class="cf-item" data-g="5"  onclick="setCfGen('5','Đời 5')">Đời 5</div>
-        <div class="cf-item" data-g="6"  onclick="setCfGen('6','Đời 6')">Đời 6</div>
-        <div class="cf-item" data-g="7"  onclick="setCfGen('7','Đời 7')">Đời 7</div>
-        <div class="cf-item" data-g="8"  onclick="setCfGen('8','Đời 8')">Đời 8</div>
-        <div class="cf-item" data-g="9"  onclick="setCfGen('9','Đời 9')">Đời 9</div>
-        <div class="cf-item" data-g="10" onclick="setCfGen('10','Đời 10')">Đời 10</div>
-        <div class="cf-item" data-g="11" onclick="setCfGen('11','Đời 11')">Đời 11</div>
-        <div class="cf-item" data-g="12" onclick="setCfGen('12','Đời 12')">Đời 12</div>
-        <div class="cf-item" data-g="13" onclick="setCfGen('13','Đời 13')">Đời 13</div>
-        <div class="cf-item" data-g="14" onclick="setCfGen('14','Đời 14')">Đời 14</div>
-        <div class="cf-item" data-g="15" onclick="setCfGen('15','Đời 15')">Đời 15</div>
-      </div>
     </div>
   </div>
 
@@ -653,14 +634,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
         <span>Nhánh: </span><span class="cf-val" id="cfBrVal">Tất cả</span>
         <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
       </button>
-      <div class="cf-drop" id="cfBrDrop">
-        <div class="cf-item on" data-br="all"             onclick="setCfBr('all','Tất cả')">Tất cả nhánh</div>
-        <div class="cf-sep"></div>
-        <div class="cf-item" data-br="Nhánh Hữu Đễ"      onclick="setCfBr('Nhánh Hữu Đễ','Hữu Đễ')">Nhánh Hữu Đễ</div>
-        <div class="cf-item" data-br="Nhánh Hữu Quyền"   onclick="setCfBr('Nhánh Hữu Quyền','Hữu Quyền')">Nhánh Hữu Quyền</div>
-        <div class="cf-item" data-br="Nhánh Hữu Hiệu"    onclick="setCfBr('Nhánh Hữu Hiệu','Hữu Hiệu')">Nhánh Hữu Hiệu</div>
-        <div class="cf-item" data-br="Tiền tổ"            onclick="setCfBr('Tiền tổ','Tiền tổ')">Tiền tổ</div>
-      </div>
     </div>
   </div>
 
@@ -690,8 +663,35 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
   </div>
 </div>
 
-<!-- Search dropdown — outside .tb to avoid backdrop-filter stacking context -->
+<!-- Dropdowns — outside .tb to avoid backdrop-filter / overflow clipping -->
 <div class="sdrop" id="sdrop"></div>
+<div class="cf-drop" id="cfGenDrop">
+  <div class="cf-item on" data-g="all" onclick="setCfGen('all','Tất cả')">Tất cả đời</div>
+  <div class="cf-sep"></div>
+  <div class="cf-item" data-g="1"  onclick="setCfGen('1','Đời 1')">Đời 1</div>
+  <div class="cf-item" data-g="2"  onclick="setCfGen('2','Đời 2')">Đời 2</div>
+  <div class="cf-item" data-g="3"  onclick="setCfGen('3','Đời 3')">Đời 3</div>
+  <div class="cf-item" data-g="4"  onclick="setCfGen('4','Đời 4')">Đời 4</div>
+  <div class="cf-item" data-g="5"  onclick="setCfGen('5','Đời 5')">Đời 5</div>
+  <div class="cf-item" data-g="6"  onclick="setCfGen('6','Đời 6')">Đời 6</div>
+  <div class="cf-item" data-g="7"  onclick="setCfGen('7','Đời 7')">Đời 7</div>
+  <div class="cf-item" data-g="8"  onclick="setCfGen('8','Đời 8')">Đời 8</div>
+  <div class="cf-item" data-g="9"  onclick="setCfGen('9','Đời 9')">Đời 9</div>
+  <div class="cf-item" data-g="10" onclick="setCfGen('10','Đời 10')">Đời 10</div>
+  <div class="cf-item" data-g="11" onclick="setCfGen('11','Đời 11')">Đời 11</div>
+  <div class="cf-item" data-g="12" onclick="setCfGen('12','Đời 12')">Đời 12</div>
+  <div class="cf-item" data-g="13" onclick="setCfGen('13','Đời 13')">Đời 13</div>
+  <div class="cf-item" data-g="14" onclick="setCfGen('14','Đời 14')">Đời 14</div>
+  <div class="cf-item" data-g="15" onclick="setCfGen('15','Đời 15')">Đời 15</div>
+</div>
+<div class="cf-drop" id="cfBrDrop">
+  <div class="cf-item on" data-br="all"           onclick="setCfBr('all','Tất cả')">Tất cả nhánh</div>
+  <div class="cf-sep"></div>
+  <div class="cf-item" data-br="Nhánh Hữu Đễ"    onclick="setCfBr('Nhánh Hữu Đễ','Hữu Đễ')">Nhánh Hữu Đễ</div>
+  <div class="cf-item" data-br="Nhánh Hữu Quyền" onclick="setCfBr('Nhánh Hữu Quyền','Hữu Quyền')">Nhánh Hữu Quyền</div>
+  <div class="cf-item" data-br="Nhánh Hữu Hiệu"  onclick="setCfBr('Nhánh Hữu Hiệu','Hữu Hiệu')">Nhánh Hữu Hiệu</div>
+  <div class="cf-item" data-br="Tiền tổ"          onclick="setCfBr('Tiền tổ','Tiền tổ')">Tiền tổ</div>
+</div>
 
 <!-- NEW DATA BANNER -->
 <div id="newDataBanner" style="display:none;position:fixed;top:calc(var(--nav)+var(--tb)+8px);left:50%;
@@ -1746,15 +1746,22 @@ window.addEventListener('resize',()=>{if(sdEl.classList.contains('open'))positio
 
 /* ── GEN FILTER ── */
 /* ── COMBO FILTER FUNCTIONS ── */
+function posCfDrop(btn, drop){
+  const r=btn.getBoundingClientRect();
+  drop.style.top=(r.bottom+4)+'px';
+  drop.style.left=r.left+'px';
+}
 function toggleCfDrop(which){
   const btn=document.getElementById('cfGenBtn'), drop=document.getElementById('cfGenDrop');
   const bBtn=document.getElementById('cfBrBtn'),  bDrop=document.getElementById('cfBrDrop');
   if(which==='Gen'){
     const open=!drop.classList.contains('open');
+    if(open) posCfDrop(btn,drop);
     drop.classList.toggle('open',open); btn.classList.toggle('open',open);
     bDrop.classList.remove('open'); bBtn.classList.remove('open');
   } else {
     const open=!bDrop.classList.contains('open');
+    if(open) posCfDrop(bBtn,bDrop);
     bDrop.classList.toggle('open',open); bBtn.classList.toggle('open',open);
     drop.classList.remove('open'); btn.classList.remove('open');
   }
