@@ -1290,5 +1290,8 @@
       "photo": "/gallery-dat-lanh-chim-dau.jpg",
       "order": 1
     }
-  ]
+  ],
+  "config": {
+    "admin_hash": "7e00ab52a123b3110a03a6e00414cc85c543e5a753366f99d8e13ecfa522d0fe"
+  }
 }
