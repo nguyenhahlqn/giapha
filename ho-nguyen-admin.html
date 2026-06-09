@@ -732,6 +732,9 @@ tr:hover .row-acts{opacity:1}
         <option value="gia-dinh">Gia đình</option>
         <option value="ky-vat">Kỷ vật</option>
         <option value="su-kien">Sự kiện</option>
+        <option value="phong-canh">Phong cảnh</option>
+        <option value="kien-truc">Kiến trúc</option>
+        <option value="tai-lieu">Tài liệu</option>
         <option value="khac">Khác</option>
       </select>
       <button class="tb-btn" onclick="refreshGallery()">
@@ -930,6 +933,9 @@ tr:hover .row-acts{opacity:1}
             <option value="gia-dinh">Gia đình</option>
             <option value="ky-vat">Kỷ vật</option>
             <option value="su-kien">Sự kiện</option>
+            <option value="phong-canh">Phong cảnh</option>
+            <option value="kien-truc">Kiến trúc</option>
+            <option value="tai-lieu">Tài liệu</option>
             <option value="khac">Khác</option>
           </select>
         </div>
@@ -1907,7 +1913,7 @@ refreshRequests();
 let galItems=[];
 let galEditId=null;
 
-const GAL_CAT_LABELS={'lich-su':'Lịch sử','gia-dinh':'Gia đình','ky-vat':'Kỷ vật','su-kien':'Sự kiện','khac':'Khác'};
+const GAL_CAT_LABELS={'lich-su':'Lịch sử','gia-dinh':'Gia đình','ky-vat':'Kỷ vật','su-kien':'Sự kiện','phong-canh':'Phong cảnh','kien-truc':'Kiến trúc','tai-lieu':'Tài liệu','khac':'Khác'};
 
 async function refreshGallery(){
   try{

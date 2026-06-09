@@ -582,7 +582,7 @@ function animCounter(el){
   const iv=setInterval(()=>{c=Math.min(c+step,target);el.innerHTML=c+(supH||'');if(c>=target)clearInterval(iv)},45);
 }
 // Fetch live member count from API before setting up IntersectionObserver
-const CAT_LABELS={'lich-su':'Lịch sử','gia-dinh':'Gia đình','ky-vat':'Kỷ vật','su-kien':'Sự kiện','khac':'Khác'};
+const CAT_LABELS={'lich-su':'Lịch sử','gia-dinh':'Gia đình','ky-vat':'Kỷ vật','su-kien':'Sự kiện','phong-canh':'Phong cảnh','kien-truc':'Kiến trúc','tai-lieu':'Tài liệu','khac':'Khác'};
 
 function openHeritageLb(src,title){
   const lb=document.getElementById('hgLb');
