@@ -468,6 +468,26 @@ tr:hover .row-acts{opacity:1}
   .brand{display:none}
   input,select,textarea{font-size:16px!important}
 }
+/* Photo upload */
+.photo-upload-wrap{display:flex;gap:1rem;align-items:flex-start}
+.photo-preview{width:72px;height:72px;border-radius:50%;border:2px dashed var(--bd2);
+  display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0;
+  background:var(--bg);cursor:pointer;transition:border-color .15s;position:relative}
+.photo-preview:hover{border-color:var(--moss3)}
+.photo-preview img{width:100%;height:100%;object-fit:cover;display:none}
+.photo-preview .ph-placeholder{font-size:22px;color:var(--bd2);transition:opacity .15s}
+.photo-preview.has-img img{display:block}
+.photo-preview.has-img .ph-placeholder{display:none}
+.photo-upload-right{flex:1;display:flex;flex-direction:column;gap:.5rem}
+.photo-url-input{width:100%}
+.photo-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.photo-btn{padding:5px 12px;font-size:11px;border:1px solid var(--bd2);border-radius:4px;
+  background:var(--bg);color:var(--clay);cursor:pointer;font-family:var(--sans);
+  transition:all .15s;white-space:nowrap}
+.photo-btn:hover{border-color:var(--moss3);color:var(--moss3)}
+.photo-btn.danger{border-color:rgba(192,69,58,.3);color:#C0453A}
+.photo-btn.danger:hover{background:rgba(192,69,58,.06)}
+.photo-hint{font-size:10px;color:var(--clay);line-height:1.5}
 /* iOS Safari: prevent auto-zoom on input focus (font-size<16px triggers zoom) */
 @supports(-webkit-touch-callout:none){input,select,textarea{font-size:16px!important}}
 </style>
@@ -761,6 +781,27 @@ tr:hover .row-acts{opacity:1}
           <span class="f-hint">Hỗ trợ nhiều dòng. Hiển thị trong panel chi tiết của cây gia phả.</span>
         </div>
       </div>
+      <div class="f-divider"></div>
+      <div class="f-section">Ảnh thành viên</div>
+      <div class="f-row full">
+        <div class="f-group">
+          <div class="photo-upload-wrap">
+            <div class="photo-preview" id="photoPreview" onclick="document.getElementById('fPhotoFile').click()" title="Nhấn để chọn ảnh">
+              <img id="photoPreviewImg" src="" alt="">
+              <span class="ph-placeholder">📷</span>
+            </div>
+            <div class="photo-upload-right">
+              <input class="f-input photo-url-input" id="fPhotoUrl" type="url" placeholder="Dán URL ảnh (https://...)">
+              <div class="photo-actions">
+                <button type="button" class="photo-btn" onclick="document.getElementById('fPhotoFile').click()">📁 Chọn từ máy</button>
+                <button type="button" class="photo-btn danger" onclick="clearPhoto()">✕ Xoá ảnh</button>
+              </div>
+              <span class="photo-hint">Chọn file ảnh hoặc dán URL. Ảnh sẽ tự thu nhỏ về 300×300px.</span>
+            </div>
+          </div>
+          <input type="file" id="fPhotoFile" accept="image/*" style="display:none" onchange="handlePhotoFile(this)">
+        </div>
+      </div>
     </div>
     <div class="m-footer">
       <button class="m-btn cancel" onclick="closeForm()">Huỷ</button>
@@ -862,6 +903,7 @@ function toTreeFmt(m){
     ori:m._ori||'',
     occ:m._occ||'',
     note:m.note||'',
+    photo:m.photo||'',
     par:m.fatherId?String(m.fatherId):null,
     br:m._br||br.label
   };
@@ -909,7 +951,8 @@ async function loadData(){
         _al:m.al||'',
         _ori:m.ori||'',
         _occ:m.occ||'',
-        _br:m.br||''
+        _br:m.br||'',
+        photo:m.photo||''
       }));
     }
   }catch(e){console.error('loadData error:',e)}
@@ -1082,12 +1125,18 @@ function openEdit(id){
   document.getElementById('fBorn').value=m.birthYear||'';
   document.getElementById('fDied').value=m.deathYear||'';
   document.getElementById('fNote').value=m.note||'';
+  const ph=m.photo||'';document.getElementById('fPhotoUrl').value=ph.startsWith('data:')?'':ph;setPhotoPreview(ph);
   clearErrors();
   document.getElementById('formModal').classList.add('open');
   setTimeout(()=>document.getElementById('fName').focus(),80);
 }
 
-function clearForm(){['fId','fName','fBorn','fDied','fNote'].forEach(id=>{document.getElementById(id).value=''});document.getElementById('fGen').value='';document.getElementById('fSexM').checked=true;document.getElementById('fFather').value='';document.getElementById('fatherHint').textContent=''}
+function clearForm(){['fId','fName','fBorn','fDied','fNote','fPhotoUrl'].forEach(id=>{document.getElementById(id).value=''});document.getElementById('fGen').value='';document.getElementById('fSexM').checked=true;document.getElementById('fFather').value='';document.getElementById('fatherHint').textContent='';clearPhoto();}
+function clearPhoto(){document.getElementById('fPhotoUrl').value='';setPhotoPreview('');}
+function setPhotoPreview(src){const prev=document.getElementById('photoPreview'),img=document.getElementById('photoPreviewImg');if(src){img.src=src;prev.classList.add('has-img')}else{img.src='';prev.classList.remove('has-img')}}
+function handlePhotoFile(input){const file=input.files[0];if(!file)return;const reader=new FileReader();reader.onload=e=>{resizePhoto(e.target.result,300,dataUrl=>{setPhotoPreview(dataUrl);document.getElementById('fPhotoUrl').value=dataUrl;})};reader.readAsDataURL(file);input.value='';}
+function resizePhoto(dataUrl,maxSize,cb){const img=new Image();img.onload=()=>{let w=img.width,h=img.height;if(w>h){if(w>maxSize){h=Math.round(h*maxSize/w);w=maxSize}}else{if(h>maxSize){w=Math.round(w*maxSize/h);h=maxSize}}const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);cb(c.toDataURL('image/jpeg',0.80));};img.src=dataUrl;}
+document.getElementById('fPhotoUrl').addEventListener('input',function(){const v=this.value.trim();if(v.startsWith('http'))setPhotoPreview(v);else if(!v)setPhotoPreview('');})
 function clearErrors(){document.querySelectorAll('.f-group').forEach(g=>g.classList.remove('has-err'))}
 function updFatherHint(){const fid=document.getElementById('fFather').value;const h=document.getElementById('fatherHint');if(!fid){h.textContent='';return}const f=byId(fid);h.textContent=f?`Đời ${f.generation} · ${f.name}`:''}
 
@@ -1101,6 +1150,12 @@ async function saveForm(){
   const born=document.getElementById('fBorn').value.trim();
   const died=document.getElementById('fDied').value.trim();
   const note=document.getElementById('fNote').value.trim();
+  // Ảnh: ưu tiên base64 (đã resize) nếu có, nếu không thì URL trong input
+  const photoPreviewImg=document.getElementById('photoPreviewImg');
+  const photoUrlInput=document.getElementById('fPhotoUrl').value.trim();
+  const photo=document.getElementById('photoPreview').classList.contains('has-img')
+    ?(photoPreviewImg.src.startsWith('data:')?photoPreviewImg.src:photoUrlInput)
+    :'';
   if(!id){document.getElementById('fg-id').classList.add('has-err');valid=false}
   else if(!editingId&&byId(id)){document.getElementById('err-id').textContent=`ID "${id}" đã tồn tại`;document.getElementById('fg-id').classList.add('has-err');valid=false}
   if(!gen){document.getElementById('fg-gen').classList.add('has-err');valid=false}
@@ -1108,7 +1163,7 @@ async function saveForm(){
   if(!valid)return;
 
   const member={id,name,birthYear:born||'',gender,fatherId:fatherId||null,
-    note,generation:parseInt(gen),deathYear:died||''};
+    note,generation:parseInt(gen),deathYear:died||'',photo};
   // Giữ lại các trường gốc nếu đang chỉnh sửa
   if(editingId){const old=byId(editingId)||{};member._al=old._al||'';member._ori=old._ori||'';member._occ=old._occ||'';member._br=old._br||'';}
 

@@ -1034,6 +1034,7 @@ function _toTreeFormat(arr){
       died:String(m.died||''),
       ori:m.ori||'',occ:m.occ||'',
       note:m.note||'',
+      photo:m.photo||'',
       par:m.par?String(m.par):null,
       br:m.br||getBr(m)
     })).filter(m=>m.id&&m.n&&m.g>0);
@@ -1049,6 +1050,7 @@ function _toTreeFormat(arr){
       born:(m.birthYear&&m.birthYear!=='xxxx'&&m.birthYear!=='')?String(m.birthYear):'',
       died:(m.deathYear&&m.deathYear!=='xxxx'&&m.deathYear!=='')?String(m.deathYear):'',
       ori:'',occ:'',note:m.note||'',
+      photo:m.photo||'',
       par:m.fatherId?String(m.fatherId):null,
       br:getBr(m)
     }));
@@ -1488,10 +1490,15 @@ function openDetail(id){
   const daughters=kids.filter(k=>k.sx==='f');
   const sib=par?(ch[par.id]||[]).filter(cid=>cid!==id).map(cid=>byId[cid]).filter(Boolean):[];
   // Header: flex row with close button right-aligned
+  const avaHtml=m.photo
+    ?`<div class="dp-ava" style="background:${c.av};border-color:${c.bd}66;flex-shrink:0;margin-bottom:0;overflow:hidden;padding:0">
+        <img src="${esc(m.photo)}" alt="${esc(m.n)}" style="width:100%;height:100%;object-fit:cover;display:block">
+      </div>`
+    :`<div class="dp-ava" style="background:${c.av};color:${c.avt};border-color:${c.bd}66;flex-shrink:0;margin-bottom:0">${ini(m.n)}</div>`;
   document.getElementById('dph').innerHTML=`
     <div class="dp-gen" style="margin-bottom:.5rem">Đời thứ ${m.g} · ${m.br||''}</div>
     <div style="display:flex;align-items:center;gap:.75rem">
-      <div class="dp-ava" style="background:${c.av};color:${c.avt};border-color:${c.bd}66;flex-shrink:0;margin-bottom:0">${ini(m.n)}</div>
+      ${avaHtml}
       <div style="min-width:0;padding-right:.5rem">
         <div class="dp-name" style="margin-bottom:2px">${esc(m.n)}</div>
         ${m.al?`<div class="dp-alias">${esc(m.al)}</div>`:''}
