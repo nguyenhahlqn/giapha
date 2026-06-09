@@ -431,13 +431,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 
 /* ── RELATIONSHIP ANALYSIS MODAL ── */
 .rel-overlay{position:fixed;inset:0;background:rgba(26,18,12,.62);z-index:720;
-  display:none;align-items:flex-start;justify-content:center;
+  display:none;align-items:center;justify-content:center;
   backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
-  overflow-y:auto;padding:24px 16px 40px}
+  overflow-y:auto;padding:24px 16px 40px;box-sizing:border-box}
 .rel-overlay.open{display:flex}
 .rel-box{background:var(--bg2);border:1px solid var(--bd2);border-radius:12px;
-  width:100%;max-width:560px;box-shadow:0 28px 72px var(--sh);
-  margin:auto;overflow:hidden}
+  width:min(560px,calc(100vw - 32px));box-shadow:0 28px 72px var(--sh);
+  flex-shrink:0;overflow:hidden}
 [data-theme="dark"] .rel-box{background:var(--bg3)}
 .rel-head{padding:1.2rem 1.4rem .9rem;border-bottom:1px solid var(--bd);
   display:flex;align-items:center;justify-content:space-between}
@@ -534,8 +534,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
   .rel-swap{display:none}
   .rel-call-grid{grid-template-columns:1fr}
   .rel-info-grid{grid-template-columns:1fr}
-  .rel-box{border-radius:0;margin:0}
-  .rel-overlay{padding:0}
+  /* Bottom-sheet trên mobile */
+  .rel-overlay{align-items:flex-end;justify-content:center;padding:0;overflow-y:hidden}
+  .rel-box{width:100vw;max-width:100vw;border-radius:16px 16px 0 0;
+    border-bottom:none;max-height:92dvh;overflow-y:auto;
+    box-sizing:border-box}
+  .rel-head::before{content:'';display:block;width:36px;height:4px;
+    background:var(--bd2);border-radius:2px;margin:0 auto 10px;opacity:.6}
 }
 </style>
 </head>
