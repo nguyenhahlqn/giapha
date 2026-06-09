@@ -1028,7 +1028,7 @@ async function saveData(){
     const treeData=DB.map(toTreeFmt);
     const r=await fetch('/api/members',{
       method:'POST',
-      headers:{'Content-Type':'application/json'},
+      headers:authHeaders(),
       body:JSON.stringify({members:treeData})
     });
     if(!r.ok)throw new Error('HTTP '+r.status);
@@ -1298,7 +1298,7 @@ async function saveForm(){
     try{
       const r=await fetch('/api/members/add',{
         method:'POST',
-        headers:{'Content-Type':'application/json'},
+        headers:authHeaders(),
         body:JSON.stringify(treePayload)
       });
       if(!r.ok)throw new Error('HTTP '+r.status);
@@ -1322,7 +1322,7 @@ async function dupMember(id){
   const newId=nextId();
   const copy={...m,id:newId,name:m.name+' (bản sao)',note:m.note||''};
   try{
-    const r=await fetch('/api/members/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(toTreeFmt(copy))});
+    const r=await fetch('/api/members/add',{method:'POST',headers:authHeaders(),body:JSON.stringify(toTreeFmt(copy))});
     if(!r.ok)throw new Error('HTTP '+r.status);
   }catch(e){toast('error','✗','Lỗi nhân đôi: '+e.message);return;}
   DB.push(copy);pushUndo('dup',copy);
@@ -1454,7 +1454,7 @@ async function undo(){
       toast('info','↩',`Khôi phục: "${data.name}"`);
     }else if(action==='bulk'){
       // Hoàn tác xoá hàng loạt → thêm lại từng thành viên
-      for(const m of data)await fetch('/api/members/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(toTreeFmt(m))});
+      for(const m of data)await fetch('/api/members/add',{method:'POST',headers:authHeaders(),body:JSON.stringify(toTreeFmt(m))});
       DB.push(...data);DB.sort((a,b)=>parseInt(a.id)-parseInt(b.id));
       toast('info','↩',`Khôi phục ${data.length} thành viên`);
     }
@@ -1834,7 +1834,7 @@ function removeReqCard(id){
 
 async function approveReq(id){
   try{
-    const r=await fetch(`/api/requests/${id}/approve`,{method:'POST'});
+    const r=await fetch(`/api/requests/${id}/approve`,{method:'POST',headers:authHeaders()});
     if(!r.ok)throw new Error('HTTP '+r.status);
     const json=await r.json();
     removeReqCard(id);
@@ -1857,7 +1857,7 @@ async function rejectReq(id){
   const nameEl=document.querySelector(`#rc-${id} .req-name`);
   const name=nameEl?nameEl.textContent:'';
   try{
-    const r=await fetch(`/api/requests/${id}/reject`,{method:'POST'});
+    const r=await fetch(`/api/requests/${id}/reject`,{method:'POST',headers:authHeaders()});
     if(!r.ok)throw new Error('HTTP '+r.status);
     removeReqCard(id);
     toast('info','✕',`Đã từ chối yêu cầu của: ${name}`);
@@ -1866,9 +1866,10 @@ async function rejectReq(id){
 
 /* ══ LOGIN ══ */
 (function initAuth(){
-  const UNAME='Administrator';
-  const PHASH='R2lhcGhhQGhvTmd1eWVuMjQz'; // btoa('Giapha@hoNguyen243')
-  if(sessionStorage.getItem('hn-auth')==='ok')return;
+  // Token lưu trong sessionStorage — hết hạn khi đóng tab
+  const savedToken = sessionStorage.getItem('hn-token');
+  if(savedToken){ window._adminToken = savedToken; return; }
+
   const wall=document.createElement('div');
   wall.className='login-wall';
   wall.id='loginWall';
@@ -1885,27 +1886,61 @@ async function rejectReq(id){
         <input type="password" id="loginPass" autocomplete="current-password" placeholder="••••••••">
       </div>
       <div class="login-err" id="loginErr"></div>
-      <button class="login-btn" onclick="doLogin()">Đăng nhập</button>
+      <button class="login-btn" id="loginSubmit" onclick="doLogin()">Đăng nhập</button>
     </div>`;
   document.body.appendChild(wall);
   document.getElementById('loginPass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
   document.getElementById('loginUser').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('loginPass').focus()});
-  function doLogin(){
+
+  async function doLogin(){
     const u=document.getElementById('loginUser').value.trim();
     const p=document.getElementById('loginPass').value;
-    if(u===UNAME&&btoa(p)===PHASH){
-      sessionStorage.setItem('hn-auth','ok');
-      wall.style.opacity='0';wall.style.transition='opacity .4s';
-      setTimeout(()=>wall.remove(),400);
-    } else {
-      document.getElementById('loginErr').textContent='Tài khoản hoặc mật khẩu không đúng.';
-      document.getElementById('loginPass').value='';
-      document.getElementById('loginPass').focus();
+    const btn=document.getElementById('loginSubmit');
+    const errEl=document.getElementById('loginErr');
+    if(!u||!p){errEl.textContent='Vui lòng nhập đầy đủ tài khoản và mật khẩu.';return;}
+    btn.disabled=true;btn.textContent='Đang xác thực…';errEl.textContent='';
+    try{
+      const r=await fetch('/api/login',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({username:u,password:p})
+      });
+      const data=await r.json();
+      if(r.ok&&data.token){
+        window._adminToken=data.token;
+        sessionStorage.setItem('hn-token',data.token);
+        wall.style.opacity='0';wall.style.transition='opacity .4s';
+        setTimeout(()=>wall.remove(),400);
+      } else {
+        errEl.textContent=data.error||'Tài khoản hoặc mật khẩu không đúng.';
+        document.getElementById('loginPass').value='';
+        document.getElementById('loginPass').focus();
+        btn.disabled=false;btn.textContent='Đăng nhập';
+      }
+    }catch(e){
+      errEl.textContent='Lỗi kết nối server. Vui lòng thử lại.';
+      btn.disabled=false;btn.textContent='Đăng nhập';
     }
   }
   window.doLogin=doLogin;
   setTimeout(()=>document.getElementById('loginUser').focus(),100);
 }());
+
+/* ══ AUTH HEADER HELPER ══ */
+function authHeaders(extra){
+  return Object.assign({'Content-Type':'application/json','Authorization':'Bearer '+(window._adminToken||'')},extra||{});
+}
+// Tự động logout nếu token hết hạn (server trả 401)
+async function authFetch(url,opts){
+  const r=await fetch(url,{...opts,headers:authHeaders(opts&&opts.headers)});
+  if(r.status===401){
+    sessionStorage.removeItem('hn-token');
+    window._adminToken=null;
+    toast('err','🔒','Phiên đăng nhập hết hạn. Trang sẽ tải lại...');
+    setTimeout(()=>location.reload(),1800);
+  }
+  return r;
+}
 
 refreshRequests();
 
@@ -2022,9 +2057,9 @@ async function saveGalItem(){
   try{
     let r;
     if(galEditId){
-      r=await fetch('/api/gallery/'+encodeURIComponent(galEditId),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(item)});
+      r=await fetch('/api/gallery/'+encodeURIComponent(galEditId),{method:'PUT',headers:authHeaders(),body:JSON.stringify(item)});
     } else {
-      r=await fetch('/api/gallery/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(item)});
+      r=await fetch('/api/gallery/add',{method:'POST',headers:authHeaders(),body:JSON.stringify(item)});
     }
     const d=await r.json();
     if(d.ok){
@@ -2040,7 +2075,7 @@ async function saveGalItem(){
 async function deleteGalItem(id){
   if(!confirm('Xoá ảnh này?'))return;
   try{
-    const r=await fetch('/api/gallery/'+encodeURIComponent(id),{method:'DELETE'});
+    const r=await fetch('/api/gallery/'+encodeURIComponent(id),{method:'DELETE',headers:authHeaders()});
     const d=await r.json();
     if(d.ok){toast('ok','🗑','Đã xoá');refreshGallery();}
     else toast('err','❌',d.error||'Lỗi xoá');
