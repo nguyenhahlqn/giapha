@@ -1051,9 +1051,12 @@ function _toTreeFormat(arr){
 
 /* ── INDEXES ── */
 const byId={}, ch={};
+// Cache: brDesc[id] = Set of branch names present in subtree of id
+const brDesc={};
 function rebuildIndex(){
   Object.keys(byId).forEach(k=>delete byId[k]);
   Object.keys(ch).forEach(k=>delete ch[k]);
+  Object.keys(brDesc).forEach(k=>delete brDesc[k]);
   D.forEach(m=>{ byId[m.id]=m; ch[m.id]=[] });
   D.forEach(m=>{
     if(m.par){
@@ -1064,6 +1067,15 @@ function rebuildIndex(){
       if(!ch['60'].includes(m.id))ch['60'].push(m.id);
     }
   });
+  // Build brDesc cache (bottom-up)
+  function calcBrDesc(id){
+    if(brDesc[id])return brDesc[id];
+    const m=byId[id];
+    const s=new Set(m&&m.br?[m.br]:[]);
+    (ch[id]||[]).forEach(cid=>calcBrDesc(cid).forEach(b=>s.add(b)));
+    brDesc[id]=s; return s;
+  }
+  D.forEach(m=>calcBrDesc(m.id));
 }
 rebuildIndex();
 
@@ -1153,7 +1165,8 @@ const vch=id=>col.has(id)?[]:(ch[id]||[]).filter(cid=>{
   const m=byId[cid];
   if(!m)return false;
   if(gf!=='all'&&m.g>+gf)return false;
-  if(bf!=='all'&&m.br!==bf)return false;
+  // Branch filter: giữ node nếu đúng nhánh HOẶC có hậu duệ thuộc nhánh đó
+  if(bf!=='all'&&m.br!==bf&&!(brDesc[cid]&&brDesc[cid].has(bf)))return false;
   return true;
 });
 function sw(id){const c=vch(id);if(!c.length)return NW;const ws=c.map(sw);return Math.max(NW,ws.reduce((a,b)=>a+b,0)+HG*(c.length-1))}
@@ -1188,6 +1201,8 @@ function node(m){
   const onP=ancPath.some(x=>x.id===m.id);
   const dk=isDk();
   const isAnc=m.g===1,isFem=m.sx==='f';
+  // Nếu đang lọc nhánh và node này không thuộc nhánh đó → mờ hơn (tổ tiên trung gian)
+  const isFaded=bf!=='all'&&m.br!==bf;
 
   /* ── Màu theo loại ── */
   const bdBg  = isAnc?'#3C2C06':isFem?'#3C1A0C':'#162A1C';
@@ -1358,7 +1373,7 @@ function node(m){
 
   /* ══ RENDER ══════════════════════════════════════════ */
   return`<g class="nd" data-id="${m.id}"
-  transform="translate(${p.x},${p.y})" style="cursor:pointer">
+  transform="translate(${p.x},${p.y})" style="cursor:pointer;opacity:${isFaded?0.38:1}">
   <clipPath id="cp${m.id}"><rect width="${NW}" height="${NH}" rx="11"/></clipPath>
   <!-- ① Nền màu (fallback) -->
   <rect width="${NW}" height="${NH}" rx="11"
@@ -1402,7 +1417,8 @@ function render(anim){
   layout();
   let eh='',nh='';
   D.forEach(m=>{if(m.par&&pos[m.par]&&pos[m.id])eh+=edge(m.par,m.id)});
-  [...D].filter(m=>bf==='all'||m.br===bf).sort((a,b)=>a.g-b.g).forEach(m=>{if(pos[m.id])nh+=node(m)});
+  // Vẽ tất cả node có vị trí (vch đã lọc đúng, kể cả tổ tiên trung gian)
+  [...D].filter(m=>pos[m.id]).sort((a,b)=>a.g-b.g).forEach(m=>{nh+=node(m)});
   document.getElementById('el').innerHTML=eh;
   document.getElementById('nl').innerHTML=nh;
   // Attach events
