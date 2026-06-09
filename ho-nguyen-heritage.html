@@ -524,7 +524,7 @@ footer{background:var(--earth);padding:2.5rem 4rem;display:flex;align-items:cent
     <div class="reveal"><div class="sec-ey">Tổng kết di sản</div><h2 class="sec-h">Con số ấn tượng</h2></div>
     <div class="heritage-stats reveal">
       <div class="hs-item"><div class="hs-n counter" data-target="15"><sup>+</sup></div><div class="hs-l">Thế hệ lịch sử</div></div>
-      <div class="hs-item"><div class="hs-n counter" data-target="83"></div><div class="hs-l">Thành viên ghi nhận</div></div>
+      <div class="hs-item"><div class="hs-n counter" id="counterMembers" data-target="83"></div><div class="hs-l">Thành viên ghi nhận</div></div>
       <div class="hs-item"><div class="hs-n counter" data-target="4"></div><div class="hs-l">Lễ hội truyền thống / năm</div></div>
       <div class="hs-item"><div class="hs-n counter" data-target="400"><sup>+</sup></div><div class="hs-l">Năm lịch sử</div></div>
     </div>
@@ -571,8 +571,13 @@ function animCounter(el){
   let c=0;const step=Math.ceil(target/28);
   const iv=setInterval(()=>{c=Math.min(c+step,target);el.innerHTML=c+(supH||'');if(c>=target)clearInterval(iv)},45);
 }
-const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');if(e.target.classList.contains('counter'))animCounter(e.target);io.unobserve(e.target)}})},{threshold:.1});
-document.querySelectorAll('.reveal,.counter').forEach(el=>io.observe(el));
+// Fetch live member count from API before setting up IntersectionObserver
+fetch('/api/status').then(r=>r.json()).then(d=>{
+  if(d&&d.members){document.getElementById('counterMembers').dataset.target=d.members;}
+}).catch(()=>{}).finally(()=>{
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');if(e.target.classList.contains('counter'))animCounter(e.target);io.unobserve(e.target)}})},{threshold:.1});
+  document.querySelectorAll('.reveal,.counter').forEach(el=>io.observe(el));
+});
 </script>
 </body>
 </html>
