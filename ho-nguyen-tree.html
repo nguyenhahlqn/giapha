@@ -711,7 +711,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
         <filter id="fs" x="-15%" y="-15%" width="130%" height="150%"><feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="rgba(44,24,16,.12)"/></filter>
         <filter id="fh" x="-22%" y="-22%" width="144%" height="164%"><feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="rgba(184,145,58,.28)"/></filter>
         <filter id="fr" x="-35%" y="-35%" width="170%" height="190%"><feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="rgba(184,145,58,.32)"/></filter>
-        <filter id="fp" x="-18%" y="-18%" width="136%" height="156%"><feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="rgba(45,74,62,.22)"/></filter>
+        <filter id="fp" x="-28%" y="-28%" width="156%" height="176%"><feDropShadow dx="0" dy="0" stdDeviation="10" flood-color="rgba(210,170,50,.55)"/></filter>
         <!-- Card backgrounds light mode -->
         <linearGradient id="gm" x1="0%" y1="0%" x2="105%" y2="105%"><stop offset="0%" stop-color="#EDF5F0"/><stop offset="100%" stop-color="#F3F8F5"/></linearGradient>
         <linearGradient id="gf" x1="0%" y1="0%" x2="105%" y2="105%"><stop offset="0%" stop-color="#FAF3EE"/><stop offset="100%" stop-color="#FDF7F4"/></linearGradient>
@@ -1184,9 +1184,13 @@ function edge(pid,cid){
   const onP=ancPath.some(m=>m.id===pid)&&ancPath.some(m=>m.id===cid);
   const isHL=hl===pid||hl===cid;
   let stroke=isDk()?'rgba(196,149,106,.14)':'rgba(92,61,46,.16)',sw2=1.4;
-  if(onP){stroke='rgba(184,145,58,.7)';sw2=2.2}
+  if(onP){stroke='rgba(210,168,48,.97)';sw2=3}
   else if(isHL){stroke='rgba(184,145,58,.42)';sw2=1.8}
-  return`<path d="M${x1},${y1} C${x1},${ym} ${x2},${ym} ${x2},${y2}" fill="none" stroke="${stroke}" stroke-width="${sw2}" stroke-linecap="round" marker-end="url(#dot)"/>`;
+  const pathD=`M${x1},${y1} C${x1},${ym} ${x2},${ym} ${x2},${y2}`;
+  if(onP) return`
+    <path d="${pathD}" fill="none" stroke="rgba(210,168,48,.22)" stroke-width="9" stroke-linecap="round"/>
+    <path d="${pathD}" fill="none" stroke="${stroke}" stroke-width="${sw2}" stroke-linecap="round" marker-end="url(#dot)"/>`;
+  return`<path d="${pathD}" fill="none" stroke="${stroke}" stroke-width="${sw2}" stroke-linecap="round" marker-end="url(#dot)"/>`;
 }
 
 /* ── RENDER NODE — Premium Card Design ── */
@@ -1207,8 +1211,8 @@ function node(m){
   const nameTx= dk?'#EEE0C0':'#16100A';
   const subTx = dk?'rgba(200,165,100,.65)':'rgba(50,34,12,.48)';
   const goldC = dk?'rgba(210,170,60,':'rgba(176,140,50,';
-  const borderC=isHL?`${accent}`:onP?'#267040':`${goldC}.28)`;
-  const borderW=isHL?2:onP?1.5:0.8;
+  const borderC=isHL?`${accent}`:onP?'#D4A832':`${goldC}.28)`;
+  const borderW=isHL?2:onP?2.5:0.8;
   const filt  =isAnc?'url(#fr)':isHL?'url(#fh)':onP?'url(#fp)':'url(#fs)';
 
   /* ── Tên (tách alias trong ngoặc ra khỏi tên chính) ── */
@@ -1367,9 +1371,12 @@ function node(m){
       fill="#229950" stroke="white" stroke-width="1.1" opacity=".9"/>`:'';
 
   /* ══ RENDER ══════════════════════════════════════════ */
+  const pathDim=ancPath.length>0&&!onP&&!isHL&&!isAnc;
   return`<g class="nd" data-id="${m.id}"
-  transform="translate(${p.x},${p.y})" style="cursor:pointer;opacity:${isFaded?0.38:1}">
+  transform="translate(${p.x},${p.y})" style="cursor:pointer;opacity:${isFaded?0.38:pathDim?0.42:1}">
   <clipPath id="cp${m.id}"><rect width="${NW}" height="${NH}" rx="11"/></clipPath>
+  ${onP?`<rect x="-4" y="-4" width="${NW+8}" height="${NH+8}" rx="14" fill="none"
+    stroke="rgba(210,168,48,.35)" stroke-width="2.5"/>`:'' }
   <!-- ① Nền màu (fallback) -->
   <rect width="${NW}" height="${NH}" rx="11"
     fill="${dk?(isAnc?'#1C1606':isFem?'#180A06':'#0A1410'):'#F5F1E6'}"
@@ -1380,7 +1387,7 @@ function node(m){
     opacity="${dk?.12:.22}" clip-path="url(#cp${m.id})"/>
   <!-- ③ Viền vàng mỏng bên trong -->
   <rect x="2.5" y="2.5" width="${NW-5}" height="${NH-5}" rx="9.5"
-    fill="none" stroke="${goldC}.28)" stroke-width=".7"
+    fill="none" stroke="${onP?'rgba(210,168,48,.55)':goldC+'.28)'}" stroke-width="${onP?1.2:.7}"
     clip-path="url(#cp${m.id})"/>
   <!-- ④ Ribbon bookmark -->
   ${ribbon}
