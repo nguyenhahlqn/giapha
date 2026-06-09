@@ -326,6 +326,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 [data-theme="dark"] #dpClose{background:#D4A84A;color:#1A1208}
 [data-theme="dark"] #dpClose:hover{background:#B8913A}
 /* Header bên trong panel (không còn là flex-shrink:0 riêng biệt) */
+/* Photo lightbox */
+.ph-lb{position:fixed;inset:0;z-index:900;background:rgba(10,8,6,.88);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+.ph-lb.open{display:flex}
+.ph-lb img{max-width:min(520px,calc(100vw-48px));max-height:calc(100dvh - 96px);
+  border-radius:10px;object-fit:contain;box-shadow:0 32px 80px rgba(0,0,0,.6);
+  animation:lb-in .18s ease}
+@keyframes lb-in{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.ph-lb-name{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  background:rgba(255,255,255,.12);backdrop-filter:blur(8px);
+  color:#fff;font-family:var(--serif);font-size:14px;
+  padding:6px 18px;border-radius:99px;white-space:nowrap;pointer-events:none}
+.ph-lb-close{position:fixed;top:16px;right:16px;width:36px;height:36px;
+  background:rgba(255,255,255,.15);border:none;border-radius:50%;
+  color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .15s;z-index:901}
+.ph-lb-close:hover{background:rgba(255,255,255,.28)}
 .dp-hdr{padding:80px 1.25rem .85rem;border-bottom:1px solid var(--bd)}
 .dp-body{padding:1rem 1.5rem 4rem}
 .dp-gen{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
@@ -667,6 +685,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
       <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5.5 8.5a3 3 0 004.24 0l2-2a3 3 0 00-4.24-4.24L6.5 3.26"/><path d="M8.5 5.5a3 3 0 00-4.24 0l-2 2a3 3 0 004.24 4.24l1-1"/></svg>Chia sẻ
     </button>
   </div>
+</div>
+
+<!-- Photo lightbox -->
+<div class="ph-lb" id="phLb" onclick="if(event.target===this||event.target.closest('.ph-lb')===this)closeLb()">
+  <button class="ph-lb-close" onclick="closeLb()">✕</button>
+  <img id="phLbImg" src="" alt="">
+  <div class="ph-lb-name" id="phLbName"></div>
 </div>
 
 <!-- Dropdowns — outside .tb to avoid backdrop-filter / overflow clipping -->
@@ -1491,8 +1516,9 @@ function openDetail(id){
   const sib=par?(ch[par.id]||[]).filter(cid=>cid!==id).map(cid=>byId[cid]).filter(Boolean):[];
   // Header: flex row with close button right-aligned
   const avaHtml=m.photo
-    ?`<div class="dp-ava" style="background:${c.av};border-color:${c.bd}66;flex-shrink:0;margin-bottom:0;overflow:hidden;padding:0">
-        <img src="${esc(m.photo)}" alt="${esc(m.n)}" style="width:100%;height:100%;object-fit:cover;display:block">
+    ?`<div class="dp-ava" style="background:${c.av};border-color:${c.bd}66;flex-shrink:0;margin-bottom:0;overflow:hidden;padding:0;cursor:zoom-in"
+        onclick="openLb('${esc(m.photo).replace(/'/g,"\\'")}','${esc(m.n).replace(/'/g,"\\'")}')">
+        <img src="${esc(m.photo)}" alt="${esc(m.n)}" style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none">
       </div>`
     :`<div class="dp-ava" style="background:${c.av};color:${c.avt};border-color:${c.bd}66;flex-shrink:0;margin-bottom:0">${ini(m.n)}</div>`;
   document.getElementById('dph').innerHTML=`
@@ -1815,6 +1841,20 @@ document.addEventListener('click', e=>{
     document.getElementById('cfBrBtn')?.classList.remove('open');
   }
 });
+
+/* ── PHOTO LIGHTBOX ── */
+function openLb(src,name){
+  document.getElementById('phLbImg').src=src;
+  document.getElementById('phLbName').textContent=name||'';
+  document.getElementById('phLb').classList.add('open');
+  document.addEventListener('keydown',_lbKey);
+}
+function closeLb(){
+  document.getElementById('phLb').classList.remove('open');
+  document.getElementById('phLbImg').src='';
+  document.removeEventListener('keydown',_lbKey);
+}
+function _lbKey(e){if(e.key==='Escape')closeLb();}
 
 /* ── EXPORT ── */
 function exportSVG(){
