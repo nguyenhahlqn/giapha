@@ -131,9 +131,24 @@ def _push_to_github(data, sha):
         print(f'[GitHub] Lỗi push: {e}')
         return False
 
+def _load_admin_hash():
+    """Nếu mật khẩu đã được đổi và lưu trong data.json thì dùng nó."""
+    global ADMIN_HASH
+    try:
+        if os.path.exists(DATA):
+            with open(DATA, 'r', encoding='utf-8') as f:
+                d = json.load(f)
+            saved = d.get('config', {}).get('admin_hash')
+            if saved:
+                ADMIN_HASH = saved
+                print('[Auth] Dùng mật khẩu đã được đổi từ data.json')
+    except Exception:
+        pass
+
 def init_data():
     """Khởi động: ưu tiên đọc từ GitHub, fallback về file local."""
     global _cache
+    _load_admin_hash()
     with _cache_lock:
         if GH_TOKEN:
             print('[GitHub] Đang tải dữ liệu từ GitHub...')
@@ -143,6 +158,11 @@ def init_data():
                 # Cập nhật file local để đồng bộ
                 with open(DATA, 'w', encoding='utf-8') as f:
                     json.dump(data, f, ensure_ascii=False, indent=2)
+                # Cập nhật ADMIN_HASH nếu đã được đổi
+                saved_hash = data.get('config', {}).get('admin_hash')
+                if saved_hash:
+                    global ADMIN_HASH
+                    ADMIN_HASH = saved_hash
                 print(f'[GitHub] ✓ {len(data.get("members",[]))} thành viên, SHA: {sha[:8]}')
                 return
         # Fallback: đọc từ file local
@@ -294,6 +314,38 @@ class Handler(BaseHTTPRequestHandler):
                 _record_fail(ip)
                 time.sleep(0.5)  # thêm độ trễ chống brute-force
                 self.send_json(401, {'error': 'Tài khoản hoặc mật khẩu không đúng'})
+            return
+
+        # ── Đổi mật khẩu (yêu cầu token + mật khẩu cũ) ──
+        if p == '/api/change-password':
+            if not _check_auth(self): return
+            old_pw  = body.get('oldPassword', '')
+            new_pw  = body.get('newPassword', '')
+            old_hash = hashlib.sha256(old_pw.encode()).hexdigest()
+            # Xác minh mật khẩu hiện tại
+            if not hmac.compare_digest(old_hash, ADMIN_HASH):
+                ip = self.client_address[0]
+                _record_fail(ip)
+                time.sleep(0.5)
+                self.send_json(401, {'error': 'Mật khẩu hiện tại không đúng'})
+                return
+            # Kiểm tra độ mạnh tối thiểu
+            if len(new_pw) < 10:
+                self.send_json(400, {'error': 'Mật khẩu mới phải có ít nhất 10 ký tự'})
+                return
+            new_hash = hashlib.sha256(new_pw.encode()).hexdigest()
+            # Lưu hash mới vào data.json (bền vững qua restart)
+            d2 = read_data()
+            d2.setdefault('config', {})['admin_hash'] = new_hash
+            write_data(d2)
+            # Cập nhật biến runtime
+            global ADMIN_HASH
+            ADMIN_HASH = new_hash
+            # Thu hồi tất cả token cũ (bắt buộc đăng nhập lại)
+            with _tokens_lock:
+                _tokens.clear()
+            print('[Auth] Mật khẩu đã được thay đổi — tất cả phiên đã bị thu hồi')
+            self.send_json(200, {'ok': True})
             return
 
         # ── Yêu cầu đăng ký (public — người dùng gửi) ──

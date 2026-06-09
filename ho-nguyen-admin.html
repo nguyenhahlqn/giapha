@@ -504,6 +504,33 @@ tr:hover .row-acts{opacity:1}
 .gal-cat-badge{display:inline-block;font-size:10px;padding:1px 7px;border-radius:10px;border:1px solid var(--bd2);color:var(--clay);background:var(--bg);font-family:var(--mono)}
 .gal-empty{text-align:center;padding:4rem 2rem;color:var(--clay);font-size:14px}
 .gal-empty svg{width:48px;height:48px;opacity:.3;margin-bottom:1rem;display:block;margin-inline:auto}
+/* Password view */
+.pw-wrap{max-width:460px;margin:3rem auto;padding:0 1.5rem}
+.pw-card{background:var(--bg-card);border:1px solid var(--bd);border-radius:10px;padding:2rem}
+.pw-title{font-family:var(--serif);font-size:18px;font-weight:500;color:var(--fg);margin-bottom:.35rem}
+.pw-sub{font-size:12px;color:var(--clay);margin-bottom:1.75rem;line-height:1.6}
+.pw-field{margin-bottom:1rem}
+.pw-field label{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--clay);margin-bottom:.4rem;font-weight:500}
+.pw-input-wrap{position:relative;display:flex}
+.pw-input-wrap input{flex:1;padding:9px 38px 9px 12px;border:1px solid var(--bd);border-radius:5px;background:var(--bg);color:var(--fg);font-size:13px;font-family:var(--sans)}
+.pw-input-wrap input:focus{outline:none;border-color:var(--gold)}
+.pw-eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--clay);padding:2px;line-height:1;font-size:15px}
+.pw-eye:hover{color:var(--fg)}
+.pw-strength{height:3px;border-radius:2px;margin-top:5px;transition:all .3s;background:var(--bd)}
+.pw-strength-label{font-size:10px;color:var(--clay);margin-top:3px;min-height:14px}
+.pw-rules{font-size:11px;color:var(--clay);line-height:1.7;margin-bottom:1.25rem;padding:.65rem .9rem;background:var(--bg);border-radius:5px;border:1px solid var(--bd)}
+.pw-rules li{list-style:none;display:flex;align-items:center;gap:.4rem}
+.pw-rules li::before{content:'·';color:var(--bd2)}
+.pw-rules li.ok::before{content:'✓';color:#4a9}
+.pw-rules li.fail::before{content:'✗';color:var(--red)}
+.pw-actions{display:flex;gap:.75rem;margin-top:1.5rem}
+.pw-save{flex:1;padding:10px;background:var(--moss);border:none;border-radius:5px;color:var(--parch2);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;cursor:pointer;font-family:var(--sans);transition:background .2s}
+.pw-save:hover:not(:disabled){background:var(--moss2)}
+.pw-save:disabled{opacity:.5;cursor:not-allowed}
+.pw-cancel{padding:10px 18px;background:none;border:1px solid var(--bd);border-radius:5px;color:var(--clay);font-size:12px;cursor:pointer;font-family:var(--sans)}
+.pw-cancel:hover{border-color:var(--bd2)}
+.pw-msg{font-size:12px;min-height:18px;margin-top:.75rem;text-align:center;font-weight:500}
+.pw-msg.ok{color:#4a9}.pw-msg.err{color:var(--red)}
 </style>
 </head>
 <body>
@@ -574,6 +601,12 @@ tr:hover .row-acts{opacity:1}
   <div class="nav-item" onclick="setView('gallery')">
     <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="3" width="12" height="9" rx="1"/><path d="M1 9l3-3 3 3 2-2 4 4"/><circle cx="10" cy="6" r="1.2" fill="currentColor" stroke="none"/></svg>
     Hình ảnh &amp; Kỷ vật <span class="cnt" id="navGal">0</span>
+  </div>
+
+  <div class="nav-section" style="margin-top:auto">Tài khoản</div>
+  <div class="nav-item" onclick="setView('password')">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="6" width="8" height="7" rx="1"/><path d="M5 6V4.5a2 2 0 0 1 4 0V6"/><circle cx="7" cy="9.5" r=".9" fill="currentColor" stroke="none"/></svg>
+    Đổi mật khẩu
   </div>
 
   <div class="filter-section">
@@ -720,6 +753,60 @@ tr:hover .row-acts{opacity:1}
       </a>
     </div>
     <div id="reqList" style="padding:1.5rem;overflow-y:auto;flex:1"></div>
+  </div>
+
+  <!-- PASSWORD VIEW -->
+  <div id="vPassword" class="exp-wrap" style="display:none">
+    <div class="tbar">
+      <h2 class="tbar-title">Đổi mật khẩu quản trị</h2>
+    </div>
+    <div class="pw-wrap">
+      <div class="pw-card">
+        <div class="pw-title">🔐 Thay đổi mật khẩu</div>
+        <div class="pw-sub">Mật khẩu mới sẽ được lưu trên server dưới dạng SHA-256 hash — không lưu plaintext.</div>
+
+        <div class="pw-field">
+          <label>Mật khẩu hiện tại</label>
+          <div class="pw-input-wrap">
+            <input type="password" id="pwOld" autocomplete="current-password" placeholder="Nhập mật khẩu đang dùng">
+            <button class="pw-eye" type="button" onclick="togglePwEye('pwOld',this)" tabindex="-1">👁</button>
+          </div>
+        </div>
+
+        <div class="pw-field">
+          <label>Mật khẩu mới</label>
+          <div class="pw-input-wrap">
+            <input type="password" id="pwNew" autocomplete="new-password" placeholder="Tối thiểu 10 ký tự" oninput="checkPwStrength()">
+            <button class="pw-eye" type="button" onclick="togglePwEye('pwNew',this)" tabindex="-1">👁</button>
+          </div>
+          <div class="pw-strength" id="pwStrengthBar"></div>
+          <div class="pw-strength-label" id="pwStrengthLabel"></div>
+        </div>
+
+        <div class="pw-field">
+          <label>Xác nhận mật khẩu mới</label>
+          <div class="pw-input-wrap">
+            <input type="password" id="pwConfirm" autocomplete="new-password" placeholder="Nhập lại mật khẩu mới" oninput="checkPwStrength()">
+            <button class="pw-eye" type="button" onclick="togglePwEye('pwConfirm',this)" tabindex="-1">👁</button>
+          </div>
+        </div>
+
+        <ul class="pw-rules" id="pwRules">
+          <li id="rLen">Ít nhất 10 ký tự</li>
+          <li id="rUpper">Có chữ hoa (A–Z)</li>
+          <li id="rLower">Có chữ thường (a–z)</li>
+          <li id="rNum">Có chữ số (0–9)</li>
+          <li id="rSpec">Có ký tự đặc biệt (!@#$%...)</li>
+          <li id="rMatch">Hai mật khẩu khớp nhau</li>
+        </ul>
+
+        <div class="pw-actions">
+          <button class="pw-cancel" onclick="setView('list')">Huỷ</button>
+          <button class="pw-save" id="pwSaveBtn" onclick="savePassword()" disabled>Đổi mật khẩu</button>
+        </div>
+        <div class="pw-msg" id="pwMsg"></div>
+      </div>
+    </div>
   </div>
 
   <!-- GALLERY VIEW -->
@@ -1608,12 +1695,12 @@ function importJSON(){
 function setView(v){
   try{localStorage.setItem('hn-admin-view',v)}catch(e){}
   curView=v;
-  const views={list:'vList',dashboard:'vDashboard',changelog:'vChangelog',export:'vExport',requests:'vRequests',gallery:'vGallery'};
+  const views={list:'vList',dashboard:'vDashboard',changelog:'vChangelog',export:'vExport',requests:'vRequests',gallery:'vGallery',password:'vPassword'};
   Object.values(views).forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none'});
   const active=document.getElementById(views[v]);
   if(active){active.style.display=v==='list'?'flex':'block';if(v==='list')active.style.flexDirection='column'}
   document.querySelectorAll('.nav-item').forEach((el,i)=>{
-    const map={0:'list',1:'dashboard',2:'changelog',3:'export',4:'requests',5:'gallery'};
+    const map={0:'list',1:'dashboard',2:'changelog',3:'export',4:'requests',5:'gallery',6:'password'};
     el.classList.toggle('active',map[i]===v);
   });
   if(v==='dashboard')renderDashboard();
@@ -2083,6 +2170,80 @@ async function deleteGalItem(id){
 }
 
 document.getElementById('galModal').addEventListener('click',e=>{if(e.target===document.getElementById('galModal'))closeGalModal()});
+
+/* ══ CHANGE PASSWORD ══ */
+function togglePwEye(inputId, btn){
+  const inp=document.getElementById(inputId);
+  const show=inp.type==='password';
+  inp.type=show?'text':'password';
+  btn.textContent=show?'🙈':'👁';
+}
+
+function checkPwStrength(){
+  const pw=document.getElementById('pwNew').value;
+  const cf=document.getElementById('pwConfirm').value;
+  const rules={
+    rLen:  pw.length>=10,
+    rUpper:/[A-Z]/.test(pw),
+    rLower:/[a-z]/.test(pw),
+    rNum:  /[0-9]/.test(pw),
+    rSpec: /[^A-Za-z0-9]/.test(pw),
+    rMatch:pw.length>0&&pw===cf
+  };
+  let pass=0;
+  for(const [id,ok] of Object.entries(rules)){
+    const el=document.getElementById(id);
+    if(el){el.classList.toggle('ok',ok);el.classList.toggle('fail',pw.length>0&&!ok);}
+    if(ok)pass++;
+  }
+  // Thanh độ mạnh
+  const bar=document.getElementById('pwStrengthBar');
+  const lbl=document.getElementById('pwStrengthLabel');
+  const pct=Math.round(pass/6*100);
+  const colors=['#e55','#e88','#ea5','#8b8','#4a9','#2a7'];
+  const labels=['','Rất yếu','Yếu','Trung bình','Khá tốt','Mạnh','Rất mạnh'];
+  bar.style.width=pct+'%';
+  bar.style.background=colors[pass]||'#e55';
+  lbl.textContent=pw.length?labels[pass]||'':'';
+  lbl.style.color=colors[pass]||'#e55';
+  // Kích hoạt nút Save khi đủ điều kiện
+  const allOk=Object.values(rules).every(Boolean);
+  document.getElementById('pwSaveBtn').disabled=!allOk;
+}
+
+async function savePassword(){
+  const oldPw=document.getElementById('pwOld').value;
+  const newPw=document.getElementById('pwNew').value;
+  const msg=document.getElementById('pwMsg');
+  const btn=document.getElementById('pwSaveBtn');
+  if(!oldPw){msg.className='pw-msg err';msg.textContent='Vui lòng nhập mật khẩu hiện tại.';return;}
+  btn.disabled=true;btn.textContent='Đang lưu…';msg.textContent='';
+  try{
+    const r=await fetch('/api/change-password',{
+      method:'POST',
+      headers:authHeaders(),
+      body:JSON.stringify({oldPassword:oldPw,newPassword:newPw})
+    });
+    const d=await r.json();
+    if(r.ok&&d.ok){
+      msg.className='pw-msg ok';
+      msg.textContent='✓ Đổi mật khẩu thành công! Vui lòng đăng nhập lại.';
+      // Xoá token cũ, yêu cầu đăng nhập lại sau 2s
+      setTimeout(()=>{
+        sessionStorage.removeItem('hn-token');
+        window._adminToken=null;
+        location.reload();
+      },2000);
+    } else {
+      msg.className='pw-msg err';
+      msg.textContent=d.error||'Đổi mật khẩu thất bại.';
+      btn.disabled=false;btn.textContent='Đổi mật khẩu';
+    }
+  }catch(e){
+    msg.className='pw-msg err';msg.textContent='Lỗi kết nối server.';
+    btn.disabled=false;btn.textContent='Đổi mật khẩu';
+  }
+}
 </script>
 </body>
 </html>
