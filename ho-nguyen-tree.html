@@ -429,6 +429,10 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
   .sbar{left:12px;bottom:76px;gap:.55rem}
   .anc-trail{display:none!important}
   #vList,#vTimeline{padding:1rem 0.5rem}
+  /* Prevent iOS Safari auto-zoom on input focus (triggered when font-size < 16px) */
+  input,select,textarea{font-size:16px!important}
+  /* Compensate: keep search bar height reasonable */
+  #si{height:34px}
 }
 
 /* ── RELATIONSHIP ANALYSIS MODAL ── */
