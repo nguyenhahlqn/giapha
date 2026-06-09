@@ -125,6 +125,34 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 .hl{background:rgba(184,145,58,.22);border-radius:2px;padding:0 1px}
 
 /* Gen pills */
+/* ── COMBO FILTER DROPDOWN ── */
+.cf-wrap{position:relative;display:inline-flex;align-items:center}
+.cf-btn{display:flex;align-items:center;gap:4px;padding:3px 8px 3px 9px;
+  height:26px;background:var(--bg);border:1px solid var(--bd2);border-radius:5px;
+  font-size:10px;color:var(--clay);font-family:var(--sans);cursor:pointer;
+  transition:all .15s;white-space:nowrap;letter-spacing:.04em;min-width:0}
+.cf-btn:hover{border-color:var(--moss3);color:var(--moss3)}
+.cf-btn.active{background:rgba(45,74,62,.12);border-color:var(--moss3);color:var(--moss3);font-weight:500}
+[data-theme="dark"] .cf-btn.active{background:rgba(74,124,95,.15)}
+.cf-btn svg{width:9px;height:9px;flex-shrink:0;opacity:.6;transition:transform .2s}
+.cf-btn.open svg{transform:rotate(180deg)}
+.cf-val{max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cf-drop{position:absolute;top:calc(100% + 4px);left:0;min-width:130px;
+  background:var(--bg2);border:1px solid var(--bd2);border-radius:7px;
+  box-shadow:0 8px 24px var(--sh);z-index:800;overflow:hidden;
+  display:none;flex-direction:column}
+[data-theme="dark"] .cf-drop{background:var(--bg3)}
+.cf-drop.open{display:flex}
+.cf-item{padding:6px 12px;font-size:11px;color:var(--e1);cursor:pointer;
+  font-family:var(--sans);transition:background .12s;white-space:nowrap;
+  display:flex;align-items:center;gap:6px}
+[data-theme="dark"] .cf-item{color:var(--parch)}
+.cf-item:hover{background:var(--bg3)}
+[data-theme="dark"] .cf-item:hover{background:var(--bg4)}
+.cf-item.on{color:var(--moss3);font-weight:500}
+.cf-item.on::before{content:'✓';font-size:9px;width:10px;flex-shrink:0}
+.cf-item:not(.on)::before{content:'';width:10px;flex-shrink:0}
+.cf-sep{height:1px;background:var(--bd);margin:3px 0}
 .gps{display:flex;gap:2px;flex-wrap:nowrap}
 .gp{padding:2px 7px;border-radius:99px;border:1px solid var(--bd2);font-size:10px;
   cursor:pointer;background:none;font-family:var(--sans);color:var(--clay);transition:all .15s}
@@ -393,7 +421,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 
 /* RESPONSIVE */
 @media(max-width:768px){
-  .nav-links,.ts.lg-sec,.ts.gf-sec{display:none}
+  .nav-links,.ts.lg-sec{display:none}
   .dp{width:100%;right:-100%}
   .mm{display:none}.zc{right:12px;bottom:76px}
   .sbar{left:12px;bottom:76px;gap:.55rem}
@@ -588,31 +616,52 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
     </button>
   </div>
 
-  <!-- Gen filter -->
+  <!-- Gen filter — combo dropdown -->
   <div class="ts gf-sec">
-    <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--straw);margin-right:4px;font-weight:300;flex-shrink:0">Đời:</span>
-    <div class="gps" id="gfilter">
-      <button class="gp on" data-g="all">Tất cả</button>
-      <button class="gp" data-g="1">1</button><button class="gp" data-g="2">2</button>
-      <button class="gp" data-g="3">3</button><button class="gp" data-g="4">4</button>
-      <button class="gp" data-g="5">5</button><button class="gp" data-g="6">6</button>
-      <button class="gp" data-g="7">7</button><button class="gp" data-g="8">8</button>
-      <button class="gp" data-g="9">9</button><button class="gp" data-g="10">10</button>
-      <button class="gp" data-g="11">11</button><button class="gp" data-g="12">12</button>
-      <button class="gp" data-g="13">13</button><button class="gp" data-g="14">14</button>
-      <button class="gp" data-g="15">15</button>
+    <div class="cf-wrap" id="cfGenWrap">
+      <button class="cf-btn" id="cfGenBtn" onclick="toggleCfDrop('Gen')">
+        <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h6M3 6h4M4 8h2"/></svg>
+        <span>Đời: </span><span class="cf-val" id="cfGenVal">Tất cả</span>
+        <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </button>
+      <div class="cf-drop" id="cfGenDrop">
+        <div class="cf-item on" data-g="all" onclick="setCfGen('all','Tất cả')">Tất cả đời</div>
+        <div class="cf-sep"></div>
+        <div class="cf-item" data-g="1"  onclick="setCfGen('1','Đời 1')">Đời 1</div>
+        <div class="cf-item" data-g="2"  onclick="setCfGen('2','Đời 2')">Đời 2</div>
+        <div class="cf-item" data-g="3"  onclick="setCfGen('3','Đời 3')">Đời 3</div>
+        <div class="cf-item" data-g="4"  onclick="setCfGen('4','Đời 4')">Đời 4</div>
+        <div class="cf-item" data-g="5"  onclick="setCfGen('5','Đời 5')">Đời 5</div>
+        <div class="cf-item" data-g="6"  onclick="setCfGen('6','Đời 6')">Đời 6</div>
+        <div class="cf-item" data-g="7"  onclick="setCfGen('7','Đời 7')">Đời 7</div>
+        <div class="cf-item" data-g="8"  onclick="setCfGen('8','Đời 8')">Đời 8</div>
+        <div class="cf-item" data-g="9"  onclick="setCfGen('9','Đời 9')">Đời 9</div>
+        <div class="cf-item" data-g="10" onclick="setCfGen('10','Đời 10')">Đời 10</div>
+        <div class="cf-item" data-g="11" onclick="setCfGen('11','Đời 11')">Đời 11</div>
+        <div class="cf-item" data-g="12" onclick="setCfGen('12','Đời 12')">Đời 12</div>
+        <div class="cf-item" data-g="13" onclick="setCfGen('13','Đời 13')">Đời 13</div>
+        <div class="cf-item" data-g="14" onclick="setCfGen('14','Đời 14')">Đời 14</div>
+        <div class="cf-item" data-g="15" onclick="setCfGen('15','Đời 15')">Đời 15</div>
+      </div>
     </div>
   </div>
 
-  <!-- Branch filter -->
+  <!-- Branch filter — combo dropdown -->
   <div class="ts" id="tbBranch">
-    <span style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--straw);margin-right:4px;font-weight:300;flex-shrink:0">Nhánh:</span>
-    <div style="display:flex;gap:2px" id="branchFilter">
-      <button class="gp on" data-br="all">Tất cả</button>
-      <button class="gp" data-br="Nhánh Hữu Đễ">Hữu Đễ</button>
-      <button class="gp" data-br="Nhánh Hữu Quyền">Hữu Quyền</button>
-      <button class="gp" data-br="Nhánh Hữu Hiệu">Hữu Hiệu</button>
-      <button class="gp" data-br="Tiền tổ">Tiền tổ</button>
+    <div class="cf-wrap" id="cfBrWrap">
+      <button class="cf-btn" id="cfBrBtn" onclick="toggleCfDrop('Br')">
+        <svg viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="5" cy="2" r="1.3"/><line x1="5" y1="3.3" x2="5" y2="5"/><line x1="2.5" y1="5" x2="7.5" y2="5"/><circle cx="2.5" cy="6.5" r="1.3"/><circle cx="7.5" cy="6.5" r="1.3"/></svg>
+        <span>Nhánh: </span><span class="cf-val" id="cfBrVal">Tất cả</span>
+        <svg viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>
+      </button>
+      <div class="cf-drop" id="cfBrDrop">
+        <div class="cf-item on" data-br="all"             onclick="setCfBr('all','Tất cả')">Tất cả nhánh</div>
+        <div class="cf-sep"></div>
+        <div class="cf-item" data-br="Nhánh Hữu Đễ"      onclick="setCfBr('Nhánh Hữu Đễ','Hữu Đễ')">Nhánh Hữu Đễ</div>
+        <div class="cf-item" data-br="Nhánh Hữu Quyền"   onclick="setCfBr('Nhánh Hữu Quyền','Hữu Quyền')">Nhánh Hữu Quyền</div>
+        <div class="cf-item" data-br="Nhánh Hữu Hiệu"    onclick="setCfBr('Nhánh Hữu Hiệu','Hữu Hiệu')">Nhánh Hữu Hiệu</div>
+        <div class="cf-item" data-br="Tiền tổ"            onclick="setCfBr('Tiền tổ','Tiền tổ')">Tiền tổ</div>
+      </div>
     </div>
   </div>
 
@@ -1678,16 +1727,50 @@ document.addEventListener('click',e=>{if(!e.target.closest('.sw')&&!e.target.clo
 window.addEventListener('resize',()=>{if(sdEl.classList.contains('open'))positionDropdown()});
 
 /* ── GEN FILTER ── */
-document.getElementById('branchFilter').addEventListener('click',e=>{
-  const p=e.target.closest('.gp');if(!p)return;
-  bf=p.dataset.br;document.querySelectorAll('#branchFilter .gp').forEach(x=>x.classList.toggle('on',x===p));
-  if(curView==='tree')render(true);else if(curView==='list')renderList();
-});
-
-document.getElementById('gfilter').addEventListener('click',e=>{
-  const p=e.target.closest('.gp');if(!p)return;
-  gf=p.dataset.g;document.querySelectorAll('.gp').forEach(x=>x.classList.toggle('on',x===p));
-  if(curView==='tree')render(true);else if(curView==='list')renderList();
+/* ── COMBO FILTER FUNCTIONS ── */
+function toggleCfDrop(which){
+  const btn=document.getElementById('cfGenBtn'), drop=document.getElementById('cfGenDrop');
+  const bBtn=document.getElementById('cfBrBtn'),  bDrop=document.getElementById('cfBrDrop');
+  if(which==='Gen'){
+    const open=!drop.classList.contains('open');
+    drop.classList.toggle('open',open); btn.classList.toggle('open',open);
+    bDrop.classList.remove('open'); bBtn.classList.remove('open');
+  } else {
+    const open=!bDrop.classList.contains('open');
+    bDrop.classList.toggle('open',open); bBtn.classList.toggle('open',open);
+    drop.classList.remove('open'); btn.classList.remove('open');
+  }
+}
+function setCfGen(val, label){
+  gf = val;
+  document.getElementById('cfGenVal').textContent = label;
+  const isAll = val === 'all';
+  document.getElementById('cfGenBtn').classList.toggle('active', !isAll);
+  document.querySelectorAll('#cfGenDrop .cf-item').forEach(x=>x.classList.toggle('on', x.dataset.g===val));
+  document.getElementById('cfGenDrop').classList.remove('open');
+  document.getElementById('cfGenBtn').classList.remove('open');
+  if(curView==='tree') render(true); else if(curView==='list') renderList();
+}
+function setCfBr(val, label){
+  bf = val;
+  document.getElementById('cfBrVal').textContent = label;
+  const isAll = val === 'all';
+  document.getElementById('cfBrBtn').classList.toggle('active', !isAll);
+  document.querySelectorAll('#cfBrDrop .cf-item').forEach(x=>x.classList.toggle('on', x.dataset.br===val));
+  document.getElementById('cfBrDrop').classList.remove('open');
+  document.getElementById('cfBrBtn').classList.remove('open');
+  if(curView==='tree') render(true); else if(curView==='list') renderList();
+}
+// Close dropdowns on outside click
+document.addEventListener('click', e=>{
+  if(!e.target.closest('#cfGenWrap')){
+    document.getElementById('cfGenDrop')?.classList.remove('open');
+    document.getElementById('cfGenBtn')?.classList.remove('open');
+  }
+  if(!e.target.closest('#cfBrWrap')){
+    document.getElementById('cfBrDrop')?.classList.remove('open');
+    document.getElementById('cfBrBtn')?.classList.remove('open');
+  }
 });
 
 /* ── EXPORT ── */
