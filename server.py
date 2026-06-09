@@ -104,6 +104,14 @@ def _fetch_from_github():
         print(f'[GitHub] Không đọc được: {e}')
         return None, None
 
+def _sanitize_for_github(data: dict) -> dict:
+    """Loại bỏ thông tin nhạy cảm trước khi đẩy lên GitHub."""
+    import copy
+    safe = copy.deepcopy(data)
+    # KHÔNG đẩy admin_hash lên repo công khai
+    safe.get('config', {}).pop('admin_hash', None)
+    return safe
+
 def _push_to_github(data, sha):
     """Ghi data.json lên GitHub API."""
     if not GH_TOKEN:
@@ -111,7 +119,7 @@ def _push_to_github(data, sha):
         return False
     try:
         content_b64 = base64.b64encode(
-            json.dumps(data, ensure_ascii=False, indent=2).encode('utf-8')
+            json.dumps(_sanitize_for_github(data), ensure_ascii=False, indent=2).encode('utf-8')
         ).decode('ascii')
         body = json.dumps({
             'message': f'[auto] Cập nhật data.json (v{data.get("version",1)})',
@@ -297,7 +305,12 @@ class Handler(BaseHTTPRequestHandler):
         else:
             if p == '' or p == '/':
                 p = '/ho-nguyen-hero.html'
-            filepath = os.path.join(BASE, p.lstrip('/'))
+            filepath = os.path.realpath(os.path.join(BASE, p.lstrip('/')))
+            # Chặn path traversal: filepath phải nằm trong BASE
+            if not filepath.startswith(os.path.realpath(BASE) + os.sep) and \
+               filepath != os.path.realpath(BASE):
+                self.send_json(403, {'error': 'Forbidden'})
+                return
             # Log social crawler access để debug
             if self._is_social_crawler():
                 ua = self.headers.get('User-Agent', '')[:60]
@@ -314,7 +327,12 @@ class Handler(BaseHTTPRequestHandler):
         global ADMIN_HASH
         p = urlparse(self.path).path.rstrip('/')
         length = int(self.headers.get('Content-Length', 0))
-        body = json.loads(self.rfile.read(length)) if length else {}
+        if length > 1_000_000:  # giới hạn 1 MB
+            self.send_json(413, {'error': 'Request quá lớn'}); return
+        try:
+            body = json.loads(self.rfile.read(length)) if length else {}
+        except (json.JSONDecodeError, Exception):
+            self.send_json(400, {'error': 'JSON không hợp lệ'}); return
 
         # ── Đăng nhập (public — không cần token) ──
         if p == '/api/login':
@@ -480,7 +498,12 @@ class Handler(BaseHTTPRequestHandler):
         if not _check_auth(self): return
         p = urlparse(self.path).path.rstrip('/')
         length = int(self.headers.get('Content-Length', 0))
-        body = json.loads(self.rfile.read(length)) if length else {}
+        if length > 1_000_000:
+            self.send_json(413, {'error': 'Request quá lớn'}); return
+        try:
+            body = json.loads(self.rfile.read(length)) if length else {}
+        except (json.JSONDecodeError, Exception):
+            self.send_json(400, {'error': 'JSON không hợp lệ'}); return
         d = read_data()
 
         # ── Sửa một gallery item ──
