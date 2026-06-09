@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 Disallow: /ho-nguyen-admin.html
 
-Sitemap: https://YOUR-DOMAIN/sitemap.xml
+Sitemap: https://honguyenhanam.id.vn/sitemap.xml
