@@ -174,6 +174,10 @@ class Handler(BaseHTTPRequestHandler):
             d = read_data()
             self.send_json(200, {'requests': d.get('requests', [])})
 
+        elif p == '/api/gallery':
+            d = read_data()
+            self.send_json(200, {'gallery': d.get('gallery', [])})
+
         elif p == '/api/status':
             d = read_data()
             m = d.get('members', [])
@@ -203,8 +207,27 @@ class Handler(BaseHTTPRequestHandler):
         body = json.loads(self.rfile.read(length)) if length else {}
         d = read_data()
 
+        # ── Gallery: lưu toàn bộ ──
+        if p == '/api/gallery':
+            items = body.get('gallery', body if isinstance(body, list) else [])
+            d['gallery'] = items
+            d['version'] = d.get('version', 1) + 1
+            write_data(d)
+            self.send_json(200, {'ok': True, 'count': len(items)})
+
+        # ── Gallery: thêm một item ──
+        elif p == '/api/gallery/add':
+            items = d.get('gallery', [])
+            new_id = body.get('id') or f"g{int(max((int(x['id'][1:]) for x in items if x.get('id','').startswith('g') and x['id'][1:].isdigit()), default=0)) + 1}"
+            body['id'] = str(new_id)
+            items.append(body)
+            d['gallery'] = items
+            d['version'] = d.get('version', 1) + 1
+            write_data(d)
+            self.send_json(200, {'ok': True, 'item': body})
+
         # ── Lưu toàn bộ danh sách thành viên ──
-        if p == '/api/members':
+        elif p == '/api/members':
             members = body.get('members', body if isinstance(body, list) else [])
             d['members'] = members
             d['version'] = d.get('version', 1) + 1
@@ -293,8 +316,23 @@ class Handler(BaseHTTPRequestHandler):
         body = json.loads(self.rfile.read(length)) if length else {}
         d = read_data()
 
+        # ── Sửa một gallery item ──
+        if p.startswith('/api/gallery/'):
+            gid = p.split('/')[-1]
+            items = d.get('gallery', [])
+            found = False
+            for i, item in enumerate(items):
+                if str(item.get('id')) == str(gid):
+                    items[i] = {**item, **body}; found = True; break
+            if not found:
+                self.send_json(404, {'error': f'Không tìm thấy gallery ID {gid}'}); return
+            d['gallery'] = items
+            d['version'] = d.get('version', 1) + 1
+            write_data(d)
+            self.send_json(200, {'ok': True})
+
         # ── Sửa một thành viên ──
-        if p.startswith('/api/members/'):
+        elif p.startswith('/api/members/'):
             mid = p.split('/')[-1]
             found = False
             for i, m in enumerate(d['members']):
@@ -313,8 +351,19 @@ class Handler(BaseHTTPRequestHandler):
         p = urlparse(self.path).path.rstrip('/')
         d = read_data()
 
+        # ── Xoá một gallery item ──
+        if p.startswith('/api/gallery/'):
+            gid = p.split('/')[-1]
+            before = len(d.get('gallery', []))
+            d['gallery'] = [x for x in d.get('gallery', []) if str(x.get('id')) != str(gid)]
+            if len(d['gallery']) == before:
+                self.send_json(404, {'error': f'Không tìm thấy gallery ID {gid}'}); return
+            d['version'] = d.get('version', 1) + 1
+            write_data(d)
+            self.send_json(200, {'ok': True})
+
         # ── Xoá một thành viên ──
-        if p.startswith('/api/members/'):
+        elif p.startswith('/api/members/'):
             mid = p.split('/')[-1]
             before = len(d['members'])
             d['members'] = [m for m in d['members'] if str(m.get('id')) != str(mid)]

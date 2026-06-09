@@ -284,7 +284,7 @@ footer{background:var(--earth);padding:2.5rem 4rem;display:flex;align-items:cent
 <section class="section section-alt">
   <div class="inner">
     <div class="reveal"><div class="sec-ey">Bộ sưu tập di sản</div><h2 class="sec-h">Hình ảnh & Kỷ vật</h2><p class="sec-sub">Những hình ảnh, tài liệu và kỷ vật ghi lại dấu ấn lịch sử của dòng họ qua nhiều thế hệ.</p></div>
-    <div class="heritage-grid reveal">
+    <div class="heritage-grid reveal" id="heritageGrid">
       <!-- Item 1 (large) -->
       <div class="hg-item">
         <svg class="hg-art" viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
@@ -556,6 +556,14 @@ footer{background:var(--earth);padding:2.5rem 4rem;display:flex;align-items:cent
   <span class="foot-copy">Bảo tàng số di sản gia tộc</span>
 </footer>
 
+<!-- HERITAGE PHOTO LIGHTBOX -->
+<div id="hgLb" style="position:fixed;inset:0;z-index:900;background:rgba(10,8,6,.88);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out" onclick="if(event.target===this||event.target.closest('button'))closeHeritageLb()">
+  <button style="position:fixed;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;z-index:1" onclick="closeHeritageLb()">✕</button>
+  <img id="hgLbImg" src="" alt="" style="max-width:min(720px,calc(100vw - 48px));max-height:calc(100dvh - 96px);border-radius:10px;object-fit:contain;box-shadow:0 32px 80px rgba(0,0,0,.6)">
+  <div id="hgLbName" style="position:fixed;bottom:28px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.85);font-size:13px;font-family:var(--serif);text-align:center;white-space:nowrap;max-width:calc(100vw - 48px);overflow:hidden;text-overflow:ellipsis"></div>
+</div>
+<style>#hgLb.open{display:flex}</style>
+
 <script>
 const btn=document.getElementById('themeBtn');
 const saved=localStorage.getItem('theme')||'light';
@@ -574,9 +582,53 @@ function animCounter(el){
   const iv=setInterval(()=>{c=Math.min(c+step,target);el.innerHTML=c+(supH||'');if(c>=target)clearInterval(iv)},45);
 }
 // Fetch live member count from API before setting up IntersectionObserver
-fetch('/api/status').then(r=>r.json()).then(d=>{
-  if(d&&d.members){document.getElementById('counterMembers').dataset.target=d.members;}
-}).catch(()=>{}).finally(()=>{
+const CAT_LABELS={'lich-su':'Lịch sử','gia-dinh':'Gia đình','ky-vat':'Kỷ vật','su-kien':'Sự kiện','khac':'Khác'};
+
+function openHeritageLb(src,title){
+  const lb=document.getElementById('hgLb');
+  document.getElementById('hgLbImg').src=src;
+  document.getElementById('hgLbName').textContent=title||'';
+  lb.classList.add('open');
+  document.addEventListener('keydown',_hgLbKey);
+}
+function closeHeritageLb(){
+  const lb=document.getElementById('hgLb');
+  lb.classList.remove('open');
+  document.getElementById('hgLbImg').src='';
+  document.removeEventListener('keydown',_hgLbKey);
+}
+function _hgLbKey(e){if(e.key==='Escape')closeHeritageLb();}
+
+function renderHeritageGallery(items){
+  const grid=document.getElementById('heritageGrid');
+  if(!items||!items.length) return; // keep hardcoded SVG items
+  const html=items.map((item,i)=>{
+    const imgContent=item.photo
+      ?`<img src="${item.photo.replace(/"/g,'&quot;')}" alt="${(item.title||'').replace(/"/g,'&quot;')}" style="width:100%;height:100%;object-fit:cover;display:block" loading="lazy">`
+      :`<svg class="hg-art" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="300" fill="#2c1810"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" font-size="48" fill="#c4956a" opacity=".2">🖼</text></svg>`;
+    const cat=item.cat?CAT_LABELS[item.cat]||item.cat:'';
+    const clickHandler=item.photo?`onclick="openHeritageLb('${item.photo.replace(/'/g,"\\'")}','${(item.title||'').replace(/'/g,"\\'")}')"` :'';
+    return`<div class="hg-item"${i===0?' style="grid-column:span 2"':''} ${clickHandler}>
+      ${imgContent}
+      <div class="hg-overlay"></div>
+      <div class="hg-inner"><div class="hg-info">${cat?`<div class="hg-cat">${cat}</div>`:''}${item.title?`<div class="hg-title">${item.title.replace(/</g,'&lt;')}</div>`:''}${item.desc?`<div class="hg-desc">${item.desc.replace(/</g,'&lt;')}</div>`:''}</div></div>
+    </div>`;
+  }).join('');
+  grid.innerHTML=html;
+}
+
+// Fetch member count + gallery
+Promise.allSettled([
+  fetch('/api/status').then(r=>r.json()),
+  fetch('/api/gallery').then(r=>r.json())
+]).then(([statusRes,galleryRes])=>{
+  if(statusRes.status==='fulfilled'&&statusRes.value?.members){
+    document.getElementById('counterMembers').dataset.target=statusRes.value.members;
+  }
+  if(galleryRes.status==='fulfilled'&&galleryRes.value?.gallery?.length){
+    renderHeritageGallery(galleryRes.value.gallery);
+  }
+}).finally(()=>{
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');if(e.target.classList.contains('counter'))animCounter(e.target);io.unobserve(e.target)}})},{threshold:.1});
   document.querySelectorAll('.reveal,.counter').forEach(el=>io.observe(el));
 });

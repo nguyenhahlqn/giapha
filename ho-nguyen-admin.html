@@ -490,6 +490,20 @@ tr:hover .row-acts{opacity:1}
 .photo-hint{font-size:10px;color:var(--clay);line-height:1.5}
 /* iOS Safari: prevent auto-zoom on input focus (font-size<16px triggers zoom) */
 @supports(-webkit-touch-callout:none){input,select,textarea{font-size:16px!important}}
+/* Gallery grid */
+.gal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1.2rem}
+.gal-card{background:var(--c1);border:1px solid var(--bd);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .15s}
+.gal-card:hover{box-shadow:0 4px 18px rgba(0,0,0,.18)}
+.gal-card-img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--c2);cursor:zoom-in}
+.gal-card-img-placeholder{width:100%;aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;font-size:36px;background:var(--c2);color:var(--bd2)}
+.gal-card-body{padding:.75rem;flex:1;display:flex;flex-direction:column;gap:.25rem}
+.gal-card-title{font-size:13px;font-weight:600;color:var(--fg);line-height:1.4;font-family:var(--serif)}
+.gal-card-meta{font-size:11px;color:var(--clay);display:flex;gap:.5rem;flex-wrap:wrap}
+.gal-card-desc{font-size:11px;color:var(--e2);line-height:1.5;flex:1}
+.gal-card-actions{display:flex;gap:.4rem;margin-top:.5rem}
+.gal-cat-badge{display:inline-block;font-size:10px;padding:1px 7px;border-radius:10px;border:1px solid var(--bd2);color:var(--clay);background:var(--bg);font-family:var(--mono)}
+.gal-empty{text-align:center;padding:4rem 2rem;color:var(--clay);font-size:14px}
+.gal-empty svg{width:48px;height:48px;opacity:.3;margin-bottom:1rem;display:block;margin-inline:auto}
 </style>
 </head>
 <body>
@@ -556,6 +570,10 @@ tr:hover .row-acts{opacity:1}
   <div class="nav-item" onclick="setView('requests')">
     <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 1v12M1 7h12"/><circle cx="7" cy="7" r="5.5"/></svg>
     Yêu cầu bổ sung <span class="cnt" id="navReq">0</span>
+  </div>
+  <div class="nav-item" onclick="setView('gallery')">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="3" width="12" height="9" rx="1"/><path d="M1 9l3-3 3 3 2-2 4 4"/><circle cx="10" cy="6" r="1.2" fill="currentColor" stroke="none"/></svg>
+    Hình ảnh &amp; Kỷ vật <span class="cnt" id="navGal">0</span>
   </div>
 
   <div class="filter-section">
@@ -704,6 +722,28 @@ tr:hover .row-acts{opacity:1}
     <div id="reqList" style="padding:1.5rem;overflow-y:auto;flex:1"></div>
   </div>
 
+  <!-- GALLERY VIEW -->
+  <div id="vGallery" class="exp-wrap" style="display:none">
+    <div class="tbar">
+      <h2 class="tbar-title">Hình ảnh &amp; Kỷ vật <span class="cnt" id="galCount">0</span></h2>
+      <select class="tb-btn" id="galCatFilter" onchange="renderGallery()" style="min-width:110px;cursor:pointer">
+        <option value="">Tất cả danh mục</option>
+        <option value="lich-su">Lịch sử</option>
+        <option value="gia-dinh">Gia đình</option>
+        <option value="ky-vat">Kỷ vật</option>
+        <option value="su-kien">Sự kiện</option>
+        <option value="khac">Khác</option>
+      </select>
+      <button class="tb-btn" onclick="refreshGallery()">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 7a5 5 0 1 0 1-3.5"/><path d="M2 2v3h3"/></svg>Làm mới
+      </button>
+      <button class="tb-btn primary" onclick="openGalModal()">
+        <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 1v12M1 7h12"/></svg>Thêm ảnh
+      </button>
+    </div>
+    <div id="galGrid" style="padding:1.5rem;overflow-y:auto;flex:1"></div>
+  </div>
+
 </main>
 </div>
 
@@ -844,6 +884,70 @@ tr:hover .row-acts{opacity:1}
     <div class="m-footer">
       <button class="m-btn cancel" onclick="closeConfirm()">Huỷ</button>
       <button class="m-btn del-ok" id="confOk">Xác nhận xoá</button>
+    </div>
+  </div>
+</div>
+
+<!-- GALLERY MODAL -->
+<div class="overlay" id="galModal">
+  <div class="modal" style="max-width:520px">
+    <div class="m-hdr">
+      <div class="m-title" id="galModalTitle">Thêm ảnh / kỷ vật</div>
+      <button class="m-close" onclick="closeGalModal()">✕</button>
+    </div>
+    <div class="m-body">
+      <div class="f-row full">
+        <div class="f-group">
+          <label class="f-label">Ảnh <span style="color:var(--clay)">*</span></label>
+          <div class="photo-upload-wrap">
+            <div class="photo-preview" id="galPhotoPreview" style="border-radius:8px;width:88px;height:88px" onclick="document.getElementById('galPhotoFile').click()">
+              <img id="galPhotoPreviewImg" src="" alt=""><span class="ph-placeholder">🖼</span>
+            </div>
+            <div class="photo-upload-right">
+              <input class="f-input photo-url-input" id="galPhotoUrl" type="url" placeholder="Dán URL ảnh (https://...)">
+              <div class="photo-actions">
+                <button type="button" class="photo-btn" onclick="document.getElementById('galPhotoFile').click()">📁 Chọn từ máy</button>
+                <button type="button" class="photo-btn danger" onclick="clearGalPhoto()">✕ Xoá</button>
+              </div>
+              <span class="photo-hint">Ảnh sẽ tự thu nhỏ về 800×800px.</span>
+            </div>
+          </div>
+          <input type="file" id="galPhotoFile" accept="image/*" style="display:none" onchange="handleGalPhotoFile(this)">
+        </div>
+      </div>
+      <div class="f-row">
+        <div class="f-group">
+          <label class="f-label">Tiêu đề <span style="color:var(--clay)">*</span></label>
+          <input class="f-input" id="galFTitle" type="text" placeholder="Tên ảnh / kỷ vật">
+        </div>
+      </div>
+      <div class="f-row">
+        <div class="f-group" style="flex:1">
+          <label class="f-label">Danh mục</label>
+          <select class="f-input" id="galFCat">
+            <option value="">-- Chọn --</option>
+            <option value="lich-su">Lịch sử</option>
+            <option value="gia-dinh">Gia đình</option>
+            <option value="ky-vat">Kỷ vật</option>
+            <option value="su-kien">Sự kiện</option>
+            <option value="khac">Khác</option>
+          </select>
+        </div>
+        <div class="f-group" style="flex:1">
+          <label class="f-label">Năm</label>
+          <input class="f-input" id="galFYear" type="number" placeholder="VD: 1975" min="1800" max="2100">
+        </div>
+      </div>
+      <div class="f-row full">
+        <div class="f-group">
+          <label class="f-label">Mô tả</label>
+          <textarea class="f-input" id="galFDesc" rows="3" placeholder="Ghi chú về hình ảnh này..."></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="m-footer">
+      <button class="m-btn cancel" onclick="closeGalModal()">Huỷ</button>
+      <button class="m-btn save" onclick="saveGalItem()">Lưu</button>
     </div>
   </div>
 </div>
@@ -1498,18 +1602,19 @@ function importJSON(){
 function setView(v){
   try{localStorage.setItem('hn-admin-view',v)}catch(e){}
   curView=v;
-  const views={list:'vList',dashboard:'vDashboard',changelog:'vChangelog',export:'vExport',requests:'vRequests'};
+  const views={list:'vList',dashboard:'vDashboard',changelog:'vChangelog',export:'vExport',requests:'vRequests',gallery:'vGallery'};
   Object.values(views).forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none'});
   const active=document.getElementById(views[v]);
   if(active){active.style.display=v==='list'?'flex':'block';if(v==='list')active.style.flexDirection='column'}
   document.querySelectorAll('.nav-item').forEach((el,i)=>{
-    const map={0:'list',1:'dashboard',2:'changelog',3:'export',4:'requests'};
+    const map={0:'list',1:'dashboard',2:'changelog',3:'export',4:'requests',5:'gallery'};
     el.classList.toggle('active',map[i]===v);
   });
   if(v==='dashboard')renderDashboard();
   if(v==='changelog')renderChangelog();
   if(v==='export')refreshExport();
   if(v==='requests')refreshRequests();
+  if(v==='gallery')refreshGallery();
 }
 
 /* ══ TOAST ══ */
@@ -1600,7 +1705,7 @@ document.addEventListener('click',e=>{
 document.addEventListener('keydown',e=>{
   if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'||e.target.tagName==='SELECT')return;
   if((e.ctrlKey||e.metaKey)&&e.key==='k'){e.preventDefault();document.getElementById('gSearch').focus();return}
-  if(e.key==='Escape'){['formModal','detailModal','confirmModal','scModal'].forEach(id=>document.getElementById(id).classList.remove('open'));document.getElementById('undoBar').classList.remove('show');return}
+  if(e.key==='Escape'){['formModal','detailModal','confirmModal','scModal','galModal'].forEach(id=>document.getElementById(id).classList.remove('open'));document.getElementById('undoBar').classList.remove('show');return}
   if((e.ctrlKey||e.metaKey)&&e.key==='n'){e.preventDefault();openAdd();return}
   if((e.ctrlKey||e.metaKey)&&e.key==='z'){e.preventDefault();undo();return}
   if((e.ctrlKey||e.metaKey)&&e.key==='e'){e.preventDefault();setView('export');return}
@@ -1797,6 +1902,146 @@ async function rejectReq(id){
 }());
 
 refreshRequests();
+
+/* ══ GALLERY ══ */
+let galItems=[];
+let galEditId=null;
+
+const GAL_CAT_LABELS={'lich-su':'Lịch sử','gia-dinh':'Gia đình','ky-vat':'Kỷ vật','su-kien':'Sự kiện','khac':'Khác'};
+
+async function refreshGallery(){
+  try{
+    const r=await fetch('/api/gallery');
+    const d=await r.json();
+    galItems=d.gallery||[];
+  }catch(e){galItems=[];}
+  document.getElementById('navGal').textContent=galItems.length||'';
+  document.getElementById('galCount').textContent=galItems.length?`(${galItems.length})`:'';
+  renderGallery();
+}
+
+function renderGallery(){
+  const cat=document.getElementById('galCatFilter').value;
+  const items=cat?galItems.filter(i=>i.cat===cat):galItems;
+  const grid=document.getElementById('galGrid');
+  if(!items.length){
+    grid.innerHTML=`<div class="gal-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor" stroke="none"/></svg>Chưa có hình ảnh nào. Nhấn <b>Thêm ảnh</b> để bắt đầu.</div>`;
+    return;
+  }
+  grid.innerHTML=`<div class="gal-grid">${items.map(item=>{
+    const imgHtml=item.photo
+      ?`<img class="gal-card-img" src="${esc(item.photo)}" alt="${esc(item.title||'')}" onclick="galPreviewPhoto('${esc(item.photo).replace(/'/g,"\\'")}','${esc(item.title||'').replace(/'/g,"\\'")}'">`
+      :`<div class="gal-card-img-placeholder">🖼</div>`;
+    const cat=item.cat?`<span class="gal-cat-badge">${esc(GAL_CAT_LABELS[item.cat]||item.cat)}</span>`:'';
+    const year=item.year?`<span>${esc(String(item.year))}</span>`:'';
+    return`<div class="gal-card">
+      ${imgHtml}
+      <div class="gal-card-body">
+        <div class="gal-card-title">${esc(item.title||'(Không tiêu đề)')}</div>
+        <div class="gal-card-meta">${cat}${year}</div>
+        ${item.desc?`<div class="gal-card-desc">${esc(item.desc)}</div>`:''}
+        <div class="gal-card-actions">
+          <button class="m-btn save" style="flex:1;padding:4px 8px;font-size:11px" onclick="openGalModal('${esc(item.id).replace(/'/g,"\\'")}')">✏️ Sửa</button>
+          <button class="m-btn cancel" style="padding:4px 8px;font-size:11px;border-color:rgba(192,69,58,.3);color:#C0453A" onclick="deleteGalItem('${esc(item.id).replace(/'/g,"\\'")}')">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function galPreviewPhoto(src,name){
+  // reuse lightbox pattern
+  const lb=document.createElement('div');
+  lb.style.cssText='position:fixed;inset:0;z-index:9000;background:rgba(10,8,6,.88);display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)';
+  lb.innerHTML=`<button style="position:fixed;top:16px;right:16px;background:rgba(255,255,255,.15);border:none;color:#fff;width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer">✕</button><img src="${esc(src)}" alt="${esc(name)}" style="max-width:min(720px,calc(100vw-48px));max-height:calc(100dvh - 80px);border-radius:10px;object-fit:contain;box-shadow:0 32px 80px rgba(0,0,0,.6)"><div style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.85);font-size:13px;font-family:var(--serif);text-align:center">${esc(name)}</div>`;
+  const close=()=>{lb.remove();document.removeEventListener('keydown',esc2)};
+  lb.addEventListener('click',e=>{if(e.target===lb||e.target.tagName==='BUTTON')close()});
+  const esc2=e=>{if(e.key==='Escape')close()};
+  document.addEventListener('keydown',esc2);
+  document.body.appendChild(lb);
+}
+
+function openGalModal(id){
+  galEditId=id||null;
+  const item=id?galItems.find(i=>i.id===id):null;
+  document.getElementById('galModalTitle').textContent=id?'Chỉnh sửa ảnh / kỷ vật':'Thêm ảnh / kỷ vật';
+  document.getElementById('galFTitle').value=item?.title||'';
+  document.getElementById('galFCat').value=item?.cat||'';
+  document.getElementById('galFYear').value=item?.year||'';
+  document.getElementById('galFDesc').value=item?.desc||'';
+  const ph=item?.photo||'';
+  document.getElementById('galPhotoUrl').value=ph.startsWith('data:')?'':ph;
+  setGalPhotoPreview(ph);
+  document.getElementById('galModal').classList.add('open');
+}
+
+function closeGalModal(){
+  document.getElementById('galModal').classList.remove('open');
+  galEditId=null;
+}
+
+function setGalPhotoPreview(src){
+  const prev=document.getElementById('galPhotoPreview');
+  const img=document.getElementById('galPhotoPreviewImg');
+  if(src){img.src=src;prev.classList.add('has-img')}
+  else{img.src='';prev.classList.remove('has-img')}
+}
+
+function clearGalPhoto(){document.getElementById('galPhotoUrl').value='';setGalPhotoPreview('');}
+
+function handleGalPhotoFile(input){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{resizePhoto(e.target.result,800,dataUrl=>{setGalPhotoPreview(dataUrl);document.getElementById('galPhotoUrl').value=dataUrl;})};
+  reader.readAsDataURL(file);input.value='';
+}
+
+document.getElementById('galPhotoUrl').addEventListener('input',function(){
+  const v=this.value.trim();
+  if(v.startsWith('http'))setGalPhotoPreview(v);
+  else if(!v)setGalPhotoPreview('');
+});
+
+async function saveGalItem(){
+  const title=(document.getElementById('galFTitle').value||'').trim();
+  if(!title){toast('warn','⚠️','Vui lòng nhập tiêu đề');return;}
+  const photo=document.getElementById('galPhotoPreviewImg').src||document.getElementById('galPhotoUrl').value.trim()||'';
+  const item={
+    title,
+    cat:document.getElementById('galFCat').value||'',
+    year:document.getElementById('galFYear').value||'',
+    desc:(document.getElementById('galFDesc').value||'').trim(),
+    photo
+  };
+  try{
+    let r;
+    if(galEditId){
+      r=await fetch('/api/gallery/'+encodeURIComponent(galEditId),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(item)});
+    } else {
+      r=await fetch('/api/gallery/add',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(item)});
+    }
+    const d=await r.json();
+    if(d.ok){
+      toast('ok','✅',galEditId?'Đã cập nhật':'Đã thêm ảnh mới');
+      closeGalModal();
+      refreshGallery();
+    } else {
+      toast('err','❌',d.error||'Lỗi lưu dữ liệu');
+    }
+  }catch(e){toast('err','❌','Lỗi kết nối server');}
+}
+
+async function deleteGalItem(id){
+  if(!confirm('Xoá ảnh này?'))return;
+  try{
+    const r=await fetch('/api/gallery/'+encodeURIComponent(id),{method:'DELETE'});
+    const d=await r.json();
+    if(d.ok){toast('ok','🗑','Đã xoá');refreshGallery();}
+    else toast('err','❌',d.error||'Lỗi xoá');
+  }catch(e){toast('err','❌','Lỗi kết nối server');}
+}
+
+document.getElementById('galModal').addEventListener('click',e=>{if(e.target===document.getElementById('galModal'))closeGalModal()});
 </script>
 </body>
 </html>
