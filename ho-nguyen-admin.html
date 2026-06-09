@@ -468,6 +468,8 @@ tr:hover .row-acts{opacity:1}
   .brand{display:none}
   input,select,textarea{font-size:16px!important}
 }
+/* iOS Safari: prevent auto-zoom on input focus (font-size<16px triggers zoom) */
+@supports(-webkit-touch-callout:none){input,select,textarea{font-size:16px!important}}
 </style>
 </head>
 <body>

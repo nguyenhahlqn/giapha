@@ -213,6 +213,8 @@ footer{background:var(--earth);padding:2.5rem 4rem;display:flex;align-items:cent
   .foot-links{justify-content:center}
   .cta-btns{flex-direction:column;align-items:center}
 }
+/* iOS Safari: prevent auto-zoom on input focus (font-size<16px triggers zoom) */
+@supports(-webkit-touch-callout:none){input,select,textarea{font-size:16px!important}}
 </style>
 </head>
 <body>

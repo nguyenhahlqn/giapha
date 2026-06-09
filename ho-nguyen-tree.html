@@ -548,6 +548,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
   .rel-head::before{content:'';display:block;width:36px;height:4px;
     background:var(--bd2);border-radius:2px;margin:0 auto 10px;opacity:.6}
 }
+/* iOS Safari: prevent auto-zoom on input focus (font-size<16px triggers zoom) */
+@supports(-webkit-touch-callout:none){input,select,textarea{font-size:16px!important}}
 </style>
 </head>
 <body>
