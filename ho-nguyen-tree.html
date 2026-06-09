@@ -2009,9 +2009,19 @@ function analyzeRelationship(idA, idB) {
   let term, summary, AcallsB, BcallsA, selfA, selfB;
 
   // ── Hàm phụ ──
-  const aOlderThanB = () => {
+  // Cho anh/chị em RUỘT (distA=1, distB=1): so sánh vị trí trực tiếp trong cùng 1 cha/mẹ
+  const aOlderThanBDirect = () => {
     if (mA.g !== mB.g) return mA.g < mB.g;
     return relSibOrder(idA) < relSibOrder(idB);
+  };
+  // Cho anh/chị em HỌ (distA=distB=2,3): so sánh vị trí cha/mẹ (pA[k]) trong danh sách của LCA
+  // ancDepthA/B = độ sâu tính từ A/B lên đến người cần so sánh (1 = cha/mẹ, 2 = ông/bà...)
+  const aParOlderThanBPar = (depthA, depthB) => {
+    const aAncId = pA[depthA];  // tổ tiên của A ở độ sâu depthA (tính từ A)
+    const bAncId = pB[depthB];  // tổ tiên của B ở độ sâu depthB
+    if (!aAncId || !bAncId) return false;
+    // So sánh vị trí 2 người này trong danh sách con của tổ chung (LCA)
+    return relSibOrder(aAncId) < relSibOrder(bAncId);
   };
 
   // ── Trực hệ: A là tổ tiên của B ──
@@ -2078,7 +2088,7 @@ function analyzeRelationship(idA, idB) {
     }
   // ── Anh chị em ruột ──
   } else if (distA === 1 && distB === 1) {
-    const aOld = aOlderThanB();
+    const aOld = aOlderThanBDirect();
     if (aOld) {
       term = gA==='m' ? 'Anh — Em' : 'Chị — Em';
       summary = `${cleanN(mA.n)} là ${gA==='m'?'anh':'chị'} của ${cleanN(mB.n)}`;
@@ -2120,15 +2130,21 @@ function analyzeRelationship(idA, idB) {
     selfA = 'cháu'; selfB = relWord;
   // ── Anh/Chị em họ (con chú bác — first cousins) ──
   } else if (distA === 2 && distB === 2) {
-    const aOld = aOlderThanB();
-    if (aOld) {
+    // So sánh vị trí CHA/MẸ của A và B trong danh sách con của LCA
+    // pA[1] = cha/mẹ của A, pB[1] = cha/mẹ của B
+    const aParOld = aParOlderThanBPar(1, 1);
+    if (aParOld) {
+      // Cha/mẹ A đứng trước → A là anh/chị họ
       const lbl = gA==='m' ? 'anh họ' : 'chị họ';
-      term = 'Anh/Chị em họ'; summary = `${cleanN(mA.n)} là ${lbl} của ${cleanN(mB.n)}`;
+      term = 'Anh/Chị em họ (con chú bác)';
+      summary = `${cleanN(mA.n)} là ${lbl} của ${cleanN(mB.n)}`;
       AcallsB = 'em họ'; BcallsA = lbl;
       selfA = lbl; selfB = 'em họ';
     } else {
+      // Cha/mẹ B đứng trước → B là anh/chị họ
       const lbl = gB==='m' ? 'anh họ' : 'chị họ';
-      term = 'Anh/Chị em họ'; summary = `${cleanN(mB.n)} là ${lbl} của ${cleanN(mA.n)}`;
+      term = 'Anh/Chị em họ (con chú bác)';
+      summary = `${cleanN(mB.n)} là ${lbl} của ${cleanN(mA.n)}`;
       AcallsB = lbl; BcallsA = 'em họ';
       selfA = 'em họ'; selfB = lbl;
     }
@@ -2145,8 +2161,9 @@ function analyzeRelationship(idA, idB) {
     selfA = 'cháu họ'; selfB = gB==='m'?'ông chú':'bà cô';
   // ── Anh/Chị em họ xa (distA=distB=3 — second cousins) ──
   } else if (distA === 3 && distB === 3) {
-    const aOld = aOlderThanB();
-    if (aOld) {
+    // So sánh vị trí ÔNG/BÀ của A và B trong danh sách con của LCA
+    const aParOld = aParOlderThanBPar(2, 2);
+    if (aParOld) {
       const lbl = gA==='m' ? 'anh họ xa' : 'chị họ xa';
       term = 'Anh/Chị em họ xa (chắt ông chú bác)';
       summary = `${cleanN(mA.n)} là ${lbl} của ${cleanN(mB.n)}`;
@@ -2154,7 +2171,7 @@ function analyzeRelationship(idA, idB) {
       selfA = lbl; selfB = 'em họ xa';
     } else {
       const lbl = gB==='m' ? 'anh họ xa' : 'chị họ xa';
-      term = 'Anh/Chị em họ xa';
+      term = 'Anh/Chị em họ xa (chắt ông chú bác)';
       summary = `${cleanN(mB.n)} là ${lbl} của ${cleanN(mA.n)}`;
       AcallsB = lbl; BcallsA = 'em họ xa';
       selfA = 'em họ xa'; selfB = lbl;
