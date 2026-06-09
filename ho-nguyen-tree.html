@@ -502,17 +502,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 .rel-term-text{font-family:var(--serif);font-size:22px;font-weight:500;color:var(--e1)}
 [data-theme="dark"] .rel-term-text{color:var(--parch)}
 .rel-term-sub{font-size:11px;color:var(--clay);margin-top:.3rem;font-family:var(--serif);font-style:italic}
-/* Call cards */
-.rel-call-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1rem}
-.rel-call-card{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:.8rem}
+/* Call rows — inline sentence style */
+.rel-call-grid{display:flex;flex-direction:column;gap:.55rem;margin-bottom:1rem}
+.rel-call-card{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:.7rem 1rem;
+  display:flex;flex-wrap:wrap;align-items:baseline;gap:.3rem .45rem;line-height:1.6}
 [data-theme="dark"] .rel-call-card{background:var(--bg2)}
-.rel-call-from{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--straw);margin-bottom:3px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rel-call-to{font-size:9px;color:var(--clay);margin-bottom:4px;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.rel-call-word{font-family:var(--serif);font-size:20px;font-weight:500;color:var(--gold)}
+.rel-call-from{font-size:12px;color:var(--e2);font-family:var(--serif)}
+[data-theme="dark"] .rel-call-from{color:var(--parch)}
+.rel-call-word{font-family:var(--serif);font-size:15px;font-weight:600;color:var(--gold)}
 [data-theme="dark"] .rel-call-word{color:var(--gold2)}
-.rel-call-self{font-size:10px;color:var(--clay);margin-top:2px;font-style:italic}
+.rel-call-self{font-size:11px;color:var(--clay);font-style:italic}
+.rel-call-to{display:none} /* merged into rel-call-self */
 /* Info rows */
 .rel-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1rem}
 .rel-info-item{background:var(--bg);border-radius:6px;padding:.6rem .8rem;border:1px solid var(--bd)}
@@ -849,16 +849,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
         </div>
         <div class="rel-call-grid">
           <div class="rel-call-card">
-            <div class="rel-call-from" id="relCallAFrom"></div>
-            <div class="rel-call-to" id="relCallATo"></div>
-            <div class="rel-call-word" id="relCallAWord"></div>
-            <div class="rel-call-self" id="relCallASelf"></div>
+            <span class="rel-call-from" id="relCallAFrom"></span>
+            <span class="rel-call-word" id="relCallAWord"></span>
+            <span class="rel-call-self" id="relCallASelf"></span>
           </div>
           <div class="rel-call-card">
-            <div class="rel-call-from" id="relCallBFrom"></div>
-            <div class="rel-call-to" id="relCallBTo"></div>
-            <div class="rel-call-word" id="relCallBWord"></div>
-            <div class="rel-call-self" id="relCallBSelf"></div>
+            <span class="rel-call-from" id="relCallBFrom"></span>
+            <span class="rel-call-word" id="relCallBWord"></span>
+            <span class="rel-call-self" id="relCallBSelf"></span>
           </div>
         </div>
         <div class="rel-info-grid">
@@ -2243,16 +2241,14 @@ function runRelAnalysis() {
   document.getElementById('relTermText').textContent = res.term;
   document.getElementById('relTermSub').textContent = res.summary;
 
-  // Call cards
+  // Call rows — sentence format: "[A] gọi [B] là: [từ] (xưng mình là "[self]")"
   document.getElementById('relCallAFrom').textContent = nameA + ' gọi ' + nameB + ' là:';
-  document.getElementById('relCallATo').textContent = '(xưng mình là "' + (res.selfA || '—') + '")';
   document.getElementById('relCallAWord').textContent = res.AcallsB || '—';
-  document.getElementById('relCallASelf').textContent = mA.sx==='f'?'♀ '+nameA:'♂ '+nameA;
+  document.getElementById('relCallASelf').textContent = '(xưng mình là "' + (res.selfA || '—') + '")';
 
   document.getElementById('relCallBFrom').textContent = nameB + ' gọi ' + nameA + ' là:';
-  document.getElementById('relCallBTo').textContent = '(xưng mình là "' + (res.selfB || '—') + '")';
   document.getElementById('relCallBWord').textContent = res.BcallsA || '—';
-  document.getElementById('relCallBSelf').textContent = mB.sx==='f'?'♀ '+nameB:'♂ '+nameB;
+  document.getElementById('relCallBSelf').textContent = '(xưng mình là "' + (res.selfB || '—') + '")';
 
   // Info
   document.getElementById('relLcaVal').textContent = res.lcaName || '—';
