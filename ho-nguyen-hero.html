@@ -415,7 +415,7 @@ footer{background:var(--ink0);border-top:1px solid var(--bd-gold);padding:3rem 2
 <!-- STATS -->
 <section class="stats-band">
   <div class="stats-grid">
-    <div class="stat-item reveal"><div class="stat-n" data-target="84">0</div><div class="stat-l">Thành viên</div><div class="stat-sub">Ghi nhận đầy đủ</div></div>
+    <div class="stat-item reveal"><div class="stat-n" data-target="83">0</div><div class="stat-l">Thành viên</div><div class="stat-sub">Ghi nhận đầy đủ</div></div>
     <div class="stat-item reveal" style="transition-delay:.1s"><div class="stat-n" data-target="15">0</div><div class="stat-l">Thế hệ</div><div class="stat-sub">Hoàng · Tạ · Nguyễn</div></div>
     <div class="stat-item reveal" style="transition-delay:.2s"><div class="stat-n" data-target="3">0</div><div class="stat-l">Chi nhánh</div><div class="stat-sub">Hữu Đễ · Hữu Quyền · Hữu Hiệu</div></div>
     <div class="stat-item reveal" style="transition-delay:.3s"><div class="stat-n" data-target="400"><sup>+</sup>0</div><div class="stat-l">Năm lịch sử</div><div class="stat-sub">Trên đất Hà Nam cổ</div></div>
@@ -533,8 +533,8 @@ footer{background:var(--ink0);border-top:1px solid var(--bd-gold);padding:3rem 2
     <div class="feat-card reveal" style="transition-delay:.2s">
       <span class="feat-num">03</span>
       <h3 class="feat-h">Phả hệ &<br><em>kết nối thế hệ</em></h3>
-      <p class="feat-p">84 thành viên, 15 đời, 3 chi nhánh ghi chép đầy đủ từ thuỷ tổ Hoàng quí Công. Con cháu toả rộng từ Quảng Ninh đến TP.HCM, nhưng tấm lòng luôn hướng về đất cổ Hà Nam.</p>
-      <span class="feat-tag">84 thành viên · 15 đời · 3 chi nhánh</span>
+      <p class="feat-p">83 thành viên, 15 đời, 3 chi nhánh ghi chép đầy đủ từ thuỷ tổ Hoàng quí Công. Con cháu toả rộng từ Quảng Ninh đến TP.HCM, nhưng tấm lòng luôn hướng về đất cổ Hà Nam.</p>
+      <span class="feat-tag">83 thành viên · 15 đời · 3 chi nhánh</span>
     </div>
   </div>
 </section>
@@ -581,7 +581,7 @@ footer{background:var(--ink0);border-top:1px solid var(--bd-gold);padding:3rem 2
   <div class="cta-inner">
     <p class="cta-eyebrow reveal">Bắt đầu hành trình</p>
     <h2 class="cta-title reveal" style="transition-delay:.1s">Khám phá <em>gia phả</em><br>dòng họ Nguyễn</h2>
-    <p class="cta-sub reveal" style="transition-delay:.2s">84 thành viên, 15 đời, hàng nghìn câu chuyện đang chờ được khám phá.</p>
+    <p class="cta-sub reveal" style="transition-delay:.2s">83 thành viên, 15 đời, hàng nghìn câu chuyện đang chờ được khám phá.</p>
     <div class="cta-btns reveal" style="transition-delay:.3s">
       <a href="ho-nguyen-tree.html" class="btn-primary">
         <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" style="width:13px;height:13px"><circle cx="7" cy="4" r="2"/><path d="M7 6v3M4.5 12h5M4.5 9l2.5 3 2.5-3"/></svg>
@@ -633,6 +633,18 @@ fetch('/api/members').then(r=>r.ok?r.json():null).then(d=>{
   if(el[1])el[1].dataset.target=genMax;
   if(el[2])el[2].dataset.target=branches;
   // el[3] = 400+ năm — giữ nguyên
+  // Cập nhật các text hardcode
+  document.querySelectorAll('.feat-tag').forEach(el=>{
+    if(el.textContent.includes('thành viên'))el.textContent=`${total} thành viên · ${genMax} đời · ${branches} chi nhánh`;
+  });
+  document.querySelectorAll('.feat-p').forEach(el=>{
+    if(el.textContent.startsWith('83')||el.textContent.startsWith('84'))
+      el.textContent=el.textContent.replace(/^\d+/,total);
+  });
+  document.querySelectorAll('.cta-sub').forEach(el=>{
+    if(el.textContent.includes('thành viên'))
+      el.textContent=el.textContent.replace(/\d+ thành viên/,total+' thành viên');
+  });
 }).catch(()=>{});
 
 // Reveal + counter
