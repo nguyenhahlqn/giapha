@@ -242,7 +242,13 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-Type', mime)
         self.send_header('Content-Length', len(body))
-        self.send_header('Cache-Control', 'no-cache')
+        # Ảnh OG cache 1 ngày; HTML không cache để OG tags luôn mới
+        if ext in ('.jpg', '.jpeg', '.png', '.webp', '.svg', '.ico'):
+            self.send_header('Cache-Control', 'public, max-age=86400')
+        else:
+            self.send_header('Cache-Control', 'no-cache')
+        # Cho phép social crawlers (Facebook, Zalo, Twitter) đọc ảnh và HTML
+        self.send_header('X-Robots-Tag', 'index, follow')
         self.end_headers()
         self.wfile.write(body)
 
