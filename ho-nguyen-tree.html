@@ -585,7 +585,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
     <div class="sw">
       <svg class="sico" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5l2.5 2.5"/></svg>
       <input id="si" type="text" placeholder="Tìm thành viên… (Ctrl+K)" autocomplete="off" spellcheck="false">
-      <div class="sdrop" id="sdrop"></div>
     </div>
   </div>
 
@@ -690,6 +689,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
     </button>
   </div>
 </div>
+
+<!-- Search dropdown — outside .tb to avoid backdrop-filter stacking context -->
+<div class="sdrop" id="sdrop"></div>
 
 <!-- NEW DATA BANNER -->
 <div id="newDataBanner" style="display:none;position:fixed;top:calc(var(--nav)+var(--tb)+8px);left:50%;
