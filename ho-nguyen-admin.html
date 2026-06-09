@@ -106,7 +106,7 @@ html,body{height:100%;font-family:var(--sans);background:var(--bg-page);color:va
   display:inline-flex;align-items:center;justify-content:center}
 
 /* ══ SIDEBAR ══ */
-.sidebar{background:var(--bg-side);display:flex;flex-direction:column;overflow:hidden}
+.sidebar{background:var(--bg-side);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden}
 .sidebar-logo{padding:1rem 1.1rem .5rem;display:flex;align-items:center;gap:.6rem;
   border-bottom:1px solid var(--bd-side)}
 .sl-text{font-family:var(--serif);font-size:13px;letter-spacing:.15em;
@@ -603,12 +603,6 @@ tr:hover .row-acts{opacity:1}
     Hình ảnh &amp; Kỷ vật <span class="cnt" id="navGal">0</span>
   </div>
 
-  <div class="nav-section" style="margin-top:auto">Tài khoản</div>
-  <div class="nav-item" onclick="setView('password')">
-    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="6" width="8" height="7" rx="1"/><path d="M5 6V4.5a2 2 0 0 1 4 0V6"/><circle cx="7" cy="9.5" r=".9" fill="currentColor" stroke="none"/></svg>
-    Đổi mật khẩu
-  </div>
-
   <div class="filter-section">
     <div class="fs-label">Lọc theo đời</div>
     <div class="filter-chips" id="genChips">
@@ -640,6 +634,12 @@ tr:hover .row-acts{opacity:1}
       <button class="fchip" data-br="Nhánh Hữu Quyền">Hữu Quyền</button>
       <button class="fchip" data-br="Nhánh Hữu Hiệu">Hữu Hiệu</button>
     </div>
+  </div>
+
+  <div class="nav-section" style="border-top:1px solid var(--bd-side);padding-top:.9rem">Tài khoản</div>
+  <div class="nav-item" onclick="setView('password')">
+    <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="3" y="6" width="8" height="7" rx="1"/><path d="M5 6V4.5a2 2 0 0 1 4 0V6"/><circle cx="7" cy="9.5" r=".9" fill="currentColor" stroke="none"/></svg>
+    Đổi mật khẩu
   </div>
 
   <div class="sidebar-stats">
@@ -1699,9 +1699,10 @@ function setView(v){
   Object.values(views).forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none'});
   const active=document.getElementById(views[v]);
   if(active){active.style.display=v==='list'?'flex':'block';if(v==='list')active.style.flexDirection='column'}
-  document.querySelectorAll('.nav-item').forEach((el,i)=>{
-    const map={0:'list',1:'dashboard',2:'changelog',3:'export',4:'requests',5:'gallery',6:'password'};
-    el.classList.toggle('active',map[i]===v);
+  document.querySelectorAll('.nav-item').forEach(el=>{
+    const m=el.getAttribute('onclick')||'';
+    const match=m.match(/setView\('(\w+)'\)/);
+    el.classList.toggle('active',match?match[1]===v:false);
   });
   if(v==='dashboard')renderDashboard();
   if(v==='changelog')renderChangelog();
