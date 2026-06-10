@@ -12,6 +12,14 @@ from urllib.parse import urlparse
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError
 
+try:
+    import anthropic as _anthropic
+    _ai = _anthropic.Anthropic(api_key=os.environ.get('ANTHROPIC_API_KEY', ''))
+except ImportError:
+    _ai = None
+
+ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY', '')
+
 BASE = os.path.dirname(os.path.abspath(__file__))
 DATA = os.path.join(BASE, 'data.json')
 PORT = int(os.environ.get('PORT', 8000))
@@ -35,6 +43,12 @@ _fail_lock = threading.Lock()
 MAX_FAILS = 5
 FAIL_WINDOW = 600  # giây
 
+# Chat rate limiting: 30 tin nhắn / giờ / IP
+_chat_log: dict = {}
+_chat_lock = threading.Lock()
+CHAT_MAX = 30
+CHAT_WINDOW = 3600
+
 def _is_rate_limited(ip: str) -> bool:
     now = time.time()
     with _fail_lock:
@@ -46,6 +60,37 @@ def _record_fail(ip: str):
     now = time.time()
     with _fail_lock:
         _fail_log.setdefault(ip, []).append(now)
+
+def _is_chat_rate_limited(ip: str) -> bool:
+    now = time.time()
+    with _chat_lock:
+        hits = [t for t in _chat_log.get(ip, []) if now - t < CHAT_WINDOW]
+        _chat_log[ip] = hits
+        return len(hits) >= CHAT_MAX
+
+def _record_chat(ip: str):
+    now = time.time()
+    with _chat_lock:
+        _chat_log.setdefault(ip, []).append(now)
+
+def _build_family_context(members: list) -> str:
+    """Tóm tắt dữ liệu gia phả thành văn bản cho AI."""
+    lines = []
+    for m in members:
+        parts = [f"- [{m['id']}] {m['n']} (đời {m.get('g','?')})"]
+        if m.get('sx') == 'f':
+            parts[0] += ' [nữ]'
+        if m.get('born'):
+            parts[0] += f" sinh {m['born']}"
+        if m.get('died'):
+            parts[0] += f" mất {m['died']}"
+        if m.get('par'):
+            parts[0] += f" con của [{m['par']}]"
+        if m.get('note'):
+            note = m['note'][:120].replace('\n', ' ')
+            parts[0] += f" | {note}"
+        lines.append(parts[0])
+    return '\n'.join(lines)
 
 def _issue_token() -> str:
     token = secrets.token_hex(32)
@@ -381,6 +426,68 @@ class Handler(BaseHTTPRequestHandler):
                 _tokens.clear()
             print('[Auth] Mật khẩu đã được thay đổi — tất cả phiên đã bị thu hồi')
             self.send_json(200, {'ok': True})
+            return
+
+        # ── AI Chat (public) ──
+        if p == '/api/chat':
+            ip = self.client_address[0]
+            if _is_chat_rate_limited(ip):
+                self.send_json(429, {'error': 'Quá nhiều tin nhắn. Vui lòng đợi một lúc.'}); return
+            if not _ai or not ANTHROPIC_API_KEY:
+                self.send_json(503, {'error': 'AI chưa được cấu hình.'}); return
+            message = str(body.get('message', '')).strip()[:2000]
+            if not message:
+                self.send_json(400, {'error': 'Tin nhắn trống.'}); return
+            # Lịch sử hội thoại: tối đa 6 lượt gần nhất
+            raw_hist = body.get('history', [])
+            history = []
+            for turn in raw_hist[-6:]:
+                role = turn.get('role', '')
+                content = str(turn.get('content', ''))[:1500]
+                if role in ('user', 'assistant') and content:
+                    history.append({'role': role, 'content': content})
+            _record_chat(ip)
+            # Build context
+            data = read_data()
+            members = data.get('members', [])
+            ctx = _build_family_context(members)
+            system = (
+                'Bạn là trợ lý gia phả họ Nguyễn Duy Tiên, Hà Nam. '
+                f'Dưới đây là danh sách {len(members)} thành viên qua nhiều thế hệ:\n\n'
+                f'{ctx}\n\n'
+                'Hãy trả lời bằng tiếng Việt, ngắn gọn và chính xác. '
+                'Nếu hỏi về quan hệ họ hàng, hãy tra theo trường "con của [id]". '
+                'Nếu không có thông tin, hãy nói thẳng.'
+            )
+            # SSE streaming response
+            self.send_response(200)
+            self.send_header('Content-Type', 'text/event-stream; charset=utf-8')
+            self.send_header('Cache-Control', 'no-cache')
+            self.send_header('X-Accel-Buffering', 'no')
+            self.send_header('Access-Control-Allow-Origin', self._cors_origin())
+            self.send_header('Vary', 'Origin')
+            self.end_headers()
+            try:
+                msgs = history + [{'role': 'user', 'content': message}]
+                with _ai.messages.stream(
+                    model='claude-haiku-4-5',
+                    max_tokens=1024,
+                    system=system,
+                    messages=msgs,
+                ) as stream:
+                    for text in stream.text_stream:
+                        chunk = json.dumps({'text': text}, ensure_ascii=False)
+                        self.wfile.write(f'data: {chunk}\n\n'.encode('utf-8'))
+                        self.wfile.flush()
+                self.wfile.write(b'data: [DONE]\n\n')
+                self.wfile.flush()
+            except Exception as e:
+                err = json.dumps({'error': str(e)}, ensure_ascii=False)
+                try:
+                    self.wfile.write(f'data: {err}\n\n'.encode('utf-8'))
+                    self.wfile.flush()
+                except Exception:
+                    pass
             return
 
         # ── Yêu cầu đăng ký (public — người dùng gửi) ──

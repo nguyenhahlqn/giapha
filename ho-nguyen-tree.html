@@ -605,6 +605,101 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 }
 /* iOS Safari: prevent auto-zoom on input focus (font-size<16px triggers zoom) */
 @supports(-webkit-touch-callout:none){input,select,textarea{font-size:16px!important}}
+
+/* ── AI Chat Widget ─────────────────────────────────────────── */
+#chatBtn{
+  position:fixed;bottom:24px;right:24px;z-index:9000;
+  width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;
+  background:var(--gold);color:#fff;font-size:22px;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .2s,box-shadow .2s;
+}
+#chatBtn:hover{transform:scale(1.08);box-shadow:0 6px 18px rgba(0,0,0,.4)}
+#chatBtn .cb-badge{
+  position:absolute;top:2px;right:2px;
+  width:10px;height:10px;border-radius:50%;
+  background:#e74c3c;border:2px solid var(--gold);
+  display:none;
+}
+#chatPanel{
+  position:fixed;bottom:88px;right:24px;z-index:9000;
+  width:360px;max-width:calc(100vw - 32px);
+  height:520px;max-height:calc(100dvh - 110px);
+  border-radius:14px;overflow:hidden;
+  box-shadow:0 8px 32px rgba(0,0,0,.35);
+  display:flex;flex-direction:column;
+  background:var(--bg);border:1.5px solid var(--gold);
+  opacity:0;pointer-events:none;transform:translateY(16px) scale(.97);
+  transition:opacity .22s,transform .22s;
+}
+#chatPanel.open{opacity:1;pointer-events:all;transform:translateY(0) scale(1)}
+.cp-head{
+  background:var(--gold);color:#fff;
+  padding:11px 14px;font-family:var(--serif);font-size:.95rem;font-weight:600;
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.cp-head svg{flex-shrink:0}
+.cp-head-title{flex:1}
+.cp-close{background:none;border:none;color:#fff;cursor:pointer;
+  font-size:18px;line-height:1;padding:2px 4px;opacity:.8}
+.cp-close:hover{opacity:1}
+.cp-msgs{
+  flex:1;overflow-y:auto;padding:14px 12px;
+  display:flex;flex-direction:column;gap:10px;
+  background:var(--bg);
+}
+.cp-msgs::-webkit-scrollbar{width:4px}
+.cp-msgs::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px;opacity:.5}
+.cm{display:flex;flex-direction:column;max-width:88%}
+.cm.user{align-self:flex-end;align-items:flex-end}
+.cm.ai{align-self:flex-start;align-items:flex-start}
+.cm-bubble{
+  padding:9px 12px;border-radius:12px;font-size:.85rem;line-height:1.55;
+  word-break:break-word;white-space:pre-wrap;
+}
+.cm.user .cm-bubble{background:var(--gold);color:#fff;border-bottom-right-radius:3px}
+.cm.ai .cm-bubble{
+  background:color-mix(in srgb,var(--gold) 12%,var(--bg));
+  color:var(--ink);border:1px solid color-mix(in srgb,var(--gold) 30%,transparent);
+  border-bottom-left-radius:3px;
+}
+.cm-typing .cm-bubble::after{
+  content:'●●●';letter-spacing:3px;
+  animation:chatDots 1.1s infinite;
+}
+@keyframes chatDots{0%,100%{opacity:.3}50%{opacity:1}}
+.cp-hint{
+  font-size:.75rem;color:var(--clay);text-align:center;
+  padding:6px 12px 0;opacity:.7;font-style:italic;
+}
+.cp-footer{
+  padding:10px 10px 12px;border-top:1px solid color-mix(in srgb,var(--gold) 25%,transparent);
+  display:flex;gap:7px;background:var(--bg);flex-shrink:0;
+}
+#chatInput{
+  flex:1;border:1.5px solid color-mix(in srgb,var(--gold) 45%,transparent);
+  border-radius:8px;padding:8px 10px;font-size:.85rem;
+  background:color-mix(in srgb,var(--gold) 8%,var(--bg));
+  color:var(--ink);resize:none;font-family:var(--sans);
+  max-height:90px;min-height:38px;line-height:1.4;
+  transition:border-color .15s;
+}
+#chatInput:focus{outline:none;border-color:var(--gold)}
+#chatSend{
+  width:38px;height:38px;flex-shrink:0;
+  background:var(--gold);border:none;border-radius:8px;
+  color:#fff;cursor:pointer;font-size:17px;align-self:flex-end;
+  transition:background .15s,transform .1s;
+  display:flex;align-items:center;justify-content:center;
+}
+#chatSend:hover{background:var(--clay)}
+#chatSend:active{transform:scale(.93)}
+#chatSend:disabled{opacity:.5;cursor:not-allowed}
+@media(max-width:480px){
+  #chatPanel{right:8px;left:8px;width:auto;bottom:80px}
+  #chatBtn{bottom:16px;right:16px}
+}
 </style>
 </head>
 <body>
@@ -2448,6 +2543,185 @@ document.getElementById('vTimeline').style.display='none';
   toast(`Phả hệ ${D.length} thành viên · ${genMax} đời · Hoàng→Tạ→Nguyễn`);
   updateStats();
   setTimeout(()=>document.getElementById('hintBar').classList.add('gone'),6000);
+})();
+</script>
+
+<!-- ── AI Chat Widget ─────────────────────────────────────── -->
+<button id="chatBtn" title="Hỏi AI về gia phả" aria-label="Mở chat AI">
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+  <span class="cb-badge" id="chatBadge"></span>
+</button>
+
+<div id="chatPanel" role="dialog" aria-label="Chat AI gia phả">
+  <div class="cp-head">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/>
+    </svg>
+    <span class="cp-head-title">Hỏi về gia phả</span>
+    <button class="cp-close" id="chatClose" title="Đóng">✕</button>
+  </div>
+  <div class="cp-msgs" id="chatMsgs"></div>
+  <p class="cp-hint" id="chatHint">Hỏi bằng tiếng Việt về thành viên, thế hệ, quan hệ họ hàng…</p>
+  <div class="cp-footer">
+    <textarea id="chatInput" placeholder="Nhập câu hỏi…" rows="1" maxlength="2000"></textarea>
+    <button id="chatSend" title="Gửi">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const btn=document.getElementById('chatBtn');
+  const panel=document.getElementById('chatPanel');
+  const closeBtn=document.getElementById('chatClose');
+  const msgsEl=document.getElementById('chatMsgs');
+  const input=document.getElementById('chatInput');
+  const sendBtn=document.getElementById('chatSend');
+  const hintEl=document.getElementById('chatHint');
+  const badge=document.getElementById('chatBadge');
+
+  let history=[];
+  let streaming=false;
+
+  btn.addEventListener('click',()=>{
+    panel.classList.toggle('open');
+    if(panel.classList.contains('open')){
+      badge.style.display='none';
+      input.focus();
+      scrollMsgs();
+    }
+  });
+  closeBtn.addEventListener('click',()=>panel.classList.remove('open'));
+
+  input.addEventListener('keydown',e=>{
+    if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();}
+  });
+  input.addEventListener('input',()=>{
+    input.style.height='auto';
+    input.style.height=Math.min(input.scrollHeight,90)+'px';
+  });
+  sendBtn.addEventListener('click',sendMsg);
+
+  function scrollMsgs(){
+    requestAnimationFrame(()=>msgsEl.scrollTop=msgsEl.scrollHeight);
+  }
+
+  function addMsg(role,text){
+    const wrap=document.createElement('div');
+    wrap.className='cm '+role;
+    const bubble=document.createElement('div');
+    bubble.className='cm-bubble';
+    bubble.textContent=text;
+    wrap.appendChild(bubble);
+    msgsEl.appendChild(wrap);
+    scrollMsgs();
+    return bubble;
+  }
+
+  function addTyping(){
+    const wrap=document.createElement('div');
+    wrap.className='cm ai cm-typing';
+    const bubble=document.createElement('div');
+    bubble.className='cm-bubble';
+    wrap.appendChild(bubble);
+    msgsEl.appendChild(wrap);
+    scrollMsgs();
+    return wrap;
+  }
+
+  function sendMsg(){
+    if(streaming)return;
+    const msg=input.value.trim();
+    if(!msg)return;
+    if(hintEl)hintEl.style.display='none';
+
+    input.value='';
+    input.style.height='auto';
+    sendBtn.disabled=true;
+    streaming=true;
+
+    addMsg('user',msg);
+    const typingEl=addTyping();
+    let aiBubble=null;
+    let aiText='';
+
+    const body=JSON.stringify({message:msg,history:history.slice(-12)});
+
+    fetch('/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body})
+      .then(res=>{
+        if(!res.ok){
+          return res.json().then(d=>{throw new Error(d.error||'Lỗi máy chủ '+res.status);});
+        }
+        const reader=res.body.getReader();
+        const dec=new TextDecoder();
+        let buf='';
+
+        function pump(){
+          return reader.read().then(({done,value})=>{
+            if(done){finish();return;}
+            buf+=dec.decode(value,{stream:true});
+            const lines=buf.split('\n');
+            buf=lines.pop();
+            for(const line of lines){
+              if(!line.startsWith('data:'))continue;
+              const raw=line.slice(5).trim();
+              if(raw==='[DONE]'){finish();return;}
+              try{
+                const obj=JSON.parse(raw);
+                if(obj.error){throw new Error(obj.error);}
+                if(obj.text){
+                  if(!aiBubble){
+                    typingEl.remove();
+                    const wrap=document.createElement('div');
+                    wrap.className='cm ai';
+                    aiBubble=document.createElement('div');
+                    aiBubble.className='cm-bubble';
+                    wrap.appendChild(aiBubble);
+                    msgsEl.appendChild(wrap);
+                  }
+                  aiText+=obj.text;
+                  aiBubble.textContent=aiText;
+                  scrollMsgs();
+                }
+              }catch(e){
+                typingEl.remove();
+                addMsg('ai','⚠ '+e.message);
+                done_();
+                return;
+              }
+            }
+            return pump();
+          });
+        }
+        return pump();
+      })
+      .catch(e=>{
+        typingEl.remove();
+        addMsg('ai','⚠ '+e.message);
+        done_();
+      });
+
+    function finish(){
+      typingEl.remove();
+      if(aiText){
+        history.push({role:'user',content:msg});
+        history.push({role:'assistant',content:aiText});
+        if(history.length>24)history=history.slice(-24);
+      }
+      done_();
+    }
+    function done_(){
+      streaming=false;
+      sendBtn.disabled=false;
+      input.focus();
+    }
+  }
+
 })();
 </script>
 </body>
