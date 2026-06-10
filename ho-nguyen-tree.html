@@ -608,7 +608,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 
 /* ── AI Chat Widget ─────────────────────────────────────────── */
 #chatBtn{
-  position:fixed;bottom:24px;right:24px;z-index:9000;
+  position:fixed;bottom:154px;right:24px;z-index:9000;
   width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;
   background:var(--gold);color:#fff;font-size:22px;
   box-shadow:0 4px 14px rgba(0,0,0,.35);
@@ -623,7 +623,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
   display:none;
 }
 #chatPanel{
-  position:fixed;bottom:88px;right:24px;z-index:9000;
+  position:fixed;bottom:218px;right:24px;z-index:9000;
   width:360px;max-width:calc(100vw - 32px);
   height:520px;max-height:calc(100dvh - 110px);
   border-radius:14px;overflow:hidden;
@@ -699,6 +699,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:500;height:var(--nav);
 @media(max-width:480px){
   #chatPanel{right:8px;left:8px;width:auto;bottom:80px}
   #chatBtn{bottom:16px;right:16px}
+}
+@media(min-width:481px){
+  #chatPanel{max-height:calc(100dvh - 240px)}
 }
 </style>
 </head>
